@@ -94,22 +94,22 @@ $updir = "";
 	<?php
 	if($dir == $base_dir) {
 	} else {
-	$nowdirarr = explode("/", $getdir);
-	$temp = count($nowdirarr);
-	for($i = 1;$i<$temp-1;$i++) {
-		$updir = $updir."/".$nowdirarr[$i];
-	}
+		$nowdirarr = explode("/", $getdir);
+		$temp = count($nowdirarr);
+			for($i = 1;$i<$temp-1;$i++) {
+				$updir = $updir."/".$nowdirarr[$i];
+			}
 	?>	
 
-	<a href='index.php?dir=<?php echo urlencode(str_replace("+","{plus}", $updir));?>'>
-    <div class="card bg-primary m-1 p-0">
-				<div class="card-body text-white m-1 p-1">
-				<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-90deg-up" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-  <path fill-rule="evenodd" d="M4.854 1.146a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L4 2.707V12.5A2.5 2.5 0 0 0 6.5 15h8a.5.5 0 0 0 0-1h-8A1.5 1.5 0 0 1 5 12.5V2.707l3.146 3.147a.5.5 0 1 0 .708-.708l-4-4z"/>
-</svg> 상위폴더로
-				</div>
-				</div>
-				</a>
+			<a href='index.php?dir=<?php echo urlencode(str_replace("+","{plus}", $updir));?>'>
+			<div class="card bg-primary m-1 p-0">
+						<div class="card-body text-white m-1 p-1">
+						<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-90deg-up" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+					  <path fill-rule="evenodd" d="M4.854 1.146a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L4 2.707V12.5A2.5 2.5 0 0 0 6.5 15h8a.5.5 0 0 0 0-1h-8A1.5 1.5 0 0 1 5 12.5V2.707l3.146 3.147a.5.5 0 1 0 .708-.708l-4-4z"/>
+					</svg> 상위폴더로
+						</div>
+						</div>
+						</a>
 	<?php
 	}
 	$dir_start = $startview;
@@ -143,7 +143,7 @@ $updir = "";
 			$startview = $i;
 			$fileinfo = $title_list[$i-count($dir_list)];
 			$dirs = str_replace($base_dir."/", "", $dir);
-			if($i >= count($title_list)+count($dir_list)){
+			if($i >= (count($title_list)+count($dir_list))){
 				break;
 			}
 	?>	
@@ -164,18 +164,20 @@ $updir = "";
 	</div>
 	</div>
 	<br><br>
+
+
 <div class="grid">
 <div class="row row-cols-2 row-cols-md-4">
-		<?php
-		if(count($file_list) > 0 && $endview > $startview){
+	<?php
+	if(count($file_list) > 0 && $endview > $startview){
 		for($i=$startview;$i<$endview;$i++) {
 					$fileinfo = $file_list[$i-count($dir_list)-count($title_list)];
 					$zip_file = $dir."/".$fileinfo;
-					if(strpos($zip_file, ".zip")){
-						$configfile = str_replace(".zip", "", $zip_file).".json";
-					} elseif(strpos($zip_file, ".cbz")){
-						$configfile = str_replace(".cbz", "", $zip_file).".json";
-					}
+						if(strpos($zip_file, ".zip")){
+							$configfile = str_replace(".zip", "", $zip_file).".json";
+						} elseif(strpos($zip_file, ".cbz")){
+							$configfile = str_replace(".cbz", "", $zip_file).".json";
+						}
 			if(is_File($configfile) === false){
 					$zip = new ZipArchive;
 					if ($zip->open($zip_file) == TRUE) {
@@ -183,11 +185,11 @@ $updir = "";
 						if($size[0] > $size[1]) {
 							$x_point = ($size[0]/2) - $size[1];
 							$originimage = imagecreatefromstring($zip->getFromIndex(0));
-							if($x_point > 0){
-								$cropimage = imagecrop($originimage, ['x' => $x_point, 'y' => 0, 'width' => $size[1], 'height' => $size[1]]);
-							} else {
-								$cropimage = imagecrop($originimage, ['x' => 0, 'y' => 0, 'width' => $size[1], 'height' => $size[1]]);
-							}
+								if($x_point > 0){
+									$cropimage = imagecrop($originimage, ['x' => $x_point, 'y' => 0, 'width' => $size[1], 'height' => $size[1]]);
+								} else {
+									$cropimage = imagecrop($originimage, ['x' => 0, 'y' => 0, 'width' => $size[1], 'height' => $size[1]]);
+								}
 							$originimage = $cropimage;
 							$cropimage = imagecreatetruecolor(400, 400);
 							imagecopyresampled($cropimage, $originimage, 0, 0, 0, 0, 400, 400, $size[1], $size[1]);
@@ -262,37 +264,37 @@ $updir = "";
 				$title_s = preg_replace("/\[[^]]*\]/","",$title_s);
 			}
 		?>
-<a href='viewer.php?file=<?php echo urlencode(str_replace("+","{plus}", $getdir."/".$fileinfo));?>'>
-  <div class="col mb-3">
-    <div class="card text-black m-0 p-1">
-		<img src="data:<?php echo mime_type("jpg").";base64,".$img_output; ?>" class="rounded card-img-top card-img" alt="thumbnail">
-					<div class="card-img-overlay m-1 p-0">
-					<span class="badge badge-pill badge-success"><?php echo $totalpage; ?>p</span>
-					<span class="badge badge-pill badge-success"><?php echo $pageorder; ?></span>
+				<a href='viewer.php?file=<?php echo urlencode(str_replace("+","{plus}", $getdir."/".$fileinfo));?>'>
+				  <div class="col mb-3">
+					<div class="card text-black m-0 p-1">
+						<img src="data:<?php echo mime_type("jpg").";base64,".$img_output; ?>" class="rounded card-img-top card-img" alt="thumbnail">
+									<div class="card-img-overlay m-1 p-0">
+									<span class="badge badge-pill badge-success"><?php echo $totalpage; ?>p</span>
+									<span class="badge badge-pill badge-success"><?php echo $pageorder; ?></span>
+									</div>
+						<div class="card-body m-0 p-0 text-center text-nowrap" style="text-overflow: ellipsis; overflow: hidden;">
+							<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-file-earmark-zip-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+				  <path fill-rule="evenodd" d="M2 2a2 2 0 0 1 2-2h5.293A1 1 0 0 1 10 .293L13.707 4a1 1 0 0 1 .293.707V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm7 2l.5-2.5 3 3L10 5a1 1 0 0 1-1-1zM5.5 3V2h-1V1H6v1h1v1H6v1h1v1H6v1h1v1H5.5V6h-1V5h1V4h-1V3h1zm0 4.5a1 1 0 0 0-1 1v.938l-.4 1.599a1 1 0 0 0 .416 1.074l.93.62a1 1 0 0 0 1.109 0l.93-.62a1 1 0 0 0 .415-1.074l-.4-1.599V8.5a1 1 0 0 0-1-1h-1zm0 1.938V8.5h1v.938a1 1 0 0 0 .03.243l.4 1.598-.93.62-.93-.62.4-1.598a1 1 0 0 0 .03-.243z"/>
+				</svg> <?php echo $title_s;?>
+						</div>
 					</div>
-		<div class="card-body m-0 p-0 text-center text-nowrap" style="text-overflow: ellipsis; overflow: hidden;">
-			<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-file-earmark-zip-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-  <path fill-rule="evenodd" d="M2 2a2 2 0 0 1 2-2h5.293A1 1 0 0 1 10 .293L13.707 4a1 1 0 0 1 .293.707V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm7 2l.5-2.5 3 3L10 5a1 1 0 0 1-1-1zM5.5 3V2h-1V1H6v1h1v1H6v1h1v1H6v1h1v1H5.5V6h-1V5h1V4h-1V3h1zm0 4.5a1 1 0 0 0-1 1v.938l-.4 1.599a1 1 0 0 0 .416 1.074l.93.62a1 1 0 0 0 1.109 0l.93-.62a1 1 0 0 0 .415-1.074l-.4-1.599V8.5a1 1 0 0 0-1-1h-1zm0 1.938V8.5h1v.938a1 1 0 0 0 .03.243l.4 1.598-.93.62-.93-.62.4-1.598a1 1 0 0 0 .03-.243z"/>
-</svg> <?php echo $title_s;?>
-		</div>
-    </div>
-  </div>
-</a>
-		<?php
-			}
-		} else {
-			$have_file = 0;
+				  </div>
+				</a>
+						<?php
 		}
+	} else {
+		$have_file = 0;
+	}
 		?>
 	</div>
 </div>
 <br>
 <p align=center><?php
 
-if($server_version['index'] > $version['index']) {
+if((int)$server_version['index'] > (int)$version['index']) {
 	echo "<a href=update.php>index.php의 새버전이 있습니다.</a><br>";
 }
-if($server_version['viewer'] > $version['viewer']) {
+if((int)$server_version['viewer'] > (int)$version['viewer']) {
 	echo "<a href=update.php>viewer.php의 새버전이 있습니다.</a><br>";
 }
 echo "현재인덱스버전:".$version['index']." 현재뷰어버전:".$version['viewer'];
@@ -312,7 +314,7 @@ echo "현재인덱스버전:".$version['index']." 현재뷰어버전:".$version[
     </li>
 				<li class="nav-bar dropdown">
 					<button class="page-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">
-					<?php echo (int)(int)$_GET['page']+1; ?>/<?php 
+					<?php echo (int)$_GET['page']+1; ?>/<?php 
 						echo ceil($maxlist/$maxview);					
 					?>
 					</button>
