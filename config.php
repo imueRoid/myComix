@@ -1,10 +1,12 @@
 <?php
-$base_dir = "/comics_folder"; //만화가 있는 절대경로
+$base_dir = "/AirComix"; //만화가 있는 절대경로
 $maxview = "18"; //한페이지에 보여줄 만화 갯수
 $maxsize = "200"; //용량이 설정보다 큰 경우 파일을 하나씩 쪼개서 전송.
 
 
 $version = json_decode(file_get_contents("version.json"), true);
+$server_version = json_decode(file_get_contents("https://raw.githubusercontent.com/imueRoid/myComix/master/version.json"), true); 
+
 ################################################################################
 # Return MIME Content type
 ################################################################################
