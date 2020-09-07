@@ -31,10 +31,34 @@ $page = ceil(($now+1)/$maxview)-1;  //현재페이지
 						if($_GET['pageorder'] !== null){
 							$newpageorder = $_GET['pageorder'];
 							$pageorder['page_order'] = (string)$newpageorder;
-							$cache_output = json_encode($pageorder, JSON_UNESCAPED_UNICODE);
-							file_put_contents($json_file, $cache_output);
+							$json_output = json_encode($pageorder, JSON_UNESCAPED_UNICODE);
+							file_put_contents($json_file, $json_output);
 						}
-
+						if($_GET['mode'] == "toon"){
+							if($pageorder['viewer'] !== "toon" || $pageorder['viewer'] == null){
+								$pageorder['viewer'] = "toon";
+								$json_output = json_encode($pageorder, JSON_UNESCAPED_UNICODE);
+								file_put_contents($json_file, $json_output);
+							}
+							$mode = $_GET['mode'];
+						} elseif ($_GET['mode'] == "book"){
+							if($pageorder['viewer'] !== "book" || $pageorder['viewer'] == null){
+								$pageorder['viewer'] = "book";
+								$json_output = json_encode($pageorder, JSON_UNESCAPED_UNICODE);
+								file_put_contents($json_file, $json_output);
+							}
+							$mode = $_GET['mode'];
+						} elseif ($_GET['mode'] == null) {
+							if($pageorder['viewer'] !== null){
+								$mode = $pageorder['viewer'];
+							} else {
+								$pageorder['viewer'] = "toon";
+								$json_output = json_encode($json_data, JSON_UNESCAPED_UNICODE);
+								file_put_contents($json_file, $json_output);
+								$mode = $pageorder['viewer'];
+							}
+						}
+						
 ?>
 <!DOCTYPE html>
 <html lang="ko">
@@ -45,6 +69,16 @@ $page = ceil(($now+1)/$maxview)-1;  //현재페이지
 	<link href="https://fonts.googleapis.com/css2?family=Gugi&family=Nanum+Gothic:wght@400;700&display=swap" rel="stylesheet">
 	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/lazyload@2.0.0-rc.2/lazyload.js"></script>
+<?php
+if($mode == "book") {
+?>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/1.8.2/css/lightgallery.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/1.8.2/js/lightgallery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-mousewheel/3.1.13/jquery.mousewheel.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/lg-fullscreen/dist/lg-fullscreen.min.js"></script>
+<?php
+}
+?>
 	<style type="text/css">
 		body {
 			font-family: 'Nanum Gothic', sans-serif;
@@ -57,27 +91,51 @@ $page = ceil(($now+1)/$maxview)-1;  //현재페이지
 	</style>
    </head>
 <script type="text/javascript">
-$(document).ready(function(){
-    if ($('.navbar').length > 0) {
-         var last_scroll_top = 0;
-        $(window).on('scroll', function() {
-            scroll_top = $(this).scrollTop();
-            if(scroll_top < last_scroll_top) {
-                $('.navbar').fadeIn();
-            }
-            else {
-                $('.navbar').fadeOut();
-            }
-            last_scroll_top = scroll_top;
-        });
-    }
-});
-function hidenav() {
-	$('.navbar').fadeToggle();
-}; 
+
+<?php
+if($mode == "toon"){
+?>
+					$(document).ready(function(){
+						if ($('.navbar').length > 0) {
+							 var last_scroll_top = 0;
+							$(window).on('scroll', function() {
+								scroll_top = $(this).scrollTop();
+								if(scroll_top < last_scroll_top) {
+									$('.navbar').fadeIn();
+								}
+								else {
+									$('.navbar').fadeOut();
+								}
+								last_scroll_top = scroll_top;
+							});
+						}
+					});
+					function hidenav() {
+						$('.navbar').fadeToggle();
+					}; 
+
+<?php
+} elseif($mode == "book"){
+?>
+					$(document).ready(function(){
+						run_gallery();
+					});
+					function run_gallery() {
+						$('#lightgallery').lightGallery({
+							loop: false,
+							hideBarsDelay: 1000,
+							controls: false,
+							preload:5,
+							download: false,
+							useLeft: true
+						});
+					}; 
+<?php
+}
+?>
 </script>
-   <body>
-   <div>
+<body>
+<div>
 
 <nav class="navbar navbar-light fixed-top bg-white p-1 m-0">
 <span class="text-nowrap">
@@ -162,8 +220,20 @@ function hidenav() {
          ?>		 
 		 </div>
 <div class="btn-group btn-group-toggle" style="width:45%;" data-toggle="buttons">
-  <label class="btn btn-outline-secondary btn-sm mr-1">
-    <input type="radio" name="options" id="rungallery" OnClick="location.replace('./book.php?file=<?php echo urlencode(str_replace("+", "{plus}", $link_dir."/".$totalfile[$now])); ?>')">
+
+<?php
+if($mode == "toon"){
+?>
+<label class="btn btn-outline-secondary btn-sm mr-1">
+<input type="radio" name="options" id="rungallery" OnClick="location.replace('./viewer.php?mode=book&file=<?php echo urlencode(str_replace("+", "{plus}", $link_dir."/".$totalfile[$now])); ?>')">
+<?php	
+} elseif($mode == "book") {
+?>
+<label class="btn btn-secondary btn-sm mr-1">
+<input type="radio" name="options" id="rungallery" OnClick="location.replace('./viewer.php?mode=toon&file=<?php echo urlencode(str_replace("+", "{plus}", $link_dir."/".$totalfile[$now])); ?>')">
+<?php
+}	
+?>
 <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-book" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
   <path fill-rule="evenodd" d="M1 2.828v9.923c.918-.35 2.107-.692 3.287-.81 1.094-.111 2.278-.039 3.213.492V2.687c-.654-.689-1.782-.886-3.112-.752-1.234.124-2.503.523-3.388.893zm7.5-.141v9.746c.935-.53 2.12-.603 3.213-.493 1.18.12 2.37.461 3.287.811V2.828c-.885-.37-2.154-.769-3.388-.893-1.33-.134-2.458.063-3.112.752zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783z"/>
 </svg>
@@ -194,7 +264,17 @@ function hidenav() {
   </label>
 </nav>
 </div>
+<?php
+if($mode == "toon"){
+?>
 <div class="container-fluid m-0 p-0" onclick="hidenav();">
+<?php
+} elseif($mode == "book") {
+?>
+<div class="container-fluid m-0 p-0" onclick="run_gallery();">
+<?php
+}
+?>
             <p align='center'>
               <?php
 			  $loaded = 0;
@@ -208,56 +288,76 @@ function hidenav() {
 						}
 						$total = count($list);
 						sort($list,SORT_NATURAL);
-						foreach($list as $imgfile){
-						if($pageorder['page_order'] == "0" || $pageorder['page_order'] == null) {
-							$filesize_mb = filesize($base_file)/1048576;
-							if($filesize_mb > (int)$maxsize) {
-								echo "<img class='lazyload img-fluid' alt='".$imgfile."' src='extract.php?file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."' /><br>";
-							} else {
-								echo "<img class='lazyload img-fluid' alt='".$imgfile."' src='data:".mime_type($imgfile).";base64,".base64_encode($zip->getFromName($imgfile))."' /><br>";
-							}
-							$loaded++;
-						} elseif($pageorder['page_order'] == "1") {
-							$size = getimagesizefromstring($zip->getFromName($imgfile));
-							$new_x = $size[0]/2;
-							$originimage = imagecreatefromstring($zip->getFromName($imgfile));
-							$cropimage_l = imagecrop($originimage, ['x' => 0, 'y' => 0, 'width' => $new_x, 'height' => $size[1]]);
-							$cropimage_r = imagecrop($originimage, ['x' => $new_x, 'y' => 0, 'width' => $new_x, 'height' => $size[1]]);
-							imagedestroy($originimage);
-							ob_start();
-							imagejpeg($cropimage_l, null);
-							imagedestroy($cropimage_l);
-							$cropimage_l = ob_get_contents();
-							ob_end_clean();
-							ob_start();
-							imagejpeg($cropimage_r, null);
-							imagedestroy($cropimage_r);
-							$cropimage_r = ob_get_contents();
-							ob_end_clean();
-							echo "<img class='lazyload img-fluid' alt='".$imgfile."' src='data:".mime_type($imgfile).";base64,".base64_encode($cropimage_l)."' /><br>";
-							echo "<img class='lazyload img-fluid' alt='".$imgfile."' src='data:".mime_type($imgfile).";base64,".base64_encode($cropimage_r)."' /><br>";
-							$loaded++;
-						} elseif($pageorder['page_order'] == "2") {
-							$size = getimagesizefromstring($zip->getFromName($imgfile));
-							$new_x = $size[0]/2;
-							$originimage = imagecreatefromstring($zip->getFromName($imgfile));
-							$cropimage_l = imagecrop($originimage, ['x' => 0, 'y' => 0, 'width' => $new_x, 'height' => $size[1]]);
-							$cropimage_r = imagecrop($originimage, ['x' => $new_x, 'y' => 0, 'width' => $new_x, 'height' => $size[1]]);
-							imagedestroy($originimage);
-							ob_start();
-							imagejpeg($cropimage_l, null);
-							imagedestroy($cropimage_l);
-							$cropimage_l = ob_get_contents();
-							ob_end_clean();
-							ob_start();
-							imagejpeg($cropimage_r, null);
-							imagedestroy($cropimage_r);
-							$cropimage_r = ob_get_contents();
-							ob_end_clean();
-							echo "<img class='lazyload img-fluid' alt='".$imgfile."' src='data:".mime_type($imgfile).";base64,".base64_encode($cropimage_r)."' /><br>";
-							echo "<img class='lazyload img-fluid' alt='".$imgfile."' src='data:".mime_type($imgfile).";base64,".base64_encode($cropimage_l)."' /><br>";
-							$loaded++;
-						}
+
+						if($mode == "toon"){
+								foreach($list as $imgfile){
+								if($pageorder['page_order'] == "0" || $pageorder['page_order'] == null) {
+									$filesize_mb = filesize($base_file)/1048576;
+									if($filesize_mb > (int)$maxsize) {
+										echo "<img class='lazyload img-fluid' alt='".$imgfile."' src='extract.php?file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."' /><br>";
+									} else {
+										echo "<img class='lazyload img-fluid' alt='".$imgfile."' src='data:".mime_type($imgfile).";base64,".base64_encode($zip->getFromName($imgfile))."' /><br>";
+									}
+									$loaded++;
+								} elseif($pageorder['page_order'] == "1") {
+									$size = getimagesizefromstring($zip->getFromName($imgfile));
+									$new_x = $size[0]/2;
+									$originimage = imagecreatefromstring($zip->getFromName($imgfile));
+									$cropimage_l = imagecrop($originimage, ['x' => 0, 'y' => 0, 'width' => $new_x, 'height' => $size[1]]);
+									$cropimage_r = imagecrop($originimage, ['x' => $new_x, 'y' => 0, 'width' => $new_x, 'height' => $size[1]]);
+									imagedestroy($originimage);
+									ob_start();
+									imagejpeg($cropimage_l, null);
+									imagedestroy($cropimage_l);
+									$cropimage_l = ob_get_contents();
+									ob_end_clean();
+									ob_start();
+									imagejpeg($cropimage_r, null);
+									imagedestroy($cropimage_r);
+									$cropimage_r = ob_get_contents();
+									ob_end_clean();
+									echo "<img class='lazyload img-fluid' alt='".$imgfile."' src='data:".mime_type($imgfile).";base64,".base64_encode($cropimage_l)."' /><br>";
+									echo "<img class='lazyload img-fluid' alt='".$imgfile."' src='data:".mime_type($imgfile).";base64,".base64_encode($cropimage_r)."' /><br>";
+									$loaded++;
+								} elseif($pageorder['page_order'] == "2") {
+									$size = getimagesizefromstring($zip->getFromName($imgfile));
+									$new_x = $size[0]/2;
+									$originimage = imagecreatefromstring($zip->getFromName($imgfile));
+									$cropimage_l = imagecrop($originimage, ['x' => 0, 'y' => 0, 'width' => $new_x, 'height' => $size[1]]);
+									$cropimage_r = imagecrop($originimage, ['x' => $new_x, 'y' => 0, 'width' => $new_x, 'height' => $size[1]]);
+									imagedestroy($originimage);
+									ob_start();
+									imagejpeg($cropimage_l, null);
+									imagedestroy($cropimage_l);
+									$cropimage_l = ob_get_contents();
+									ob_end_clean();
+									ob_start();
+									imagejpeg($cropimage_r, null);
+									imagedestroy($cropimage_r);
+									$cropimage_r = ob_get_contents();
+									ob_end_clean();
+									echo "<img class='lazyload img-fluid' alt='".$imgfile."' src='data:".mime_type($imgfile).";base64,".base64_encode($cropimage_r)."' /><br>";
+									echo "<img class='lazyload img-fluid' alt='".$imgfile."' src='data:".mime_type($imgfile).";base64,".base64_encode($cropimage_l)."' /><br>";
+									$loaded++;
+								}
+								}
+						} elseif($mode == "book"){
+								echo "<div class=\"text-center\" id=\"lightgallery\">";
+								foreach($list as $imgfile){
+									if($pageorder['page_order'] == "0" || $pageorder['page_order'] == null) {
+										echo "<img class='lazyload img-fluid' alt='".$imgfile."' data-src='extract.php?file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."' src='extract.php?file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."' />";
+										$loaded++;
+									} elseif($pageorder['page_order'] == "1") {
+										echo "<img class='lazyload img-fluid' alt='".$imgfile."' data-src='extract.php?order=left&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."' src='extract.php?order=left&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."' />";
+										echo "<img class='lazyload img-fluid' alt='".$imgfile."' data-src='extract.php?order=right&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."' src='extract.php?order=right&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."' />";
+										$loaded++;
+									} elseif($pageorder['page_order'] == "2") {
+										echo "<img class='lazyload img-fluid' alt='".$imgfile."' data-src='extract.php?order=right&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."' src='extract.php?order=right$file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."' />";
+										echo "<img class='lazyload img-fluid' alt='".$imgfile."' data-src='extract.php?order=left&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."' src='extract.php?order=left&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."' />";
+										$loaded++;
+									}
+								}
+								echo "</div>";
 						}
 						$zip->close();
 						$countloaded++;

@@ -218,6 +218,7 @@ $updir = "";
 					$cache_data = array();
 					$cache_data['totalpage'] = $zip->numFiles;
 					$cache_data['page_order'] = "0";
+					$cache_data['viewer'] = "toon";
 					$cache_data['thumbnail'] = base64_encode($cropimage);
 					$zip->close();
 					$cache_output = json_encode($cache_data, JSON_UNESCAPED_UNICODE);
@@ -235,6 +236,14 @@ $updir = "";
 				} elseif((int)$json_data['page_order'] == 2) {
 					$pageorder = "[2|1]";
 				}
+			if($json_data['viewer'] !== null){
+				$viewer = $json_data['viewer'];
+			} else {
+				$json_data['viewer'] = "toon";
+				$json_output = json_encode($json_data, JSON_UNESCAPED_UNICODE);
+				file_put_contents($configfile, $json_output);
+				$viewer = $json_data['viewer'];
+			}
 
 			if(strpos($nowdirarr[count($nowdirarr)-1],"] ")){
 				$dir_s = preg_replace("/\[[^]]*\]/","",$nowdirarr[count($nowdirarr)-1]);
@@ -264,13 +273,14 @@ $updir = "";
 				$title_s = preg_replace("/\[[^]]*\]/","",$title_s);
 			}
 		?>
-				<a href='viewer.php?file=<?php echo urlencode(str_replace("+","{plus}", $getdir."/".$fileinfo));?>'>
+				<a href='viewer.php?mode=<?php echo $viewer; ?>&file=<?php echo urlencode(str_replace("+","{plus}", $getdir."/".$fileinfo));?>'>
 				  <div class="col mb-3">
 					<div class="card text-black m-0 p-1">
 						<img src="data:<?php echo mime_type("jpg").";base64,".$img_output; ?>" class="rounded card-img-top card-img" alt="thumbnail">
 									<div class="card-img-overlay m-1 p-0">
 									<span class="badge badge-pill badge-success"><?php echo $totalpage; ?>p</span>
 									<span class="badge badge-pill badge-success"><?php echo $pageorder; ?></span>
+									<span class="badge badge-pill badge-success"><?php echo $viewer; ?></span>
 									</div>
 						<div class="card-body m-0 p-0 text-center text-nowrap" style="text-overflow: ellipsis; overflow: hidden;">
 							<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-file-earmark-zip-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -291,13 +301,13 @@ $updir = "";
 <br>
 <p align=center><?php
 
-if((int)$server_version['index'] > (int)$version['index']) {
-	echo "<a href=update.php>index.php의 새버전이 있습니다.</a><br>";
-}
-if((int)$server_version['viewer'] > (int)$version['viewer']) {
-	echo "<a href=update.php>viewer.php의 새버전이 있습니다.</a><br>";
-}
-echo "현재인덱스버전:".$version['index']." 현재뷰어버전:".$version['viewer'];
+//	if((int)$server_version['index'] > (int)$version['index']) {
+//		echo "<a href=update.php>index.php의 새버전이 있습니다.</a><br>";
+//	}
+//	if((int)$server_version['viewer'] > (int)$version['viewer']) {
+//		echo "<a href=update.php>viewer.php의 새버전이 있습니다.</a><br>";
+//	}
+//	echo "현재인덱스버전:".$version['index']." 현재뷰어버전:".$version['viewer'];
  
  
  ?></p>
