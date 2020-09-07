@@ -1,7 +1,7 @@
 <?php
 $base_dir = "/AirComix"; //만화가 있는 절대경로
 $maxview = "18"; //한페이지에 보여줄 만화 갯수
-$maxsize = "200"; //용량이 설정보다 큰 경우 파일을 하나씩 쪼개서 전송.
+$maxsize = "100"; //용량이 설정보다 큰 경우 파일을 하나씩 쪼개서 전송.
 
 
 $version = json_decode(file_get_contents("version.json"), true);

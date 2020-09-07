@@ -18,6 +18,25 @@ $list = array();
 $zip = new ZipArchive;
 $zip->open($base_file);
 header('Content-Type: image/jpeg');
-echo $zip->getFromName($imgfile);
+if($_GET['order'] == null){
+	echo $zip->getFromName($imgfile);
+} elseif($_GET['order'] == "right"){
+	$size = getimagesizefromstring($zip->getFromName($imgfile));
+	$new_x = $size[0]/2;
+	$originimage = imagecreatefromstring($zip->getFromName($imgfile));
+	$cropimage_r = imagecrop($originimage, ['x' => $new_x, 'y' => 0, 'width' => $new_x, 'height' => $size[1]]);
+	imagedestroy($originimage);
+	ob_start();
+	imagejpeg($cropimage_r);
+	imagedestroy($cropimage_r);
+	$cropimage_r = ob_get_contents();
+} elseif($_GET['order'] == "left"){
+	$size = getimagesizefromstring($zip->getFromName($imgfile));
+	$new_x = $size[0]/2;
+	$originimage = imagecreatefromstring($zip->getFromName($imgfile));
+	$cropimage_l = imagecrop($originimage, ['x' => 0, 'y' => 0, 'width' => $new_x, 'height' => $size[1]]);
+	imagejpeg($cropimage_l);
+	imagedestroy($cropimage_l);
+}
 $zip->close();
 ?>
