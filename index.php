@@ -32,7 +32,9 @@ $iterator = new DirectoryIterator($dir);
 $dircounter = 0;
 $titlecounter = 0;
 $filecounter = 0;
-
+$file_list = array();
+$dir_list = array();
+$title_list = array();
 foreach ($iterator as $fileinfo) {
     if (!$fileinfo->isDot() && $fileinfo != "@eaDir" && $fileinfo->isDir()) {
 		$sub_iterator = new DirectoryIterator($dir."/".$fileinfo->getFilename());

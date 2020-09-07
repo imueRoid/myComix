@@ -88,6 +88,11 @@ if($mode == "book") {
 		a:visited {text-decoration: none;}
 		a:active {text-decoration: none;}
 		a:hover {text-decoration: none;}
+		img.lg-image {
+			min-height:100%;
+			min-width:100%;
+			object-fit:contain;
+		}
 	</style>
    </head>
 <script type="text/javascript">
@@ -130,6 +135,7 @@ if($mode == "toon"){
 							useLeft: true
 						});
 					}; 
+
 <?php
 }
 ?>
