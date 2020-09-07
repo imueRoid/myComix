@@ -104,7 +104,7 @@ function hidenav() {
 
 <div>
 <nav class="navbar navbar-light fixed-bottom bg-white ">
-<div class="btn-group justify-content-center" style="width:60%" style="font-family: 'Gugi';">
+<div class="btn-group justify-content-center" style="width:45%" style="font-family: 'Gugi';">
 <?php
          if ($now == '0') {
 			 ?>
@@ -161,7 +161,7 @@ function hidenav() {
 		 }
          ?>		 
 		 </div>
-<div class="btn-group btn-group-toggle" style="width:35%;" data-toggle="buttons">
+<div class="btn-group btn-group-toggle" style="width:45%;" data-toggle="buttons">
   <label class="btn btn-outline-secondary btn-sm mr-1">
     <input type="radio" name="options" id="rungallery" OnClick="location.replace('./book.php?file=<?php echo urlencode(str_replace("+", "{plus}", $link_dir."/".$totalfile[$now])); ?>')">
 <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-book" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
