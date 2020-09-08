@@ -189,7 +189,7 @@ $updir = "";
 			
 					$fileinfo = $file_list[$i-count($dir_list)-count($title_list)];
 					$zip_file = $dir."/".$fileinfo;
-if(is_File($zip_file)){
+	if(is_File($zip_file)){
 						if(strpos(strtolower($zip_file), ".zip")){
 							$configfile = substr($zip_file, 0, strpos(strtolower($zip_file), ".zip")).".json";
 						} elseif(strpos(strtolower($zip_file), ".cbz")){
@@ -200,10 +200,21 @@ if(is_File($zip_file)){
 			if(is_File($configfile) === false){
 					$zip = new ZipArchive;
 					if ($zip->open($zip_file) == TRUE) {
-						$size = getimagesizefromstring($zip->getFromIndex(0));
+						$thumbnail_index = 0;
+						for ($findthumb = 0; $findthumb < $zip->numFiles; $findthumb++) {
+							$find_img = $zip->getNameIndex($findthumb);
+							if(!strpos(strtolower($find_img), ".jpg")){
+								continue;
+							} elseif (strpos(strtolower($find_img), ".jpg") !== false) {
+								$thumbnail_index = $findthumb;
+								break;
+							}
+						}						
+						
+						$size = getimagesizefromstring($zip->getFromIndex($thumbnail_index));
 						if($size[0] > $size[1]) {
 							$x_point = ($size[0]/2) - $size[1];
-							$originimage = imagecreatefromstring($zip->getFromIndex(0));
+							$originimage = imagecreatefromstring($zip->getFromIndex($thumbnail_index));
 								if($x_point > 0){
 									$cropimage = imagecrop($originimage, ['x' => $x_point, 'y' => 0, 'width' => $size[1], 'height' => $size[1]]);
 								} else {
@@ -220,7 +231,7 @@ if(is_File($zip_file)){
 							ob_end_clean();
 
 						} else {
-							$originimage = imagecreatefromstring($zip->getFromIndex(0));
+							$originimage = imagecreatefromstring($zip->getFromIndex($thumbnail_index));
 							$y_point = ($size[1] - $size[0])/2;
 							$cropimage = imagecrop($originimage, ['x' => 0, 'y' => 0, 'width' => $size[0], 'height' => $size[0]]);
 							$originimage = $cropimage;

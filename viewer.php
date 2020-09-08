@@ -154,7 +154,8 @@ if($mode == "toon"){
 <?php
 		$files = scandir($base_folder);
 		sort($files,SORT_NATURAL);
-
+		$totalfile = array();
+		
 		foreach ($files as $file) {
 			if(strpos($file, "json") !== false){
 			} elseif (strpos(strtolower($file), "zip") !== false || strpos(strtolower($file), "cbz") !== false || strpos(strtolower($file), "rar") !== false || strpos(strtolower($file), "cbr") !== false) {
@@ -307,6 +308,9 @@ if($mode == "toon"){
 
 						if($mode == "toon"){
 								foreach($list as $imgfile){
+								if(!strpos(strtolower($imgfile), ".jpg")){
+									continue;
+								}
 								if($pageorder['page_order'] == "0" || $pageorder['page_order'] == null) {
 									$filesize_mb = filesize($base_file)/1048576;
 									if($filesize_mb > (int)$maxsize) {
@@ -375,6 +379,9 @@ if($mode == "toon"){
 						} elseif($mode == "book"){
 								echo "<div class=\"text-center\" id=\"lightgallery\">";
 								foreach($list as $imgfile){
+									if(!strpos(strtolower($imgfile), ".jpg")){
+										continue;
+									}
 									if($pageorder['page_order'] == "0" || $pageorder['page_order'] == null) {
 										echo "<img class='lazyload img-fluid' alt='".$imgfile."' data-src='extract.php?file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."' src='extract.php?file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."' />";
 										$loaded++;
