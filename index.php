@@ -182,7 +182,7 @@ $updir = "";
 					
 						if(strpos(strtolower($zip_file), ".zip")){
 							$configfile = substr($zip_file, 0, strpos(strtolower($zip_file), ".zip")).".json";
-						} elseif(strtolower(strpos($zip_file), ".cbz")){
+						} elseif(strpos(strtolower($zip_file), ".cbz")){
 							$configfile = substr($zip_file, 0, strpos(strtolower($zip_file), ".cbz")).".json";
 						}
 
