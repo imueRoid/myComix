@@ -305,10 +305,13 @@ $updir = "";
 </div>
 <br>
 <p align=center><?php
-	if((int)$server_version > (int)$version) {
-		echo "<a href=https://github.com/imueRoid/myComix/archive/master.zip>마이코믹스의 새버전이 있습니다.</a><br>";
+	if($server_version['index'] > $version['index']) {
+		echo "<a href=https://github.com/imueRoid/myComix/archive/master.zip>인덱스의 새버전(".$server_version['index'].")이 있습니다.</a><br>";
 	}
-	echo "현재 마이코믹스버전 : ".$version;
+	if($server_version['viewer'] > $version['viewer']) {
+		echo "<a href=https://github.com/imueRoid/myComix/archive/master.zip>뷰어의 새버전(".$server_version['viewer'].")이 있습니다.</a><br>";
+	}
+	echo "현재버전 인덱스:".$version['index']."/뷰어:".$version['index'];
 
  
  ?></p>
