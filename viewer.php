@@ -317,44 +317,59 @@ if($mode == "toon"){
 									$loaded++;
 								} elseif($pageorder['page_order'] == "1") {
 									$size = getimagesizefromstring($zip->getFromName($imgfile));
-									$new_x = $size[0]/2;
-									$originimage = imagecreatefromstring($zip->getFromName($imgfile));
-									$cropimage_l = imagecrop($originimage, ['x' => 0, 'y' => 0, 'width' => $new_x, 'height' => $size[1]]);
-									$cropimage_r = imagecrop($originimage, ['x' => $new_x, 'y' => 0, 'width' => $new_x, 'height' => $size[1]]);
-									imagedestroy($originimage);
-									ob_start();
-									imagejpeg($cropimage_l, null);
-									imagedestroy($cropimage_l);
-									$cropimage_l = ob_get_contents();
-									ob_end_clean();
-									ob_start();
-									imagejpeg($cropimage_r, null);
-									imagedestroy($cropimage_r);
-									$cropimage_r = ob_get_contents();
-									ob_end_clean();
-									echo "<img class='lazyload img-fluid' alt='".$imgfile."' src='data:".mime_type($imgfile).";base64,".base64_encode($cropimage_l)."' /><br>";
-									echo "<img class='lazyload img-fluid' alt='".$imgfile."' src='data:".mime_type($imgfile).";base64,".base64_encode($cropimage_r)."' /><br>";
-									$loaded++;
+									
+									if($size[0]/$size[1] < 1){
+										$originimage = $zip->getFromName($imgfile);
+										echo "<img class='lazyload img-fluid' alt='".$imgfile."' src='data:".mime_type($imgfile).";base64,".base64_encode($originimage)."' /><br>";
+										imagedestroy($originimage);
+										$loaded++;
+									} else {
+										$new_x = $size[0]/2;
+										$originimage = imagecreatefromstring($zip->getFromName($imgfile));
+										$cropimage_l = imagecrop($originimage, ['x' => 0, 'y' => 0, 'width' => $new_x, 'height' => $size[1]]);
+										$cropimage_r = imagecrop($originimage, ['x' => $new_x, 'y' => 0, 'width' => $new_x, 'height' => $size[1]]);
+										imagedestroy($originimage);
+										ob_start();
+										imagejpeg($cropimage_l, null);
+										imagedestroy($cropimage_l);
+										$cropimage_l = ob_get_contents();
+										ob_end_clean();
+										ob_start();
+										imagejpeg($cropimage_r, null);
+										imagedestroy($cropimage_r);
+										$cropimage_r = ob_get_contents();
+										ob_end_clean();
+										echo "<img class='lazyload img-fluid' alt='".$imgfile."' src='data:".mime_type($imgfile).";base64,".base64_encode($cropimage_l)."' /><br>";
+										echo "<img class='lazyload img-fluid' alt='".$imgfile."' src='data:".mime_type($imgfile).";base64,".base64_encode($cropimage_r)."' /><br>";
+										$loaded++;
+									}
 								} elseif($pageorder['page_order'] == "2") {
 									$size = getimagesizefromstring($zip->getFromName($imgfile));
-									$new_x = $size[0]/2;
-									$originimage = imagecreatefromstring($zip->getFromName($imgfile));
-									$cropimage_l = imagecrop($originimage, ['x' => 0, 'y' => 0, 'width' => $new_x, 'height' => $size[1]]);
-									$cropimage_r = imagecrop($originimage, ['x' => $new_x, 'y' => 0, 'width' => $new_x, 'height' => $size[1]]);
-									imagedestroy($originimage);
-									ob_start();
-									imagejpeg($cropimage_l, null);
-									imagedestroy($cropimage_l);
-									$cropimage_l = ob_get_contents();
-									ob_end_clean();
-									ob_start();
-									imagejpeg($cropimage_r, null);
-									imagedestroy($cropimage_r);
-									$cropimage_r = ob_get_contents();
-									ob_end_clean();
-									echo "<img class='lazyload img-fluid' alt='".$imgfile."' src='data:".mime_type($imgfile).";base64,".base64_encode($cropimage_r)."' /><br>";
-									echo "<img class='lazyload img-fluid' alt='".$imgfile."' src='data:".mime_type($imgfile).";base64,".base64_encode($cropimage_l)."' /><br>";
-									$loaded++;
+									if($size[0]/$size[1] < 1){
+										$originimage = $zip->getFromName($imgfile);
+										echo "<img class='lazyload img-fluid' alt='".$imgfile."' src='data:".mime_type($imgfile).";base64,".base64_encode($originimage)."' /><br>";
+										imagedestroy($originimage);
+										$loaded++;
+									} else {
+										$new_x = $size[0]/2;
+										$originimage = imagecreatefromstring($zip->getFromName($imgfile));
+										$cropimage_l = imagecrop($originimage, ['x' => 0, 'y' => 0, 'width' => $new_x, 'height' => $size[1]]);
+										$cropimage_r = imagecrop($originimage, ['x' => $new_x, 'y' => 0, 'width' => $new_x, 'height' => $size[1]]);
+										imagedestroy($originimage);
+										ob_start();
+										imagejpeg($cropimage_l, null);
+										imagedestroy($cropimage_l);
+										$cropimage_l = ob_get_contents();
+										ob_end_clean();
+										ob_start();
+										imagejpeg($cropimage_r, null);
+										imagedestroy($cropimage_r);
+										$cropimage_r = ob_get_contents();
+										ob_end_clean();
+										echo "<img class='lazyload img-fluid' alt='".$imgfile."' src='data:".mime_type($imgfile).";base64,".base64_encode($cropimage_r)."' /><br>";
+										echo "<img class='lazyload img-fluid' alt='".$imgfile."' src='data:".mime_type($imgfile).";base64,".base64_encode($cropimage_l)."' /><br>";
+										$loaded++;
+									}
 								}
 								}
 						} elseif($mode == "book"){
@@ -368,7 +383,7 @@ if($mode == "toon"){
 										echo "<img class='lazyload img-fluid' alt='".$imgfile."' data-src='extract.php?order=right&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."' src='extract.php?order=right&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."' />";
 										$loaded++;
 									} elseif($pageorder['page_order'] == "2") {
-										echo "<img class='lazyload img-fluid' alt='".$imgfile."' data-src='extract.php?order=right&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."' src='extract.php?order=right$file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."' />";
+										echo "<img class='lazyload img-fluid' alt='".$imgfile."' data-src='extract.php?order=right&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."' src='extract.php?order=right&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."' />";
 										echo "<img class='lazyload img-fluid' alt='".$imgfile."' data-src='extract.php?order=left&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."' src='extract.php?order=left&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."' />";
 										$loaded++;
 									}

@@ -10,25 +10,32 @@ if($_GET['file'] && $_GET['imgfile']){
 }
 
 if($_GET['filetype'] == "images") {
+	header('Content-Type: image/jpeg');
 	if($_GET['order'] == null){
 		echo file_get_contents($imgfile);
 	} elseif($_GET['order'] == "right"){
 		$size = getimagesizefromstring(file_get_contents($imgfile));
-		$new_x = $size[0]/2;
-		$originimage = imagecreatefromstring(file_get_contents($imgfile));
-		$cropimage_r = imagecrop($originimage, ['x' => $new_x, 'y' => 0, 'width' => $new_x, 'height' => $size[1]]);
-		imagedestroy($originimage);
-		ob_start();
-		imagejpeg($cropimage_r);
-		imagedestroy($cropimage_r);
-		$cropimage_r = ob_get_contents();
+		if($size[0]/$size[1] < 1){
+			echo base64_decode($null_image);
+		} else {
+			$new_x = $size[0]/2;
+			$originimage = imagecreatefromstring(file_get_contents($imgfile));
+			$cropimage_r = imagecrop($originimage, ['x' => $new_x, 'y' => 0, 'width' => $new_x, 'height' => $size[1]]);
+			imagedestroy($originimage);
+			imagejpeg($cropimage_r);
+			imagedestroy($cropimage_r);
+		}
 	} elseif($_GET['order'] == "left"){
 		$size = getimagesizefromstring(file_get_contents($imgfile));
-		$new_x = $size[0]/2;
-		$originimage = imagecreatefromstring(file_get_contents($imgfile));
-		$cropimage_l = imagecrop($originimage, ['x' => 0, 'y' => 0, 'width' => $new_x, 'height' => $size[1]]);
-		imagejpeg($cropimage_l);
-		imagedestroy($cropimage_l);
+		if($size[0]/$size[1] < 1){
+			echo file_get_contents($imgfile);
+		} else {
+			$new_x = $size[0]/2;
+			$originimage = imagecreatefromstring(file_get_contents($imgfile));
+			$cropimage_l = imagecrop($originimage, ['x' => 0, 'y' => 0, 'width' => $new_x, 'height' => $size[1]]);
+			imagejpeg($cropimage_l);
+			imagedestroy($cropimage_l);
+		}
 	}
 } else {
 	$base_title = explode("/", $base_file);
@@ -44,21 +51,27 @@ if($_GET['filetype'] == "images") {
 		echo $zip->getFromName($imgfile);
 	} elseif($_GET['order'] == "right"){
 		$size = getimagesizefromstring($zip->getFromName($imgfile));
-		$new_x = $size[0]/2;
-		$originimage = imagecreatefromstring($zip->getFromName($imgfile));
-		$cropimage_r = imagecrop($originimage, ['x' => $new_x, 'y' => 0, 'width' => $new_x, 'height' => $size[1]]);
-		imagedestroy($originimage);
-		ob_start();
-		imagejpeg($cropimage_r);
-		imagedestroy($cropimage_r);
-		$cropimage_r = ob_get_contents();
+		if($size[0]/$size[1] < 1){
+			echo base64_decode($null_image);
+		} else {
+			$new_x = $size[0]/2;
+			$originimage = imagecreatefromstring($zip->getFromName($imgfile));
+			$cropimage_r = imagecrop($originimage, ['x' => $new_x, 'y' => 0, 'width' => $new_x, 'height' => $size[1]]);
+			imagedestroy($originimage);
+			imagejpeg($cropimage_r);
+			imagedestroy($cropimage_r);
+		}
 	} elseif($_GET['order'] == "left"){
 		$size = getimagesizefromstring($zip->getFromName($imgfile));
-		$new_x = $size[0]/2;
-		$originimage = imagecreatefromstring($zip->getFromName($imgfile));
-		$cropimage_l = imagecrop($originimage, ['x' => 0, 'y' => 0, 'width' => $new_x, 'height' => $size[1]]);
-		imagejpeg($cropimage_l);
-		imagedestroy($cropimage_l);
+		if($size[0]/$size[1] < 1){
+			echo $zip->getFromName($imgfile);
+		} else {
+			$new_x = $size[0]/2;
+			$originimage = imagecreatefromstring($zip->getFromName($imgfile));
+			$cropimage_l = imagecrop($originimage, ['x' => 0, 'y' => 0, 'width' => $new_x, 'height' => $size[1]]);
+			imagejpeg($cropimage_l);
+			imagedestroy($cropimage_l);
+		}
 	}
 	$zip->close();
 }
