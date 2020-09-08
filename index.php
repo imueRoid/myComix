@@ -61,7 +61,7 @@ foreach ($iterator as $fileinfo) {
     if ($fileinfo->isFile()) {
 		if(strpos($fileinfo, ".json")){
 		} else {
-			if(strpos($fileinfo, "zip") !== false || strpos($fileinfo, "cbz") !== false) {
+			if(strpos(strtolower($fileinfo), "zip") !== false || strpos(strtolower($fileinfo), "cbz") !== false) {
 				$file_list[$filecounter] = $fileinfo->getFilename();
 				$filecounter++;
 			}
@@ -178,11 +178,16 @@ $updir = "";
 		for($i=$startview;$i<$endview;$i++) {
 					$fileinfo = $file_list[$i-count($dir_list)-count($title_list)];
 					$zip_file = $dir."/".$fileinfo;
-						if(strpos($zip_file, ".zip")){
-							$configfile = str_replace(".zip", "", $zip_file).".json";
-						} elseif(strpos($zip_file, ".cbz")){
-							$configfile = str_replace(".cbz", "", $zip_file).".json";
+
+					
+						if(strpos(strtolower($zip_file), ".zip")){
+							$configfile = substr($zip_file, 0, strpos(strtolower($zip_file), ".zip")).".json";
+						} elseif(strtolower(strpos($zip_file), ".cbz")){
+							$configfile = substr($zip_file, 0, strpos(strtolower($zip_file), ".cbz")).".json";
 						}
+
+
+
 			if(is_File($configfile) === false){
 					$zip = new ZipArchive;
 					if ($zip->open($zip_file) == TRUE) {

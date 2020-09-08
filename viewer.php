@@ -13,7 +13,7 @@ $title = $base_title[(count($base_title)-1)];
 $base_folder = str_replace($title, "", $base_file);
 $link_dir = str_replace("/".$title, "", $getfile);
 
-if(strpos($base_file, "zip") !== false || strpos($base_file, "cbz") !== false) {
+if(strpos(strtolower($base_file), "zip") !== false || strpos(strtolower($base_file), "cbz") !== false) {
 	$type = "zip";
 } else {
 	  die("이 파일은 처리하지 않습니다.");
@@ -21,10 +21,10 @@ if(strpos($base_file, "zip") !== false || strpos($base_file, "cbz") !== false) {
 
 $page = ceil(($now+1)/$maxview)-1;  //현재페이지
 
-						if(strpos($base_file, ".zip")){
-							$json_file = str_replace(".zip", "", $base_file).".json";
-						} elseif(strpos($base_file, ".cbz")){
-							$json_file = str_replace(".cbz", "", $base_file).".json";
+						if(strpos(strtolower($base_file), ".zip")){
+							$json_file = substr($base_file, 0, strpos(strtolower($base_file), ".zip")).".json";
+						} elseif(strpos(strtolower($base_file), ".cbz")){
+							$json_file = substr($base_file, 0, strpos(strtolower($base_file), ".cbz")).".json";
 						}
 
 						$pageorder = json_decode(file_get_contents($json_file), true);
@@ -155,7 +155,7 @@ if($mode == "toon"){
 
 		foreach ($files as $file) {
 			if(strpos($file, "json") !== false){
-			} elseif (strpos($file, "zip") !== false || strpos($file, "cbz") !== false || strpos($file, "rar") !== false || strpos($file, "cbr") !== false) {
+			} elseif (strpos(strtolower($file), "zip") !== false || strpos(strtolower($file), "cbz") !== false || strpos(strtolower($file), "rar") !== false || strpos(strtolower($file), "cbr") !== false) {
 				$totalfile[] = $file;
 			}
 		}
