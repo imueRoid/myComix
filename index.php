@@ -183,18 +183,18 @@ $updir = "";
 	<?php
 	if(count($file_list) > 0 && $endview > $startview){
 		for($i=$startview;$i<$endview;$i++) {
-			if($i+1 == $endview) {
+			if($i>$endview) {
 				break;
 			}
 			
 					$fileinfo = $file_list[$i-count($dir_list)-count($title_list)];
 					$zip_file = $dir."/".$fileinfo;
+if(is_File($zip_file)){
 						if(strpos(strtolower($zip_file), ".zip")){
 							$configfile = substr($zip_file, 0, strpos(strtolower($zip_file), ".zip")).".json";
 						} elseif(strpos(strtolower($zip_file), ".cbz")){
 							$configfile = substr($zip_file, 0, strpos(strtolower($zip_file), ".cbz")).".json";
 						}
-
 
 
 			if(is_File($configfile) === false){
@@ -310,6 +310,7 @@ $updir = "";
 				  </div>
 				</a>
 						<?php
+		}
 		}
 	} else {
 	}
