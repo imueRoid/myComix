@@ -4,9 +4,14 @@ $maxview = "18"; //한페이지에 보여줄 만화 갯수
 $maxsize = "100"; //용량이 설정보다 큰 경우 파일을 하나씩 쪼개서 전송.
 
 
-$version = json_decode(file_get_contents("version.json"), true);
-$server_version = json_decode(file_get_contents("https://raw.githubusercontent.com/imueRoid/myComix/master/version.json"), true); 
-
+$version = file_get_contents("version.txt");
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, "https://raw.githubusercontent.com/imueRoid/myComix/master/version.txt");
+ob_start();
+curl_exec($ch);
+curl_close($ch);
+$server_version = ob_get_contents();
+ob_end_clean();
 ################################################################################
 # Return MIME Content type
 ################################################################################
