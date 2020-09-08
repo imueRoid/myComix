@@ -311,7 +311,7 @@ $updir = "";
 	if($server_version['viewer'] > $version['viewer']) {
 		echo "<a href=https://github.com/imueRoid/myComix/archive/master.zip>뷰어의 새버전(".$server_version['viewer'].")이 있습니다.</a><br>";
 	}
-	echo "현재버전 인덱스:".$version['index']."/뷰어:".$version['index'];
+	echo "현재버전 {인덱스:".$version['index'].", 뷰어:".$version['index']."}";
 
  
  ?></p>
