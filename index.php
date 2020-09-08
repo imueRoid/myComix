@@ -4,6 +4,9 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<link rel="shortcut icon" href="data:data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAXdaVRYdFhNTDpjb20uYWRvYmUueG1wAAAAAAA8P3hwYWNrZXQgYmVnaW49Iu+7vyIgaWQ9Ilc1TTBNcENlaGlIenJlU3pOVGN6a2M5ZCI/PiA8eDp4bXBtZXRhIHhtbG5zOng9ImFkb2JlOm5zOm1ldGEvIiB4OnhtcHRrPSJBZG9iZSBYTVAgQ29yZSA1LjYtYzE0MiA3OS4xNjA5MjQsIDIwMTcvMDcvMTMtMDE6MDY6MzkgICAgICAgICI+IDxyZGY6UkRGIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyI+IDxyZGY6RGVzY3JpcHRpb24gcmRmOmFib3V0PSIiIHhtbG5zOnhtcD0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLyIgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIiB4bWxuczpwaG90b3Nob3A9Imh0dHA6Ly9ucy5hZG9iZS5jb20vcGhvdG9zaG9wLzEuMC8iIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIiB4bWxuczpzdEV2dD0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlRXZlbnQjIiB4bXA6Q3JlYXRvclRvb2w9IkFkb2JlIFBob3Rvc2hvcCBDQyAoV2luZG93cykiIHhtcDpDcmVhdGVEYXRlPSIyMDIwLTA4LTE5VDAxOjEwOjAzKzA5OjAwIiB4bXA6TW9kaWZ5RGF0ZT0iMjAyMC0wOS0wNVQxOTowNDozNCswOTowMCIgeG1wOk1ldGFkYXRhRGF0ZT0iMjAyMC0wOS0wNVQxOTowNDozNCswOTowMCIgZGM6Zm9ybWF0PSJpbWFnZS9wbmciIHBob3Rvc2hvcDpDb2xvck1vZGU9IjMiIHBob3Rvc2hvcDpJQ0NQcm9maWxlPSJzUkdCIElFQzYxOTY2LTIuMSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDphNDQ2OTM5YS00NGZkLTViNDEtOWQ3NC05MDg3N2E5OGY3ZjIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6N2UzNDdjMzAtYjRhZS02NjRlLTkyMDQtNzA4M2Y3NWFlZGY1IiB4bXBNTTpPcmlnaW5hbERvY3VtZW50SUQ9InhtcC5kaWQ6N2UzNDdjMzAtYjRhZS02NjRlLTkyMDQtNzA4M2Y3NWFlZGY1Ij4gPHhtcE1NOkhpc3Rvcnk+IDxyZGY6U2VxPiA8cmRmOmxpIHN0RXZ0OmFjdGlvbj0iY3JlYXRlZCIgc3RFdnQ6aW5zdGFuY2VJRD0ieG1wLmlpZDo3ZTM0N2MzMC1iNGFlLTY2NGUtOTIwNC03MDgzZjc1YWVkZjUiIHN0RXZ0OndoZW49IjIwMjAtMDgtMTlUMDE6MTA6MDMrMDk6MDAiIHN0RXZ0OnNvZnR3YXJlQWdlbnQ9IkFkb2JlIFBob3Rvc2hvcCBDQyAoV2luZG93cykiLz4gPHJkZjpsaSBzdEV2dDphY3Rpb249InNhdmVkIiBzdEV2dDppbnN0YW5jZUlEPSJ4bXAuaWlkOmE0NDY5MzlhLTQ0ZmQtNWI0MS05ZDc0LTkwODc3YTk4ZjdmMiIgc3RFdnQ6d2hlbj0iMjAyMC0wOS0wNVQxOTowNDozNCswOTowMCIgc3RFdnQ6c29mdHdhcmVBZ2VudD0iQWRvYmUgUGhvdG9zaG9wIENDIChXaW5kb3dzKSIgc3RFdnQ6Y2hhbmdlZD0iLyIvPiA8L3JkZjpTZXE+IDwveG1wTU06SGlzdG9yeT4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz4Q/ejHAAAMaklEQVR4Xu3dX4xeRR3G8VlvegNFSNrsNlShDQQTEqWiTTQpNNQL0jZt9QI1EqnRRLwB1Kohoq01hNBo1ZhUU7UqBvVCaUNJjdasNNFYUrEkQgikFSPa0l4ohcuS9Tz7zuu+nM6cf3vOe857ft9Psul5t8subeeZM7+ZOfNOOefmkg/ApLf4XwGTCABMIwAwjQDAtGARPDdHXYx+mppSk1/AHQCmBe8Aq6aX+St7Tp05568WrJ5Z7q8w6U6fPe+vBrgDwDQCANMI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">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
 	<link href="https://fonts.googleapis.com/css2?family=Gugi&family=Nanum+Gothic:wght@400;700&display=swap" rel="stylesheet">
 	<style type="text/css">
 		body {
@@ -42,11 +45,11 @@ foreach ($iterator as $fileinfo) {
 		$subdir_list = array();
 		foreach ($sub_iterator as $subfileinfo) {
 			if (!$subfileinfo->isDot() && $subfileinfo != "@eaDir" && $subfileinfo->isDir()) {
-				$subdir_list[$sub_dircounter] = $subfileinfo->getFilename();
 				$sub_dircounter++;
+				break;
 			}
 		}
-		if(count($subdir_list)>0){
+		if($sub_dircounter>0){
 			$dir_list[$dircounter] = $fileinfo->getFilename();
 			$dircounter++;
 		} else {
@@ -302,15 +305,11 @@ $updir = "";
 </div>
 <br>
 <p align=center><?php
+	if((int)$server_version['index'] > (int)$version['index'] || (int)$server_version['viewer'] > (int)$version['viewer']) {
+		echo "<a href=https://github.com/imueRoid/myComix/archive/master.zip>index.php의 새버전이 있습니다.</a><br>";
+	}
+	echo "현재인덱스버전:".$version['index']." 현재뷰어버전:".$version['viewer'];
 
-//	if((int)$server_version['index'] > (int)$version['index']) {
-//		echo "<a href=update.php>index.php의 새버전이 있습니다.</a><br>";
-//	}
-//	if((int)$server_version['viewer'] > (int)$version['viewer']) {
-//		echo "<a href=update.php>viewer.php의 새버전이 있습니다.</a><br>";
-//	}
-//	echo "현재인덱스버전:".$version['index']." 현재뷰어버전:".$version['viewer'];
- 
  
  ?></p>
 
@@ -331,9 +330,7 @@ $updir = "";
 					?>
 					</button>
 
-					<div class="dropdown-menu">
-	
-	
+					<div class="dropdown-menu" >
 <?php	
 					$pagingcount = 0;
 				while($pagingcount<($maxlist/$maxview)){
@@ -352,7 +349,5 @@ $updir = "";
   </ul>
 </nav>
 <br><br>
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 </body>
 </html>
