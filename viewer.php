@@ -15,6 +15,8 @@ $link_dir = str_replace("/".$title, "", $getfile);
 
 if(strpos(strtolower($base_file), "zip") !== false || strpos(strtolower($base_file), "cbz") !== false) {
 	$type = "zip";
+} elseif($_GET['filetype'] == "images") {
+	$type = "images";
 } else {
 	  die("이 파일은 처리하지 않습니다.");
 }
@@ -25,8 +27,9 @@ $page = ceil(($now+1)/$maxview)-1;  //현재페이지
 							$json_file = substr($base_file, 0, strpos(strtolower($base_file), ".zip")).".json";
 						} elseif(strpos(strtolower($base_file), ".cbz")){
 							$json_file = substr($base_file, 0, strpos(strtolower($base_file), ".cbz")).".json";
+						} elseif($_GET['filetype'] == "images") {
+							$json_file = $base_file."/image_files.json";								
 						}
-
 						$pageorder = json_decode(file_get_contents($json_file), true);
 						if($_GET['pageorder'] !== null){
 							$newpageorder = $_GET['pageorder'];
@@ -58,7 +61,6 @@ $page = ceil(($now+1)/$maxview)-1;  //현재페이지
 								$mode = $pageorder['viewer'];
 							}
 						}
-						
 ?>
 <!DOCTYPE html>
 <html lang="ko">
@@ -192,6 +194,15 @@ if($mode == "toon"){
 ?>
 <!-- 리스트로 돌아가기 시작 -->
 <?php
+if($_GET['filetype'] == "images"){
+?>	
+<button type="button" class="btn btn-outline-secondary btn-sm mr-1" OnClick="location.replace('./index.php?dir=<?php echo urlencode(str_replace("+", "{plus}", $getfile)); ?>&page=<?php echo $page; ?>')">
+<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-list" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <path fill-rule="evenodd" d="M2.5 11.5A.5.5 0 0 1 3 11h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 7h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 3h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+</svg>
+</button>
+<?php	
+} else {
 ?>
 <button type="button" class="btn btn-outline-secondary btn-sm mr-1" OnClick="location.replace('./index.php?dir=<?php echo urlencode(str_replace("+", "{plus}", $link_dir)); ?>&page=<?php echo $page; ?>')">
 <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-list" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -199,8 +210,7 @@ if($mode == "toon"){
 </svg>
 </button>
 <?php
-
-
+}
 ?>
 <!-- 리스트로 돌아가기 끝 -->
 <?php
@@ -231,12 +241,12 @@ if($mode == "toon"){
 if($mode == "toon"){
 ?>
 <label class="btn btn-outline-secondary btn-sm mr-1">
-<input type="radio" name="options" id="rungallery" OnClick="location.replace('./viewer.php?mode=book&file=<?php echo urlencode(str_replace("+", "{plus}", $link_dir."/".$totalfile[$now])); ?>')">
+<input type="radio" name="options" id="rungallery" OnClick="location.replace('./viewer.php?<?php if($_GET['filetype'] == "images") { echo "filetype=images&";} ?>mode=book&file=<?php echo urlencode(str_replace("+", "{plus}", $getfile)); ?>')">
 <?php	
 } elseif($mode == "book") {
 ?>
 <label class="btn btn-secondary btn-sm mr-1">
-<input type="radio" name="options" id="rungallery" OnClick="location.replace('./viewer.php?mode=toon&file=<?php echo urlencode(str_replace("+", "{plus}", $link_dir."/".$totalfile[$now])); ?>')">
+<input type="radio" name="options" id="rungallery" OnClick="location.replace('./viewer.php?<?php if($_GET['filetype'] == "images") { echo "filetype=images&";} ?>mode=toon&file=<?php echo urlencode(str_replace("+", "{plus}", $getfile)); ?>')">
 <?php
 }	
 ?>
@@ -250,7 +260,7 @@ if($mode == "toon"){
 	  echo "-outline";
   }
   ?>-secondary btn-sm">
-    <input type="radio" name="options" id="option1" OnClick="location.replace('./viewer.php?file=<?php echo urlencode(str_replace("+", "{plus}", $link_dir."/".$totalfile[$now])); ?>&pageorder=0')"> - 
+    <input type="radio" name="options" id="option1" OnClick="location.replace('./viewer.php?<?php if($_GET['filetype'] == "images") { echo "filetype=images&";} ?>file=<?php echo urlencode(str_replace("+", "{plus}", $getfile)); ?>&pageorder=0')"> - 
   </label>
   <label class="btn btn<?php
   if($pageorder['page_order'] == "1"){
@@ -258,7 +268,7 @@ if($mode == "toon"){
 	  echo "-outline";
   }
   ?>-secondary btn-sm">
-    <input type="radio" name="options" id="option2" OnClick="location.replace('./viewer.php?file=<?php echo urlencode(str_replace("+", "{plus}", $link_dir."/".$totalfile[$now])); ?>&pageorder=1')">1|2
+    <input type="radio" name="options" id="option2" OnClick="location.replace('./viewer.php?<?php if($_GET['filetype'] == "images") { echo "filetype=images&";} ?>file=<?php echo urlencode(str_replace("+", "{plus}", $getfile)); ?>&pageorder=1')">1|2
   </label>
   <label class="btn btn<?php
   if($pageorder['page_order'] == "2"){
@@ -266,7 +276,7 @@ if($mode == "toon"){
 	  echo "-outline";
   }
   ?>-secondary btn-sm">
-    <input type="radio" name="options" id="option3" OnClick="location.replace('./viewer.php?file=<?php echo urlencode(str_replace("+", "{plus}", $link_dir."/".$totalfile[$now])); ?>&pageorder=2')">2|1
+    <input type="radio" name="options" id="option3" OnClick="location.replace('./viewer.php?<?php if($_GET['filetype'] == "images") { echo "filetype=images&";} ?>file=<?php echo urlencode(str_replace("+", "{plus}", $getfile)); ?>&pageorder=2')">2|1
   </label>
 </nav>
 </div>
@@ -366,6 +376,35 @@ if($mode == "toon"){
 								echo "</div>";
 						}
 						$zip->close();
+						$countloaded++;
+					} elseif($type == "images") {
+						$list = array();
+						$counter = 0;
+						$iterator = new DirectoryIterator($base_file);
+						foreach ($iterator as $jpgfile) {
+							if (strpos(strtolower($jpgfile), ".jpg") !== false) {
+								$list[$counter] = $base_file."/".$jpgfile;
+								$counter++;
+							}
+						}
+						$total = count($list);
+						sort($list,SORT_NATURAL);
+								echo "<div class=\"text-center\" id=\"lightgallery\">";
+								foreach($list as $imgfile){
+									if($pageorder['page_order'] == "0" || $pageorder['page_order'] == null) {
+										echo "<img class='lazyload img-fluid' alt='".$imgfile."' data-src='extract.php?filetype=images&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."' src='extract.php?filetype=images&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."' />";
+										$loaded++;
+									} elseif($pageorder['page_order'] == "1") {
+										echo "<img class='lazyload img-fluid' alt='".$imgfile."' data-src='extract.php?filetype=images&order=left&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."' src='extract.php?filetype=images&order=left&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."' />";
+										echo "<img class='lazyload img-fluid' alt='".$imgfile."' data-src='extract.php?filetype=images&order=right&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."' src='extract.php?filetype=images&order=right&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."' />";
+										$loaded++;
+									} elseif($pageorder['page_order'] == "2") {
+										echo "<img class='lazyload img-fluid' alt='".$imgfile."' data-src='extract.php?filetype=images&order=right&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."' src='extract.php?filetype=images&order=right$file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."' />";
+										echo "<img class='lazyload img-fluid' alt='".$imgfile."' data-src='extract.php?filetype=images&order=left&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."' src='extract.php?filetype=images&order=left&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."' />";
+										$loaded++;
+									}
+								}
+								echo "</div>";
 						$countloaded++;
 					}
 					
