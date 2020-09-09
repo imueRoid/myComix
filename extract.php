@@ -69,6 +69,7 @@ if($_GET['filetype'] == "images") {
 			$new_x = $size[0]/2;
 			$originimage = imagecreatefromstring($zip->getFromName($imgfile));
 			$cropimage_l = imagecrop($originimage, ['x' => 0, 'y' => 0, 'width' => $new_x, 'height' => $size[1]]);
+			imagedestroy($originimage);
 			imagejpeg($cropimage_l);
 			imagedestroy($cropimage_l);
 		}

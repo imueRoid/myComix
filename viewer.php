@@ -69,8 +69,7 @@ $page = ceil(($now+1)/$maxview)-1;  //현재페이지
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
 	<link href="https://fonts.googleapis.com/css2?family=Gugi&family=Nanum+Gothic:wght@400;700&display=swap" rel="stylesheet">
-	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/lazyload@2.0.0-rc.2/lazyload.js"></script>
+	<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <?php
 if($mode == "book") {
 ?>
@@ -98,7 +97,6 @@ if($mode == "book") {
 	</style>
    </head>
 <script type="text/javascript">
-
 <?php
 if($mode == "toon"){
 ?>
@@ -119,8 +117,7 @@ if($mode == "toon"){
 					});
 					function hidenav() {
 						$('.navbar').fadeToggle();
-					}; 
-
+					};
 <?php
 } elseif($mode == "book"){
 ?>
@@ -300,106 +297,15 @@ if($mode == "toon"){
 						$zip = new ZipArchive;
 						if ($zip->open($base_file) == TRUE) {
 							for ($i = 0; $i < $zip->numFiles; $i++) {
-								$list[$i] = $zip->getNameIndex($i);
+								if(!strpos(strtolower($zip->getNameIndex($i)), ".jpg")){
+									continue;
+								} else {
+									$list[$i] = $zip->getNameIndex($i);
+								}
 							}
 						}
-						$total = count($list);
-						sort($list,SORT_NATURAL);
-
-						if($mode == "toon"){
-								foreach($list as $imgfile){
-								if(!strpos(strtolower($imgfile), ".jpg")){
-									continue;
-								}
-								if($pageorder['page_order'] == "0" || $pageorder['page_order'] == null) {
-									$filesize_mb = filesize($base_file)/1048576;
-									if($filesize_mb > (int)$maxsize) {
-										echo "<img class='lazyload img-fluid' alt='".$imgfile."' src='extract.php?file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."' /><br>";
-									} else {
-										echo "<img class='lazyload img-fluid' alt='".$imgfile."' src='data:".mime_type($imgfile).";base64,".base64_encode($zip->getFromName($imgfile))."' /><br>";
-									}
-									$loaded++;
-								} elseif($pageorder['page_order'] == "1") {
-									$size = getimagesizefromstring($zip->getFromName($imgfile));
-									
-									if($size[0]/$size[1] < 1){
-										$originimage = $zip->getFromName($imgfile);
-										echo "<img class='lazyload img-fluid' alt='".$imgfile."' src='data:".mime_type($imgfile).";base64,".base64_encode($originimage)."' /><br>";
-										imagedestroy($originimage);
-										$loaded++;
-									} else {
-										$new_x = $size[0]/2;
-										$originimage = imagecreatefromstring($zip->getFromName($imgfile));
-										$cropimage_l = imagecrop($originimage, ['x' => 0, 'y' => 0, 'width' => $new_x, 'height' => $size[1]]);
-										$cropimage_r = imagecrop($originimage, ['x' => $new_x, 'y' => 0, 'width' => $new_x, 'height' => $size[1]]);
-										imagedestroy($originimage);
-										ob_start();
-										imagejpeg($cropimage_l, null);
-										imagedestroy($cropimage_l);
-										$cropimage_l = ob_get_contents();
-										ob_end_clean();
-										ob_start();
-										imagejpeg($cropimage_r, null);
-										imagedestroy($cropimage_r);
-										$cropimage_r = ob_get_contents();
-										ob_end_clean();
-										echo "<img class='lazyload img-fluid' alt='".$imgfile."' src='data:".mime_type($imgfile).";base64,".base64_encode($cropimage_l)."' /><br>";
-										echo "<img class='lazyload img-fluid' alt='".$imgfile."' src='data:".mime_type($imgfile).";base64,".base64_encode($cropimage_r)."' /><br>";
-										$loaded++;
-									}
-								} elseif($pageorder['page_order'] == "2") {
-									$size = getimagesizefromstring($zip->getFromName($imgfile));
-									if($size[0]/$size[1] < 1){
-										$originimage = $zip->getFromName($imgfile);
-										echo "<img class='lazyload img-fluid' alt='".$imgfile."' src='data:".mime_type($imgfile).";base64,".base64_encode($originimage)."' /><br>";
-										imagedestroy($originimage);
-										$loaded++;
-									} else {
-										$new_x = $size[0]/2;
-										$originimage = imagecreatefromstring($zip->getFromName($imgfile));
-										$cropimage_l = imagecrop($originimage, ['x' => 0, 'y' => 0, 'width' => $new_x, 'height' => $size[1]]);
-										$cropimage_r = imagecrop($originimage, ['x' => $new_x, 'y' => 0, 'width' => $new_x, 'height' => $size[1]]);
-										imagedestroy($originimage);
-										ob_start();
-										imagejpeg($cropimage_l, null);
-										imagedestroy($cropimage_l);
-										$cropimage_l = ob_get_contents();
-										ob_end_clean();
-										ob_start();
-										imagejpeg($cropimage_r, null);
-										imagedestroy($cropimage_r);
-										$cropimage_r = ob_get_contents();
-										ob_end_clean();
-										echo "<img class='lazyload img-fluid' alt='".$imgfile."' src='data:".mime_type($imgfile).";base64,".base64_encode($cropimage_r)."' /><br>";
-										echo "<img class='lazyload img-fluid' alt='".$imgfile."' src='data:".mime_type($imgfile).";base64,".base64_encode($cropimage_l)."' /><br>";
-										$loaded++;
-									}
-								}
-								}
-						} elseif($mode == "book"){
-								echo "<div class=\"text-center\" id=\"lightgallery\">";
-								foreach($list as $imgfile){
-									if(!strpos(strtolower($imgfile), ".jpg")){
-										continue;
-									}
-									if($pageorder['page_order'] == "0" || $pageorder['page_order'] == null) {
-										echo "<img class='lazyload img-fluid' alt='".$imgfile."' data-src='extract.php?file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."' src='extract.php?file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."' />";
-										$loaded++;
-									} elseif($pageorder['page_order'] == "1") {
-										echo "<img class='lazyload img-fluid' alt='".$imgfile."' data-src='extract.php?order=left&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."' src='extract.php?order=left&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."' />";
-										echo "<img class='lazyload img-fluid' alt='".$imgfile."' data-src='extract.php?order=right&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."' src='extract.php?order=right&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."' />";
-										$loaded++;
-									} elseif($pageorder['page_order'] == "2") {
-										echo "<img class='lazyload img-fluid' alt='".$imgfile."' data-src='extract.php?order=right&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."' src='extract.php?order=right&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."' />";
-										echo "<img class='lazyload img-fluid' alt='".$imgfile."' data-src='extract.php?order=left&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."' src='extract.php?order=left&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."' />";
-										$loaded++;
-									}
-								}
-								echo "</div>";
-						}
-						$zip->close();
-						$countloaded++;
-					} elseif($type == "images") {
+						$file_type = "";
+ 					} elseif($type == "images") {
 						$list = array();
 						$counter = 0;
 						$iterator = new DirectoryIterator($base_file);
@@ -409,29 +315,36 @@ if($mode == "toon"){
 								$counter++;
 							}
 						}
+						$file_type = "filetype=images&";
+					}
+
 						$total = count($list);
 						sort($list,SORT_NATURAL);
-								echo "<div class=\"text-center\" id=\"lightgallery\">";
-								foreach($list as $imgfile){
-									if($pageorder['page_order'] == "0" || $pageorder['page_order'] == null) {
-										echo "<img class='lazyload img-fluid' alt='".$imgfile."' data-src='extract.php?filetype=images&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."' src='extract.php?filetype=images&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."' />";
-										$loaded++;
-									} elseif($pageorder['page_order'] == "1") {
-										echo "<img class='lazyload img-fluid' alt='".$imgfile."' data-src='extract.php?filetype=images&order=left&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."' src='extract.php?filetype=images&order=left&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."' />";
-										echo "<img class='lazyload img-fluid' alt='".$imgfile."' data-src='extract.php?filetype=images&order=right&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."' src='extract.php?filetype=images&order=right&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."' />";
-										$loaded++;
-									} elseif($pageorder['page_order'] == "2") {
-										echo "<img class='lazyload img-fluid' alt='".$imgfile."' data-src='extract.php?filetype=images&order=right&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."' src='extract.php?filetype=images&order=right$file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."' />";
-										echo "<img class='lazyload img-fluid' alt='".$imgfile."' data-src='extract.php?filetype=images&order=left&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."' src='extract.php?filetype=images&order=left&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."' />";
-										$loaded++;
-									}
-								}
-								echo "</div>";
+						
+						echo "<div class=\"text-center\" id=\"lightgallery\">";
+
+						foreach($list as $imgfile){
+							if($pageorder['page_order'] == "0" || $pageorder['page_order'] == null) {
+								echo "<div data-src=\"extract.php?".$file_type."file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."\"><img class='img-fluid' alt='".$imgfile."' src=\"extract.php?".$file_type."file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."\" /></div>";
+								$loaded++;
+							} elseif($pageorder['page_order'] == "1") {
+								echo "<div data-src=\"extract.php?".$file_type."order=left&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."\"><img class='img-fluid' alt='".$imgfile."' src=\"extract.php?".$file_type."order=left&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."\" /></div>";
+								echo "<div data-src=\"extract.php?".$file_type."order=right&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."\"><img class='img-fluid' alt='".$imgfile."' src=\"extract.php?".$file_type."order=right&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."\" /></div>";
+								$loaded++;
+							} elseif($pageorder['page_order'] == "2") {
+								echo "<div data-src=\"extract.php?".$file_type."order=right&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."\"><img class='img-fluid' alt='".$imgfile."' src=\"extract.php?".$file_type."order=right&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."\" /></div>";
+								echo "<div data-src=\"extract.php?".$file_type."order=left&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."\"><img class='img-fluid' alt='".$imgfile."' src=\"extract.php?".$file_type."order=left&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."\" /></div>";
+								$loaded++;
+							}
+						}
+						echo "</div>";
+
+						$zip->close();
+
 						$countloaded++;
-					}
 					
 					if($loaded < $total){
-						echo "모든 파일 로딩에 실패했습니다.";
+						echo "모든 파일 로딩에 실패했습니다. 인식할 수 없는 파일이 있습니다.";
 					}
                ?>
             </p>
