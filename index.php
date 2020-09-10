@@ -42,23 +42,32 @@ $dir_list = array();
 $title_list = array();
 foreach ($iterator as $fileinfo) {
     if (!$fileinfo->isDot() && $fileinfo != "@eaDir" && $fileinfo->isDir()) {
-		$sub_iterator = new DirectoryIterator($dir."/".$fileinfo->getFilename());
-		$sub_dircounter = 0;
-		$subdir_list = array();
-		foreach ($sub_iterator as $subfileinfo) {
-			if (!$subfileinfo->isDot() && $subfileinfo != "@eaDir" && $subfileinfo->isDir()) {
-				$sub_dircounter++;
-				break;
-			}
-		}
-		if($sub_dircounter>0){
+		if(strpos($dir, "rclone_")) {
 			$dir_list[$dircounter] = $fileinfo->getFilename();
 			$dircounter++;
 		} else {
-			$title_list[$titlecounter] = $fileinfo->getFilename();
-			$titlecounter++;
+			if(strpos($fileinfo->getFilename(), "rclone_")) {
+				$sub_dircounter = 0;
+			} else {
+				$sub_iterator = new DirectoryIterator($dir."/".$fileinfo->getFilename());
+				$sub_dircounter = 0;
+				$subdir_list = array();
+				foreach ($sub_iterator as $subfileinfo) {
+					if (!$subfileinfo->isDot() && $subfileinfo != "@eaDir" && $subfileinfo->isDir()) {
+						$sub_dircounter++;
+						break;
+					}
+				}
+			}
+			if($sub_dircounter>0){
+				$dir_list[$dircounter] = $fileinfo->getFilename();
+				$dircounter++;
+			} else {
+				$title_list[$titlecounter] = $fileinfo->getFilename();
+				$titlecounter++;
+			}
+			unset($subdir_list);
 		}
-		unset($subdir_list);
     }
     if ($fileinfo->isFile()) {
 		if(strpos($fileinfo, ".json")){
@@ -196,7 +205,34 @@ $updir = "";
 							$configfile = substr($zip_file, 0, strpos(strtolower($zip_file), ".cbz")).".json";
 						}
 
-
+	if(strpos($dir, "rclone_")) {
+		if(is_File($configfile) === false){
+			$img_output = $null_image;
+			$totalpage = "nodata-";
+			$pageorder = "[ - ]";
+			$viewer = "toon";
+		} else {
+			$json_data = json_decode(file_get_contents($configfile), true);
+			$img_output = $json_data['thumbnail'];
+			$totalpage = $json_data['totalpage'];
+			$pageorder = $json_data['page_order'];
+				if((int)$json_data['page_order'] == 0) {
+					$pageorder = "[ - ]";
+				} elseif((int)$json_data['page_order'] == 1) {
+					$pageorder = "[1|2]";
+				} elseif((int)$json_data['page_order'] == 2) {
+					$pageorder = "[2|1]";
+				}
+			if($json_data['viewer'] !== null){
+				$viewer = $json_data['viewer'];
+			} else {
+				$json_data['viewer'] = "toon";
+				$json_output = json_encode($json_data, JSON_UNESCAPED_UNICODE);
+				file_put_contents($configfile, $json_output);
+				$viewer = $json_data['viewer'];
+			}		
+		}
+	} else {
 			if(is_File($configfile) === false){
 					$zip = new ZipArchive;
 					if ($zip->open($zip_file) == TRUE) {
@@ -254,7 +290,6 @@ $updir = "";
 					$cache_output = json_encode($cache_data, JSON_UNESCAPED_UNICODE);
 					file_put_contents($configfile, $cache_output);
 			}
-
 			$json_data = json_decode(file_get_contents($configfile), true);
 			$img_output = $json_data['thumbnail'];
 			$totalpage = $json_data['totalpage'];
@@ -274,6 +309,7 @@ $updir = "";
 				file_put_contents($configfile, $json_output);
 				$viewer = $json_data['viewer'];
 			}
+	}
 
 			if(strpos($nowdirarr[count($nowdirarr)-1],"] ")){
 				$dir_s = preg_replace("/\[[^]]*\]/","",$nowdirarr[count($nowdirarr)-1]);
