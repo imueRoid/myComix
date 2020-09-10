@@ -30,37 +30,100 @@ $page = ceil(($now+1)/$maxview)-1;  //현재페이지
 						} elseif($_GET['filetype'] == "images") {
 							$json_file = $base_file."/image_files.json";								
 						}
-						$pageorder = json_decode(file_get_contents($json_file), true);
-						if($_GET['pageorder'] !== null){
-							$newpageorder = $_GET['pageorder'];
-							$pageorder['page_order'] = (string)$newpageorder;
-							$json_output = json_encode($pageorder, JSON_UNESCAPED_UNICODE);
-							file_put_contents($json_file, $json_output);
-						}
-						if($_GET['mode'] == "toon"){
-							if($pageorder['viewer'] !== "toon" || $pageorder['viewer'] == null){
-								$pageorder['viewer'] = "toon";
+						
+						if(is_file($json_file) === true){
+							$pageorder = json_decode(file_get_contents($json_file), true);
+							if($_GET['pageorder'] !== null){
+								$newpageorder = $_GET['pageorder'];
+								$pageorder['page_order'] = (string)$newpageorder;
 								$json_output = json_encode($pageorder, JSON_UNESCAPED_UNICODE);
 								file_put_contents($json_file, $json_output);
 							}
-							$mode = $_GET['mode'];
-						} elseif ($_GET['mode'] == "book"){
-							if($pageorder['viewer'] !== "book" || $pageorder['viewer'] == null){
-								$pageorder['viewer'] = "book";
-								$json_output = json_encode($pageorder, JSON_UNESCAPED_UNICODE);
-								file_put_contents($json_file, $json_output);
+							if($_GET['mode'] == "toon"){
+								if($pageorder['viewer'] !== "toon" || $pageorder['viewer'] == null){
+									$pageorder['viewer'] = "toon";
+									$json_output = json_encode($pageorder, JSON_UNESCAPED_UNICODE);
+									file_put_contents($json_file, $json_output);
+								}
+								$mode = $_GET['mode'];
+							} elseif ($_GET['mode'] == "book"){
+								if($pageorder['viewer'] !== "book" || $pageorder['viewer'] == null){
+									$pageorder['viewer'] = "book";
+									$json_output = json_encode($pageorder, JSON_UNESCAPED_UNICODE);
+									file_put_contents($json_file, $json_output);
+								}
+								$mode = $_GET['mode'];
+							} elseif ($_GET['mode'] == null) {
+								if($pageorder['viewer'] !== null){
+									$mode = $pageorder['viewer'];
+								} else {
+									$pageorder['viewer'] = "toon";
+									$json_output = json_encode($json_data, JSON_UNESCAPED_UNICODE);
+									file_put_contents($json_file, $json_output);
+									$mode = $pageorder['viewer'];
+								}
 							}
-							$mode = $_GET['mode'];
-						} elseif ($_GET['mode'] == null) {
-							if($pageorder['viewer'] !== null){
-								$mode = $pageorder['viewer'];
-							} else {
+						} elseif (is_file($json_file) === false) {
+							if(strpos(strtolower($base_file), ".zip") !== false || strpos(strtolower($base_file), ".cbz") !== false){
+								$zip = new ZipArchive;
+								if ($zip->open($base_file) == TRUE) {
+									$thumbnail_index = 0;
+									for ($findthumb = 0; $findthumb < $zip->numFiles; $findthumb++) {
+										$find_img = $zip->getNameIndex($findthumb);
+										if(!strpos(strtolower($find_img), ".jpg")){
+											continue;
+										} elseif (strpos(strtolower($find_img), ".jpg") !== false) {
+											$thumbnail_index = $findthumb;
+											break;
+										}
+									}						
+									
+									$size = getimagesizefromstring($zip->getFromIndex($thumbnail_index));
+									if($size[0] > $size[1]) {
+										$x_point = ($size[0]/2) - $size[1];
+										$originimage = imagecreatefromstring($zip->getFromIndex($thumbnail_index));
+											if($x_point > 0){
+												$cropimage = imagecrop($originimage, ['x' => $x_point, 'y' => 0, 'width' => $size[1], 'height' => $size[1]]);
+											} else {
+												$cropimage = imagecrop($originimage, ['x' => 0, 'y' => 0, 'width' => $size[1], 'height' => $size[1]]);
+											}
+										$originimage = $cropimage;
+										$cropimage = imagecreatetruecolor(400, 400);
+										imagecopyresampled($cropimage, $originimage, 0, 0, 0, 0, 400, 400, $size[1], $size[1]);
+										imagedestroy($originimage);
+										ob_start();
+										imagejpeg($cropimage, null, 75 );
+										imagedestroy($cropimage);
+										$cropimage = ob_get_contents();
+										ob_end_clean();
+
+									} else {
+										$originimage = imagecreatefromstring($zip->getFromIndex($thumbnail_index));
+										$y_point = ($size[1] - $size[0])/2;
+										$cropimage = imagecrop($originimage, ['x' => 0, 'y' => 0, 'width' => $size[0], 'height' => $size[0]]);
+										$originimage = $cropimage;
+										$cropimage = imagecreatetruecolor(400, 400);
+										imagecopyresampled($cropimage, $originimage, 0, 0, 0, 0, 400, 400, $size[0], $size[0]);
+										imagedestroy($originimage);
+										ob_start();
+										imagejpeg($cropimage, null, 75 );
+										imagedestroy($cropimage);
+										$cropimage = ob_get_contents();
+										ob_end_clean();
+									}
+								}
+
+								$pageorder = array();
+								$pageorder['totalpage'] = $zip->numFiles;
+								$pageorder['page_order'] = "0";
 								$pageorder['viewer'] = "toon";
-								$json_output = json_encode($json_data, JSON_UNESCAPED_UNICODE);
+								$pageorder['thumbnail'] = base64_encode($cropimage);
+								$json_output = json_encode($pageorder, JSON_UNESCAPED_UNICODE);
 								file_put_contents($json_file, $json_output);
 								$mode = $pageorder['viewer'];
 							}
 						}
+							
 ?>
 <!DOCTYPE html>
 <html lang="ko">
