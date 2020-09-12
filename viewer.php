@@ -160,6 +160,30 @@ if($mode == "book") {
 	</style>
    </head>
 <script type="text/javascript">
+var bookmark = getCookie("<?php echo $getfile; ?>");
+var scroll_top = "";
+
+function setCookie(cookie_name, value, days) {
+  var exdate = new Date();
+  exdate.setDate(exdate.getDate() + days);
+  var cookie_value = escape(value) + ((days == null) ? '' : ';    expires=' + exdate.toUTCString());
+  document.cookie = cookie_name + '=' + cookie_value;
+}
+
+function getCookie(cookie_name) {
+  var x, y;
+  var val = document.cookie.split(';');
+
+  for (var i = 0; i < val.length; i++) {
+    x = val[i].substr(0, val[i].indexOf('='));
+    y = val[i].substr(val[i].indexOf('=') + 1);
+    x = x.replace(/^\s+|\s+$/g, '');
+    if (x == cookie_name) {
+      return unescape(y);
+    }
+  }
+}
+
 <?php
 if($mode == "toon"){
 ?>
@@ -173,6 +197,7 @@ if($mode == "toon"){
 								}
 								else {
 									$('.navbar').fadeOut();
+									document.getElementById("info").value = "";
 								}
 								last_scroll_top = scroll_top;
 							});
@@ -201,14 +226,41 @@ if($mode == "toon"){
 <?php
 }
 ?>
+function load_bookmark() {
+	scroll_image2 = $("#image2").position().top;
+	scroll_position = bookmark*scroll_image2;
+	$('html').animate({scrollTop : scroll_position}, 400);
+	document.getElementById("info").value = "로드완료";
+}
+function save_bookmark() {
+	scroll_image2 = $("#image2").position().top;
+	scroll_top = $(this).scrollTop();
+	setCookie("<?php echo $getfile; ?>",scroll_top/scroll_image2,3);
+	document.getElementById("info").value = "저장완료";
+}
 </script>
 <body>
 <div>
 
 <nav class="navbar navbar-light fixed-top bg-white p-1 m-0">
-<span class="text-nowrap">
-<a OnClick="location.href='./index.php?dir=<?php echo urlencode(str_replace("+", "{plus}", $link_dir)); ?>&page=<?php echo $page; ?>'"><font style="font-family: 'Gugi'; font-size: 2em;">마이코믹스</font></a><br><?php echo $title; ?>			
-</span>
+<table width=100%>
+<tr>
+<td>
+<a OnClick="location.href='./index.php?dir=<?php echo urlencode(str_replace("+", "{plus}", $link_dir)); ?>&page=<?php echo $page; ?>'"><font style="font-family: 'Gugi'; font-size: 2em;">마이코믹스</font></a>
+</td>
+<td align="right">
+<input type="text" style="border:none;border-right:0px; border-top:0px; boder-left:0px; boder-bottom:0px;" readonly id="info" value="" size=10></input>
+<button class="btn btn-sm m-0 p-0" onclick="load_bookmark();" id="load" value="위치저장"><svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-bookmark-check-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <path fill-rule="evenodd" d="M4 0a2 2 0 0 0-2 2v13.5a.5.5 0 0 0 .74.439L8 13.069l5.26 2.87A.5.5 0 0 0 14 15.5V2a2 2 0 0 0-2-2H4zm6.854 5.854a.5.5 0 0 0-.708-.708L7.5 7.793 6.354 6.646a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0l3-3z"/>
+</svg></button>&nbsp;&nbsp;
+<button class="btn btn-sm m-0 p-0" onclick="save_bookmark();" id="save" value="위치저장"><svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-bookmark-plus" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <path fill-rule="evenodd" d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z"/>
+  <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5V6H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V7H6a.5.5 0 0 1 0-1h1.5V4.5A.5.5 0 0 1 8 4z"/>
+</svg></button></td></tr>
+<tr>
+<td><?php echo $title; ?>
+</td></tr>
+</table>
 </nav>
 </div>
 <?php
@@ -355,6 +407,7 @@ if($mode == "toon"){
             <p align='center'>
               <?php
 			  $loaded = 0;
+			  $image_counter = 0;
 					if ($type == "zip") {
 						$list = array();
 						$zip = new ZipArchive;
@@ -388,23 +441,26 @@ if($mode == "toon"){
 
 						foreach($list as $imgfile){
 							if($pageorder['page_order'] == "0" || $pageorder['page_order'] == null) {
-								echo "<div data-src=\"extract.php?".$file_type."file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."\"><img class='img-fluid' src=\"extract.php?".$file_type."file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."\" /></div>";
+								echo "<div data-src=\"extract.php?".$file_type."file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."\"><img class='img-fluid' id=\"image".$image_counter."\" src=\"extract.php?".$file_type."file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."\" /></div>";
 								$loaded++;
+								$image_counter++;
 							} elseif($pageorder['page_order'] == "1") {
-								echo "<div data-src=\"extract.php?".$file_type."order=left&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."\"><img class='img-fluid' src=\"extract.php?".$file_type."order=left&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."\" /></div>";
-								echo "<div data-src=\"extract.php?".$file_type."order=right&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."\"><img class='img-fluid' src=\"extract.php?".$file_type."order=right&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."\" /></div>";
+								echo "<div data-src=\"extract.php?".$file_type."order=left&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."\"><img class='img-fluid' id=\"image".$image_counter."\" src=\"extract.php?".$file_type."order=left&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."\" /></div>";
+								$image_counter++;
+								echo "<div data-src=\"extract.php?".$file_type."order=right&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."\"><img class='img-fluid' id=\"image".$image_counter."\" src=\"extract.php?".$file_type."order=right&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."\" /></div>";
 								$loaded++;
+								$image_counter++;
 							} elseif($pageorder['page_order'] == "2") {
-								echo "<div data-src=\"extract.php?".$file_type."order=right&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."\"><img class='img-fluid' src=\"extract.php?".$file_type."order=right&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."\" /></div>";
-								echo "<div data-src=\"extract.php?".$file_type."order=left&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."\"><img class='img-fluid' src=\"extract.php?".$file_type."order=left&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."\" /></div>";
+								echo "<div data-src=\"extract.php?".$file_type."order=right&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."\"><img class='img-fluid' id=\"image".$image_counter."\" src=\"extract.php?".$file_type."order=right&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."\" /></div>";
+								$image_counter++;
+								echo "<div data-src=\"extract.php?".$file_type."order=left&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."\"><img class='img-fluid' id=\"image".$image_counter."\" src=\"extract.php?".$file_type."order=left&file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."\" /></div>";
 								$loaded++;
+								$image_counter++;
 							}
 						}
 						echo "</div>";
 
 						$zip->close();
-
-						$countloaded++;
 					
 					if($loaded < $total){
 						echo "모든 파일 로딩에 실패했습니다. 인식할 수 없는 파일이 있습니다.";
