@@ -75,7 +75,7 @@ foreach ($iterator as $fileinfo) {
 			if(strpos(strtolower($fileinfo), ".zip") !== false || strpos(strtolower($fileinfo), ".cbz") !== false) {
 				$file_list[$filecounter] = $fileinfo->getFilename();
 				$filecounter++;
-			} elseif(strpos(strtolower($fileinfo), ".jpg") !== false) {
+			} elseif(strpos(strtolower($fileinfo), ".jpg") !== false || strpos(strtolower($fileinfo), ".jpeg") !== false || strpos(strtolower($fileinfo), ".png") !== false) {
 				$jpg_list[$jpgcounter] = $fileinfo->getFilename();
 				$jpgcounter++;
 			}

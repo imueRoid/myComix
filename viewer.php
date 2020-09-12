@@ -70,9 +70,9 @@ $page = ceil(($now+1)/$maxview)-1;  //현재페이지
 									$thumbnail_index = 0;
 									for ($findthumb = 0; $findthumb < $zip->numFiles; $findthumb++) {
 										$find_img = $zip->getNameIndex($findthumb);
-										if(!strpos(strtolower($find_img), ".jpg")){
+										if(!strpos(strtolower($find_img), ".jpg") && !strpos(strtolower($find_img), ".jpeg") && !strpos(strtolower($find_img), ".png")){
 											continue;
-										} elseif (strpos(strtolower($find_img), ".jpg") !== false) {
+										} elseif (strpos(strtolower($find_img), ".jpg") !== false || strpos(strtolower($find_img), ".jpeg") !== false || strpos(strtolower($find_img), ".png") !== false) {
 											$thumbnail_index = $findthumb;
 											break;
 										}
@@ -416,7 +416,7 @@ if($mode == "toon"){
 						$zip = new ZipArchive;
 						if ($zip->open($base_file) == TRUE) {
 							for ($i = 0; $i < $zip->numFiles; $i++) {
-								if(!strpos(strtolower($zip->getNameIndex($i)), ".jpg")){
+								if(!strpos(strtolower($zip->getNameIndex($i)), ".jpg") && !strpos(strtolower($zip->getNameIndex($i)), ".jpeg") && !strpos(strtolower($zip->getNameIndex($i)), ".png")){
 									continue;
 								} else {
 									$list[$i] = $zip->getNameIndex($i);
@@ -429,7 +429,7 @@ if($mode == "toon"){
 						$counter = 0;
 						$iterator = new DirectoryIterator($base_file);
 						foreach ($iterator as $jpgfile) {
-							if (strpos(strtolower($jpgfile), ".jpg") !== false) {
+							if (strpos(strtolower($jpgfile), ".jpg") !== false || strpos(strtolower($jpgfile), ".jpeg") !== false || strpos(strtolower($jpgfile), ".png") !== false) {
 								$list[$counter] = $base_file."/".$jpgfile;
 								$counter++;
 							}
