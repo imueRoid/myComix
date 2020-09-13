@@ -21,6 +21,16 @@ if(strpos(strtolower($base_file), "zip") !== false || strpos(strtolower($base_fi
 	  die("이 파일은 처리하지 않습니다.");
 }
 
+
+$bookmark_file = "admin_bookmark.json";
+$bookmark_arr = array();
+$bookmark = 0;
+if(is_file($bookmark_file) === true){
+	$bookmark_arr = json_decode(file_get_contents($bookmark_file), true);
+	if($bookmark_arr[$getfile]) {
+		$bookmark = $bookmark_arr[$getfile];
+	}
+}
 $page = ceil(($now+1)/$maxview)-1;  //현재페이지
 
 						if(strpos(strtolower($base_file), ".zip")){
@@ -160,30 +170,6 @@ if($mode == "book") {
 	</style>
    </head>
 <script type="text/javascript">
-var bookmark = getCookie("<?php echo $getfile; ?>");
-var scroll_top = "";
-
-function setCookie(cookie_name, value, days) {
-  var exdate = new Date();
-  exdate.setDate(exdate.getDate() + days);
-  var cookie_value = escape(value) + ((days == null) ? '' : ';    expires=' + exdate.toUTCString());
-  document.cookie = cookie_name + '=' + cookie_value;
-}
-
-function getCookie(cookie_name) {
-  var x, y;
-  var val = document.cookie.split(';');
-
-  for (var i = 0; i < val.length; i++) {
-    x = val[i].substr(0, val[i].indexOf('='));
-    y = val[i].substr(val[i].indexOf('=') + 1);
-    x = x.replace(/^\s+|\s+$/g, '');
-    if (x == cookie_name) {
-      return unescape(y);
-    }
-  }
-}
-
 <?php
 if($mode == "toon"){
 ?>
@@ -226,18 +212,6 @@ if($mode == "toon"){
 <?php
 }
 ?>
-function load_bookmark() {
-	scroll_image2 = $("#image2").position().top;
-	scroll_position = bookmark*scroll_image2;
-	$('html').animate({scrollTop : scroll_position}, 400);
-	document.getElementById("info").value = "로드완료";
-}
-function save_bookmark() {
-	scroll_image2 = $("#image2").position().top;
-	scroll_top = $(this).scrollTop();
-	setCookie("<?php echo $getfile; ?>",scroll_top/scroll_image2,3);
-	document.getElementById("info").value = "저장완료";
-}
 </script>
 <body>
 <div>
@@ -249,8 +223,8 @@ function save_bookmark() {
 <a OnClick="location.href='./index.php?dir=<?php echo urlencode(str_replace("+", "{plus}", $link_dir)); ?>&page=<?php echo $page; ?>'"><font style="font-family: 'Gugi'; font-size: 2em;">마이코믹스</font></a>
 </td>
 <td class="m-0 p-0 align-middle" align="right">
-<input type="text" style="border:none;border-right:0px; border-top:0px; boder-left:0px; boder-bottom:0px;" readonly id="info" value="" size=10></input>
-<button class="btn btn-sm m-0 p-0" onclick="load_bookmark();" id="load" value="위치저장"><svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-bookmark-check-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+<img id="submit_bookmark" src="" height="1" width="1"><input type="text" style="border:none;border-right:0px; border-top:0px; boder-left:0px; boder-bottom:0px;" readonly id="info" value="" size=10></input>
+<button class="btn btn-sm m-0 p-0" onclick="location.href='#<?php echo $bookmark; ?>';" id="load" value="위치저장"><svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-bookmark-check-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
   <path fill-rule="evenodd" d="M4 0a2 2 0 0 0-2 2v13.5a.5.5 0 0 0 .74.439L8 13.069l5.26 2.87A.5.5 0 0 0 14 15.5V2a2 2 0 0 0-2-2H4zm6.854 5.854a.5.5 0 0 0-.708-.708L7.5 7.793 6.354 6.646a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0l3-3z"/>
 </svg></button>&nbsp;&nbsp;
 <button class="btn btn-sm m-0 p-0" onclick="save_bookmark();" id="save" value="위치저장"><svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-bookmark-plus" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -471,6 +445,23 @@ if($mode == "toon"){
                ?>
             </p>
 </div>
+
+<script type="text/javascript">
+function save_bookmark() {
+	var bookmark = "image0";
+	var scroll_top = $(this).scrollTop();
+	for (var i = 0; i < <?php echo $image_counter; ?>; i++) {
+		var scroll_image = $("#image"+i).position().top;
+		if (scroll_top < scroll_image) {
+			bookmark= "image" + String(i-1);
+			break;
+		}
+	}
+	var scroll_image3 = $("#image"+3).position().top;
+    document.getElementById("submit_bookmark").src = "bookmark.php?file=<?php echo urlencode(str_replace("+", "{plus}", $getfile)); ?>&bookmark=" + bookmark;
+	document.getElementById("info").value = "저장완료";
+}
+</script>
 
 </body>
 </html>
