@@ -131,7 +131,7 @@ $bookmark_mark = array_values($bookmark_arr);
 for($count=0;$count < count($bookmark_arr); $count++){
 	$title_temp = explode("/", $bookmark_title[$count]);
 ?>
-	<a onclick="location.href='./viewer.php?file=<?php echo urlencode(str_replace("+","{plus}", $bookmark_title[$count])); ?>'" href="#" class="dropdown-item"><?php echo $title_temp[count($title_temp) - 1]; ?></a>
+	<a onclick="location.href='./viewer.php?file=<?php echo urlencode(str_replace("+","{plus}", $bookmark_title[$count])); ?>#<?php echo $bookmark_mark[$count]; ?>'" href="#" class="dropdown-item"><?php echo $title_temp[count($title_temp) - 1]; ?></a>
 <?php
 }
 ?>
