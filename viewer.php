@@ -465,7 +465,7 @@ var bookmark = "image0";
 
 function save_bookmark() {
 <?php
-if ($_GET['mode'] == "toon"){
+if ($mode == "toon"){
 ?>
 	var scroll_top = $(this).scrollTop();
 
@@ -486,6 +486,9 @@ if ($_GET['mode'] == "toon"){
 	document.getElementById("submit_bookmark").src = "bookmark.php?file=<?php echo urlencode(str_replace("+", "{plus}", $getfile)); ?>&bookmark=" + bookmark;
 	document.getElementById("info").value = "저장완료";
 }
+<?php
+if ($mode == "book"){
+?>
 var img_counter = 0;
 
 $("body").on('DOMSubtreeModified', "#lg-counter-current", function() {
@@ -497,6 +500,9 @@ $("body").on('DOMSubtreeModified', "#lg-counter-current", function() {
 		img_counter = new_counter;
 	}
 });
+<?php
+}
+?>
 </script>
 </body>
 </html>
