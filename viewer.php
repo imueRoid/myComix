@@ -147,7 +147,7 @@ $page = ceil(($now+1)/$maxview)-1;  //현재페이지
 if($mode == "book") {
 ?>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/1.8.2/css/lightgallery.min.css">
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/1.8.2/js/lightgallery.min.js"></script>
+	<script src="lightgallery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-mousewheel/3.1.13/jquery.mousewheel.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/lg-fullscreen/dist/lg-fullscreen.min.js"></script>
 <?php
@@ -163,9 +163,23 @@ if($mode == "book") {
 		a:active {text-decoration: none;}
 		a:hover {text-decoration: none;}
 		img.lg-image {
+			margin: 0;
+			padding: 0;
 			min-height:100%;
 			min-width:100%;
 			object-fit:contain;
+		}
+		.lg-outer .lg-img-wrap {
+			position: absolute;
+			padding: 0 0px;
+			padding-top: 0px;
+			padding-right: 0px;
+			padding-bottom: 0px;
+			padding-left: 0px;
+			left: 0;
+			right: 0;
+			top: 0;
+			bottom: 0;
 		}
 	</style>
    </head>
@@ -205,9 +219,10 @@ if($mode == "toon"){
 							controls: false,
 							preload:5,
 							download: false,
-							useLeft: true
+							useLeft: true,
 						});
-					}; 
+					};
+					
 
 <?php
 }
@@ -215,7 +230,6 @@ if($mode == "toon"){
 </script>
 <body>
 <div>
-
 <nav class="navbar navbar-light fixed-top bg-white p-1 m-0">
 <table class="table table-borderless m-0 p-0" width=100%>
 <tr>
@@ -224,7 +238,7 @@ if($mode == "toon"){
 </td>
 <td class="m-0 p-0 align-middle" align="right">
 <img id="submit_bookmark" src="" height="1" width="1"><input type="text" style="border:none;border-right:0px; border-top:0px; boder-left:0px; boder-bottom:0px;" readonly id="info" value="" size=10></input>
-<button class="btn btn-sm m-0 p-0" onclick="location.href='#<?php echo $bookmark; ?>';" id="load" value="위치저장"><svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-bookmark-check-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+<button class="btn btn-sm m-0 p-0" onclick="location.replace('#<?php echo $bookmark; ?>');" id="load" value="위치저장"><svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-bookmark-check-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
   <path fill-rule="evenodd" d="M4 0a2 2 0 0 0-2 2v13.5a.5.5 0 0 0 .74.439L8 13.069l5.26 2.87A.5.5 0 0 0 14 15.5V2a2 2 0 0 0-2-2H4zm6.854 5.854a.5.5 0 0 0-.708-.708L7.5 7.793 6.354 6.646a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0l3-3z"/>
 </svg></button>&nbsp;&nbsp;
 <button class="btn btn-sm m-0 p-0" onclick="save_bookmark();" id="save" value="위치저장"><svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-bookmark-plus" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -232,7 +246,8 @@ if($mode == "toon"){
   <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5V6H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V7H6a.5.5 0 0 1 0-1h1.5V4.5A.5.5 0 0 1 8 4z"/>
 </svg></button></td></tr>
 </table>
-<div class="m-0 p-1 text-nowrap d-inline-block text-truncate"><?php echo $title; ?></div>
+<div class="m-0 p-1 text-nowrap d-inline-block text-truncate">
+<?php echo $title; ?></div>
 </nav>
 </div>
 <?php
@@ -252,7 +267,6 @@ if($mode == "toon"){
 		$next = $now + 1;
 		$pre = $now - 1;
 ?>
-
 <div>
 <nav class="navbar navbar-light fixed-bottom bg-white m-0 p-1 ">
 <table width="100%">
@@ -381,7 +395,7 @@ if($mode == "toon"){
 <?php
 }
 ?>
-            <p align='center'>
+            <p class="m-0 p-0" align='center'>
               <?php
 			  $loaded = 0;
 			  $image_counter = 0;
@@ -447,9 +461,14 @@ if($mode == "toon"){
 </div>
 
 <script type="text/javascript">
+var bookmark = "image0";
+
 function save_bookmark() {
-	var bookmark = "image0";
+<?php
+if ($_GET['mode'] == "toon"){
+?>
 	var scroll_top = $(this).scrollTop();
+
 	for (var i = 0; i < <?php echo $image_counter; ?>; i++) {
 		var scroll_image = $("#image"+i).position().top;
 		if (scroll_top < scroll_image) {
@@ -457,11 +476,27 @@ function save_bookmark() {
 			break;
 		}
 	}
-	var scroll_image3 = $("#image"+3).position().top;
-    document.getElementById("submit_bookmark").src = "bookmark.php?file=<?php echo urlencode(str_replace("+", "{plus}", $getfile)); ?>&bookmark=" + bookmark;
+<?php
+} else {
+?>
+	location.replace('#' + bookmark);
+<?php
+}
+?>
+	document.getElementById("submit_bookmark").src = "bookmark.php?file=<?php echo urlencode(str_replace("+", "{plus}", $getfile)); ?>&bookmark=" + bookmark;
 	document.getElementById("info").value = "저장완료";
 }
-</script>
+var img_counter = 0;
 
+$("body").on('DOMSubtreeModified', "#lg-counter-current", function() {
+	var new_counter = document.getElementById("lg-counter-current").innerHTML - 1;
+	if (new_counter == 0 || new_counter == null){
+	} else {
+		bookmark = "image" + new_counter;
+		location.replace('#' + bookmark);
+		img_counter = new_counter;
+	}
+});
+</script>
 </body>
 </html>
