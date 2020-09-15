@@ -1,6 +1,8 @@
 <?php
 include("config.php");
-$getfile = str_replace("{plus}", "+", urldecode($_GET['file']));
+include("function.php");
+
+$getfile = decode_url($_GET['file']);
 $bookmark_file = "admin_bookmark.json";
 $bookmark_arr = array();
 if(is_file($bookmark_file) === true){

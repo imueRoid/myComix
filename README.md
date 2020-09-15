@@ -3,35 +3,7 @@
 
 ## PHP Comics Viewer
 <br>
-
-`PHP7` 이상 버전 및 `php-zip`, `php-gd` 설치된 웹서버 필요.  
-도커와 도커컴포즈를 이용할 수 있는 환경이라면 아래의 yml 파일을 참조하라.  
-도커컴포즈는 띄어쓰기에 민감하다. 아래의 내용을 `docker-compose.yml`로 저장한 후,  
-`docker-compose.yml`파일이 있는 디렉토리에서 `docker-compose pull && docker-compose up -d` 명령어를 실행하라. 
- 
-
-```docker-compose.yml
-version: '3'
-
-services:
-  NGINX:
-    container_name: NGINX
-    image: webdevops/php-nginx:7.4-alpine
-    restart: always
-    network_mode: "bridge"
-    ports:
-      - "외부에서접속할포트:80"
-    environment:
-      PHP_MEMORY_LIMIT: "256M"
-      PHP_POST_MAX_SIZE: "100M"
-      PHP_UPLOAD_MAX_FILESIZE: "100M"
-      FPM_REQUEST_TERMINATE_TIMEOUT: "600"
-      PHP_MAX_EXECUTION_TIME: "600"
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - /시놀로지의 마이코믹스폴더경로:/app
-      - /시놀로지의 만화책폴더 경로:/myComix
-```
+PHP7 이상 버전 및 php-zip, php-gd 설치된 웹서버 필요.
 
 자신의 환경에 맞게 config.php 수정하라. 아래의 두가지 변수를 설정하면 된다.
 
@@ -77,6 +49,21 @@ $maxview = "18"; //한페이지에 보여줄 만화 갯수(폴더도 이 숫자�
 <br>
 
 ## 업데이트 정보
+<br>
+
+- index 0.18 viewer 0.2  
+
+파일 이름의 |, ? 특수문자를 시놀로지에서 옮기거나 복사할 때 urlencode되어 myComix가 인식하지 못하는 문제 수정.  
+겸사겸사 config.php 파일 내의 함수 등등을 function.php라는 새 파일을 만들어 빼냈다.  
+오작동하는 경우, config.php 파일 내부를 아래의 정보만 남겨두면 된다.
+
+```php
+<?php
+$base_dir = "/myComix"; //만화가 있는 절대경로
+$maxview = "18"; //한페이지에 보여줄 만화 갯수
+?>
+```
+  
 <br>
 
 - viewer 0.193  

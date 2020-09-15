@@ -24,9 +24,10 @@
 
 <?php
 include("config.php");
+include("function.php");
 
-if($_GET['dir']){
-	$getdir = str_replace("{plus}", "+", urldecode($_GET['dir']));
+if($_GET['dir'] != null){
+	$getdir = decode_url($_GET['dir']);
 	$dir = $base_dir.$getdir;
 } else {
 	$dir = $base_dir;
@@ -131,7 +132,7 @@ if(is_file($bookmark_file) === true){
 for($count=0;$count < count($bookmark_arr); $count++){
 	$title_temp = explode("/", $bookmark_title[$count]);
 ?>
-	<a onclick="location.href='./viewer.php?file=<?php echo urlencode(str_replace("+","{plus}", $bookmark_title[$count])); ?>#<?php echo $bookmark_mark[$count]; ?>'" href="#" class="dropdown-item"><?php echo $title_temp[count($title_temp) - 1]; ?></a>
+	<a onclick="location.href='./viewer.php?file=<?php echo encode_url($bookmark_title[$count]); ?>#<?php echo $bookmark_mark[$count]; ?>'" href="#" class="dropdown-item"><?php echo $title_temp[count($title_temp) - 1]; ?></a>
 <?php
 }
 ?>
@@ -142,12 +143,12 @@ for($count=0;$count < count($bookmark_arr); $count++){
 ?>
 	</td>
 	<tr>
-	<td colspan="2" align="left">
+	<td colspan="2" class="m-0 p-0" align="left">
 	<h6 style="font-family: 'Nanum Gothic', sans-serif;"><br>[<?php echo $getdir;?>]</h6>
 	</td>
 	</tr>
 	</table>
-	<br><br>
+	<br>
 	</div>
 <div class="grid">
 <div class="row row-cols-1 row-cols-md-2">
@@ -162,7 +163,7 @@ for($count=0;$count < count($bookmark_arr); $count++){
 			}
 	?>	
 
-			<a href='index.php?dir=<?php echo urlencode(str_replace("+","{plus}", $updir));?>'>
+			<a href='index.php?dir=<?php echo encode_url($updir);?>'>
 			<div class="card bg-primary m-1 p-0">
 						<div class="card-body text-white m-1 p-1">
 						<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-90deg-up" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -185,7 +186,7 @@ for($count=0;$count < count($bookmark_arr); $count++){
 
 	?>	
 			 
-	<a href='index.php?dir=<?php echo urlencode(str_replace("+","{plus}", $getdir."/".$fileinfo));?>'>
+	<a href='index.php?dir=<?php echo encode_url($getdir."/".$fileinfo);?>'>
     <div class="card border-secondary m-1 p-0">
 				<div class="card-body text-secondary m-1 p-1">
 <?php
@@ -220,7 +221,7 @@ if(strpos($fileinfo, "rclone_") !== false || strpos($dir, "rclone_") !== false){
 				break;
 			}
 	?>	
-	<a href='index.php?dir=<?php echo urlencode(str_replace("+","{plus}", $getdir."/".$fileinfo)); ?>'>			 
+	<a href='index.php?dir=<?php echo encode_url($getdir."/".$fileinfo); ?>'>			 
     <div class="card text-white bg-secondary m-1 p-0">
 				<div class="card-body m-1 p-1">
 					<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-book" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -391,7 +392,7 @@ if(strpos($fileinfo, "rclone_") !== false || strpos($dir, "rclone_") !== false){
 				$title_s = preg_replace("/\[[^]]*\]/","",$title_s);
 			}
 		?>
-				<a href='viewer.php?mode=<?php echo $viewer; ?>&file=<?php echo urlencode(str_replace("+","{plus}", $getdir."/".$fileinfo));?>'>
+				<a href='viewer.php?mode=<?php echo $viewer; ?>&file=<?php echo encode_url($getdir."/".$fileinfo);?>'>
 				  <div class="col mb-3">
 					<div class="card text-black m-0 p-1">
 						<img src="data:<?php echo mime_type("jpg").";base64,".$img_output; ?>" class="rounded card-img-top card-img" alt="thumbnail">
@@ -482,7 +483,7 @@ if(strpos($fileinfo, "rclone_") !== false || strpos($dir, "rclone_") !== false){
 						
 						
 		?>
-				<a href='viewer.php?filetype=images&mode=<?php echo $viewer; ?>&file=<?php echo urlencode(str_replace("+","{plus}", $getdir));?>'>
+				<a href='viewer.php?filetype=images&mode=<?php echo $viewer; ?>&file=<?php echo encode_url($getdir);?>'>
 				  <div class="col mb-3">
 					<div class="card text-black m-0 p-1">
 						<img src="data:<?php echo mime_type("jpg").";base64,".$img_output; ?>" class="rounded card-img-top card-img" alt="thumbnail">
@@ -524,12 +525,12 @@ if(strpos($fileinfo, "rclone_") !== false || strpos($dir, "rclone_") !== false){
 <nav aria-label="Page navigation">
   <ul class="pagination pagination-outline-primary justify-content-center">
     <li class="page-item <?php if($dir == $base_dir) { echo "disabled"; } ?>">
-      <a class="page-link" onclick="location.href='index.php?dir=<?php echo urlencode(str_replace("+","{plus}", $updir));?>'" href="#" tabindex="-1" aria-disabled="true">상위폴더로</a>
+      <a class="page-link" onclick="location.href='index.php?dir=<?php echo encode_url($updir);?>'" href="#" tabindex="-1" aria-disabled="true">상위폴더로</a>
     </li>
     <li class="page-item <?php if($paging == 0) { echo "disabled"; } ?>">
 	</li>
     <li class="page-item <?php if($paging == 0) { echo "disabled"; } ?>">
-      <a class="page-link" onclick="location.href='./index.php?dir=<?php echo urlencode(str_replace("+","{plus}", $getdir)); ?>&page=<?php echo (int)$_GET['page']-1; ?>'" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+      <a class="page-link" onclick="location.href='./index.php?dir=<?php echo encode_url($getdir); ?>&page=<?php echo (int)$_GET['page']-1; ?>'" href="#" tabindex="-1" aria-disabled="true">Previous</a>
     </li>
 				<li class="nav-bar dropdown">
 					<button class="page-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">
@@ -543,7 +544,7 @@ if(strpos($fileinfo, "rclone_") !== false || strpos($dir, "rclone_") !== false){
 					$pagingcount = 0;
 				while($pagingcount<($maxlist/$maxview)){
 			?>
-					<a onclick="location.href='./index.php?dir=<?php echo urlencode(str_replace("+","{plus}", $getdir)); ?>&page=<?php echo $pagingcount; ?>'" href="#" class="dropdown-item">[<?php echo $pagingcount+1; ?>페이지]</a>
+					<a onclick="location.href='./index.php?dir=<?php echo encode_url($getdir); ?>&page=<?php echo $pagingcount; ?>'" href="#" class="dropdown-item">[<?php echo $pagingcount+1; ?>페이지]</a>
 			<?php
 				$pagingcount++;
 				}
@@ -552,7 +553,7 @@ if(strpos($fileinfo, "rclone_") !== false || strpos($dir, "rclone_") !== false){
 					</div>
 				</li>
 	    <li class="page-item <?php if(($maxview*($paging+1))>=$maxlist) { echo "disabled"; } ?>">
-      <a class="page-link" onclick="location.href='./index.php?dir=<?php echo urlencode(str_replace("+","{plus}", $getdir)); ?>&page=<?php echo (int)$_GET['page']+1; ?>'" href="#">Next</a>
+      <a class="page-link" onclick="location.href='./index.php?dir=<?php echo encode_url($getdir); ?>&page=<?php echo (int)$_GET['page']+1; ?>'" href="#">Next</a>
     </li>
   </ul>
 </nav>

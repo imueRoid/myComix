@@ -1,8 +1,10 @@
 <?php
 include("config.php");
+include("function.php");
+
 if($_GET['file'] && $_GET['imgfile']){
-	$getfile = str_replace("{plus}", "+", urldecode($_GET['file']));
-	$imgfile = str_replace("{plus}", "+", urldecode($_GET['imgfile']));
+	$getfile = decode_url($_GET['file']);
+	$imgfile = decode_url($_GET['imgfile']);
 	$base_file = $base_dir.$getfile;
 } else {
 	echo "정보가 없습니다.";
