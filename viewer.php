@@ -15,12 +15,9 @@ $link_dir = str_replace("/".$title, "", $getfile);
 
 if(strpos(strtolower($base_file), "zip") !== false || strpos(strtolower($base_file), "cbz") !== false) {
 	$type = "zip";
-} elseif($_GET['filetype'] == "images") {
-	$type = "images";
 } else {
-	  die("이 파일은 처리하지 않습니다.");
+	$type = "images";
 }
-
 
 $bookmark_file = "admin_bookmark.json";
 $bookmark_arr = array();
@@ -427,7 +424,6 @@ if($mode == "toon"){
 						sort($list,SORT_NATURAL);
 						
 						echo "<div class=\"text-center\" id=\"lightgallery\">";
-
 						foreach($list as $imgfile){
 							if($pageorder['page_order'] == "0" || $pageorder['page_order'] == null) {
 								echo "<div data-src=\"extract.php?".$file_type."file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."\"><img class='img-fluid' id=\"image".$image_counter."\" src=\"extract.php?".$file_type."file=".urlencode(str_replace("+", "{plus}", $_GET['file']))."&imgfile=".urlencode(str_replace("+", "{plus}", $imgfile))."\" /></div>";
@@ -448,9 +444,9 @@ if($mode == "toon"){
 							}
 						}
 						echo "</div>";
-
-						$zip->close();
-					
+						if ($type == "zip") {
+							$zip->close();
+						}
 					if($loaded < $total){
 						echo "모든 파일 로딩에 실패했습니다. 인식할 수 없는 파일이 있습니다.";
 					}
