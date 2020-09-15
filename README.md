@@ -4,10 +4,10 @@
 ## PHP Comics Viewer
 <br>
 
-PHP7 이상 버전 및 php-zip, php-gd 설치된 웹서버 필요.  
+`PHP7` 이상 버전 및 `php-zip`, `php-gd` 설치된 웹서버 필요.  
 도커와 도커컴포즈를 이용할 수 있는 환경이라면 아래의 yml 파일을 참조하라.  
-도커컴포즈는 띄어쓰기에 민감하다. 아래의 내용을 docker-compose.yml로 저장한 후,  
-docker-compose.yml파일이 있는 디렉토리에서 `docker-compose pull && docker-compose up -d` 명령어를 실행하라. 
+도커컴포즈는 띄어쓰기에 민감하다. 아래의 내용을 `docker-compose.yml`로 저장한 후,  
+`docker-compose.yml`파일이 있는 디렉토리에서 `docker-compose pull && docker-compose up -d` 명령어를 실행하라. 
  
 
 ```docker-compose.yml
