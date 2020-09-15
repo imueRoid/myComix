@@ -24,8 +24,6 @@ $server_version =  json_decode(file_get_contents("https://raw.githubusercontent.
 					$file_name = str_replace($zip->getNameIndex(0), "", $zip->getNameIndex($i));
 					if(is_file("config.php") && $file_name == "config.php") {
 						echo "config.php 파일은 교체하지 않습니다.<br>";
-					} elseif(is_file("update.php") && $file_name == "update.php") {
-						echo "update.php 파일은 교체하지 않습니다.<br>";
 					} else {
 						$update_temp = $zip->getFromIndex($i);
 						echo $file_name."파일 용량: ".strlen($update_temp)."byte, ";
