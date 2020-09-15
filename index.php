@@ -42,12 +42,12 @@ $dir_list = array();
 $title_list = array();
 foreach ($iterator as $fileinfo) {
     if (!$fileinfo->isDot() && $fileinfo != "@eaDir" && $fileinfo->isDir()) {
-		if(strpos($dir, "rclone_")) {
+		if(strpos($dir, "rclone_") !== false) {
 			$dir_list[$dircounter] = $fileinfo->getFilename();
 			$dircounter++;
 		} else {
-			if(strpos($fileinfo->getFilename(), "rclone_")) {
-				$sub_dircounter = 0;
+			if(strpos($fileinfo->getFilename(), "rclone_") !== false) {
+				$sub_dircounter = 1;
 			} else {
 				$sub_iterator = new DirectoryIterator($dir."/".$fileinfo->getFilename());
 				$sub_dircounter = 0;
@@ -70,7 +70,7 @@ foreach ($iterator as $fileinfo) {
 		}
     }
     if ($fileinfo->isFile()) {
-		if(strpos($fileinfo, ".json")){
+		if(strpos($fileinfo, ".json") !== false){
 		} else {
 			if(strpos(strtolower($fileinfo), ".zip") !== false || strpos(strtolower($fileinfo), ".cbz") !== false) {
 				$file_list[$filecounter] = $fileinfo->getFilename();
@@ -188,9 +188,21 @@ for($count=0;$count < count($bookmark_arr); $count++){
 	<a href='index.php?dir=<?php echo urlencode(str_replace("+","{plus}", $getdir."/".$fileinfo));?>'>
     <div class="card border-secondary m-1 p-0">
 				<div class="card-body text-secondary m-1 p-1">
+<?php
+if(strpos($fileinfo, "rclone_") !== false || strpos($getdir, "rclone_") !== false){
+?>	
+					<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-hdd-network-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <path fill-rule="evenodd" d="M2 2a2 2 0 0 0-2 2v1a2 2 0 0 0 2 2h5.5v3A1.5 1.5 0 0 0 6 11.5H.5a.5.5 0 0 0 0 1H6A1.5 1.5 0 0 0 7.5 14h1a1.5 1.5 0 0 0 1.5-1.5h5.5a.5.5 0 0 0 0-1H10A1.5 1.5 0 0 0 8.5 10V7H14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H2zm.5 3a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1zm2 0a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1z"/>
+</svg> <?php echo str_replace("rclone_", "", $fileinfo); ?>
+<?php
+} else {
+?>	
 					<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-folder-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
   <path fill-rule="evenodd" d="M9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.826a2 2 0 0 1-1.991-1.819l-.637-7a1.99 1.99 0 0 1 .342-1.31L.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3zm-8.322.12C1.72 3.042 1.95 3 2.19 3h5.396l-.707-.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981l.006.139z"/>
 </svg> <?php echo $fileinfo;?>
+<?php
+}
+?>
 				</div>
 			</div>
 				</a>
@@ -239,13 +251,13 @@ for($count=0;$count < count($bookmark_arr); $count++){
 					$fileinfo = $file_list[$i-count($dir_list)-count($title_list)];
 					$zip_file = $dir."/".$fileinfo;
 	if(is_File($zip_file)){
-						if(strpos(strtolower($zip_file), ".zip")){
+						if(strpos(strtolower($zip_file), ".zip") !== false){
 							$configfile = substr($zip_file, 0, strpos(strtolower($zip_file), ".zip")).".json";
-						} elseif(strpos(strtolower($zip_file), ".cbz")){
+						} elseif(strpos(strtolower($zip_file), ".cbz") !== false){
 							$configfile = substr($zip_file, 0, strpos(strtolower($zip_file), ".cbz")).".json";
 						}
 
-	if(strpos($dir, "rclone_")) {
+	if(strpos($dir, "rclone_") !== false) {
 		if(is_File($configfile) === false){
 			$img_output = $null_image;
 			$totalpage = "nodata-";
@@ -351,7 +363,7 @@ for($count=0;$count < count($bookmark_arr); $count++){
 			}
 	}
 
-			if(strpos($nowdirarr[count($nowdirarr)-1],"] ")){
+			if(strpos($nowdirarr[count($nowdirarr)-1],"] ") !== false){
 				$dir_s = preg_replace("/\[[^]]*\]/","",$nowdirarr[count($nowdirarr)-1]);
 				$t = str_replace($dir_s,"", $nowdirarr[count($nowdirarr)-1]);
 				$dir_s = str_replace($t." ","", $nowdirarr[count($nowdirarr)-1]);

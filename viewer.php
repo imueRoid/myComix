@@ -33,9 +33,9 @@ if(is_file($bookmark_file) === true){
 }
 $page = ceil(($now+1)/$maxview)-1;  //현재페이지
 
-						if(strpos(strtolower($base_file), ".zip")){
+						if(strpos(strtolower($base_file), ".zip") !== false){
 							$json_file = substr($base_file, 0, strpos(strtolower($base_file), ".zip")).".json";
-						} elseif(strpos(strtolower($base_file), ".cbz")){
+						} elseif(strpos(strtolower($base_file), ".cbz") !== false){
 							$json_file = substr($base_file, 0, strpos(strtolower($base_file), ".cbz")).".json";
 						} elseif($_GET['filetype'] == "images") {
 							$json_file = $base_file."/image_files.json";								
