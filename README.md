@@ -3,7 +3,32 @@
 
 ## PHP Comics Viewer
 <br>
-PHP7 이상 버전 및 php-zip, php-gd 설치된 웹서버 필요.
+PHP7 이상 버전 및 php-zip, php-gd 설치된 웹서버 필요.  
+도커와 도커컴포즈를 이용할 수 있는 환경이라면 아래의 yml 파일을 참조하라.  
+도커컴포즈는 띄어쓰기에 민감하다.
+
+```docker-compose.yml
+version: '3'
+
+services:
+  NGINX:
+    container_name: NGINX
+    image: webdevops/php-nginx:7.4-alpine
+    restart: always
+    network_mode: "bridge"
+    ports:
+      - "외부에서접속할포트:80"
+    environment:
+      PHP_MEMORY_LIMIT: "256M"
+      PHP_POST_MAX_SIZE: "100M"
+      PHP_UPLOAD_MAX_FILESIZE: "100M"
+      FPM_REQUEST_TERMINATE_TIMEOUT: "600"
+      PHP_MAX_EXECUTION_TIME: "600"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /시놀로지의 마이코믹스폴더경로:/app
+      - /시놀로지의 만화책폴더 경로:/myComix
+```
 
 자신의 환경에 맞게 config.php 수정하라. 아래의 두가지 변수를 설정하면 된다.
 
