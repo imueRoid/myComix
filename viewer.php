@@ -147,7 +147,7 @@ $page = ceil(($now+1)/$maxview)-1;  //현재페이지
 if($mode == "book") {
 ?>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/1.8.2/css/lightgallery.min.css">
-	<script src="lightgallery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/1.8.2/js/lightgallery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-mousewheel/3.1.13/jquery.mousewheel.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/lg-fullscreen/dist/lg-fullscreen.min.js"></script>
 <?php
@@ -222,8 +222,6 @@ if($mode == "toon"){
 							useLeft: true,
 						});
 					};
-					
-
 <?php
 }
 ?>
