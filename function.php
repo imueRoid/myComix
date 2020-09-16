@@ -2,22 +2,37 @@
 $version = json_decode(file_get_contents("version.json"), true);
 $server_version = json_decode(file_get_contents("https://raw.githubusercontent.com/imueRoid/myComix/master/version.json"), true); 
 
+if(!isset($_COOKIE['user_id']) || !isset($_COOKIE['user_pass'])) { 
+	echo("<script>location.replace('login.php');</script>"); 
+} else {
+	$user_file = "user.php";
+	$user_arr = array();
+	$user_arr = json_decode(file_get_contents($user_file), true);
+	if (password_verify($_COOKIE['user_pass'], $user_arr[$_COOKIE['user_id']]['pass']) == true) {
+		$user_id = $_COOKIE['user_id'];
+		$user_group = $user_arr[$user_id]['group'];
+	} else {
+		echo("<script>location.replace('login.php?mode=fail');</script>"); 
+	}
+}
+	
+$bookmark_file = $user_id."_bookmark.json";
 
 ################################################################################
 # Return encode/decode URL for Special character
 ################################################################################
 
 function encode_url($filename) {
-	$filename = str_replace("+", "{plus}", $filename);
-	$filename = str_replace("%", "{percent}", $filename);
+	$filename = str_replace("+", "{pl}", $filename);
+	$filename = str_replace("%", "{pc}", $filename);
 	$filename = urlencode($filename);
 	return $filename;
 }
 
 function decode_url($filename) {
 	$filename = urldecode($filename);
-	$filename = str_replace("{plus}", "+", $filename);
-	$filename = str_replace("{percent}", "%", $filename);
+	$filename = str_replace("{pl}", "+", $filename);
+	$filename = str_replace("{pc}", "%", $filename);
 	return $filename;
 }
 

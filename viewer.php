@@ -21,7 +21,6 @@ if(strpos(strtolower($base_file), "zip") !== false || strpos(strtolower($base_fi
 	$type = "images";
 }
 
-$bookmark_file = "admin_bookmark.json";
 $bookmark_arr = array();
 $bookmark = 0;
 if(is_file($bookmark_file) === true){

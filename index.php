@@ -1,3 +1,7 @@
+<?php
+include("config.php");
+include("function.php");
+?>
 <html>
 <head>
 	<title>myComix</title>
@@ -10,6 +14,7 @@
 	<link href="https://fonts.googleapis.com/css2?family=Gugi&family=Nanum+Gothic:wght@400;700&display=swap" rel="stylesheet">
 	<style type="text/css">
 		body {
+			padding-bottom: 3em;
 			font-family: 'Nanum Gothic', sans-serif;
 			font-size: smaller;
 		}
@@ -23,8 +28,6 @@
 <div class="container-fluid" >
 
 <?php
-include("config.php");
-include("function.php");
 
 if($_GET['dir'] != null){
 	$getdir = decode_url($_GET['dir']);
@@ -113,7 +116,6 @@ $updir = "";
 	</td>
 	<td class="m-0 p-0 align-middle" align="right">	
 <?php
-$bookmark_file = "admin_bookmark.json";
 $bookmark_arr = array();
 $bookmark_title = array();
 $bookmark_mark = array();
@@ -122,9 +124,10 @@ if(is_file($bookmark_file) === true){
 	$bookmark_arr = json_decode(file_get_contents($bookmark_file), true);
 	$bookmark_title = array_keys($bookmark_arr);
 	$bookmark_mark = array_values($bookmark_arr);
+	if(count($bookmark_arr)>0){
 ?>
 	<div class="dropdown">
-	<button class="dropdown-toggle btn btn-sm m-0 p-0" onclick="load_bookmark();" role="button" data-toggle="dropdown" value="위치저장"><svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-bookmark-check-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+	<button class="dropdown-toggle btn btn-sm m-0 p-0" role="button" data-toggle="dropdown"><svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-bookmark-check-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
   <path fill-rule="evenodd" d="M4 0a2 2 0 0 0-2 2v13.5a.5.5 0 0 0 .74.439L8 13.069l5.26 2.87A.5.5 0 0 0 14 15.5V2a2 2 0 0 0-2-2H4zm6.854 5.854a.5.5 0 0 0-.708-.708L7.5 7.793 6.354 6.646a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0l3-3z"/>
 	</svg></button>
 		<div class="dropdown-menu dropdown-menu-right" >
@@ -132,19 +135,29 @@ if(is_file($bookmark_file) === true){
 for($count=0;$count < count($bookmark_arr); $count++){
 	$title_temp = explode("/", $bookmark_title[$count]);
 ?>
-	<a onclick="location.href='./viewer.php?file=<?php echo encode_url($bookmark_title[$count]); ?>#<?php echo $bookmark_mark[$count]; ?>'" href="#" class="dropdown-item"><?php echo $title_temp[count($title_temp) - 1]; ?></a>
+	<div  class="dropdown-item">
+	<button class="btn btn-sm m-0 p-0" onclick="location.replace('bookmark.php?mode=delete&file=<?php echo encode_url($bookmark_title[$count]); ?>');"><svg width="1.3em" height="1.3em" viewBox="0 0 16 16" class="bi bi-bookmark-x-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <path fill-rule="evenodd" d="M4 0a2 2 0 0 0-2 2v13.5a.5.5 0 0 0 .74.439L8 13.069l5.26 2.87A.5.5 0 0 0 14 15.5V2a2 2 0 0 0-2-2H4zm2.854 5.146a.5.5 0 1 0-.708.708L7.293 7 6.146 8.146a.5.5 0 1 0 .708.708L8 7.707l1.146 1.147a.5.5 0 1 0 .708-.708L8.707 7l1.147-1.146a.5.5 0 0 0-.708-.708L8 6.293 6.854 5.146z"/>
+	</svg></button>
+	<button class="btn btn-sm m-1 p-0" onclick="location.href='./viewer.php?file=<?php echo encode_url($bookmark_title[$count]); ?>#<?php echo $bookmark_mark[$count]; ?>'"><?php echo $title_temp[count($title_temp) - 1]; ?></button>
+	</div>
 <?php
 }
 ?>
 		</div>
 	</div>
 <?php
+	}
 }
 ?>
 	</td>
 	<tr>
 	<td colspan="2" class="m-0 p-0" align="left">
-	<h6 style="font-family: 'Nanum Gothic', sans-serif;"><br>[<?php echo $getdir;?>]</h6>
+	<span class="badge badge-light badge-sm" style="font-family: 'Nanum Gothic', sans-serif;">
+	[ <?php echo $user_id;?> ]로 로그인되었습니다.</span>
+	<?php if($user_group == "admin") { echo "<a class=\"badge badge-danger badge-sm\" href=admin.php>관리자페이지</a>"; }?> <a class="badge badge-danger badge-sm" href="login.php?mode=logout">로그아웃</a>
+	</a>
+	<h6 style="font-family: 'Nanum Gothic', sans-serif;"><br><br>[<?php echo $getdir;?>]</h6>
 	</td>
 	</tr>
 	</table>
@@ -510,29 +523,30 @@ if(strpos($fileinfo, "rclone_") !== false || strpos($dir, "rclone_") !== false){
 	</div>
 </div>
 <br>
-<p align=center><?php
-	if($server_version['index'] > $version['index']) {
-		echo "<a href=update.php>인덱스의 새버전(".$server_version['index'].")이 있습니다. 업데이트합니다.</a><br>";
-	}
-	if($server_version['viewer'] > $version['viewer']) {
-		echo "<a href=update.php>뷰어의 새버전(".$server_version['viewer'].")이 있습니다. 업데이트합니다.</a><br>";
-	}
-	echo "현재버전 {인덱스:".$version['index'].", 뷰어:".$version['viewer']."}";
+<nav class="navbar  navbar-light bg-white m-0 p-2 " aria-label="Page navigation">
+<table width="100%">
+<tr><td align="center">
 
- 
- ?></p>
-
-<nav aria-label="Page navigation">
-  <ul class="pagination pagination-outline-primary justify-content-center">
-    <li class="page-item <?php if($dir == $base_dir) { echo "disabled"; } ?>">
+<button class="btn btn-sm btn-light p-1">
+	<?php
+		if($server_version['index'] > $version['index'] || $server_version['viewer'] > $version['viewer']) {
+			echo "<a href='update.php' class='m-1 badge badge-sm badge-danger'>새버전(".$server_version['index'].")이 있습니다. 업데이트합니다.</a><br>";
+		}
+		echo "<span class=badge>현재버전 {인덱스:".$version['index'].", 뷰어:".$version['viewer']."}</span>";
+		?>
+</button>
+</td></tr><tr>
+<td width="100%" class="p-2" align="center">
+  <div class="pagination pagination-sm justify-content-center pagination-outline-primary">
+    <div class="page-item <?php if($dir == $base_dir) { echo "disabled"; } ?>">
       <a class="page-link" onclick="location.href='index.php?dir=<?php echo encode_url($updir);?>'" href="#" tabindex="-1" aria-disabled="true">상위폴더로</a>
-    </li>
-    <li class="page-item <?php if($paging == 0) { echo "disabled"; } ?>">
-	</li>
-    <li class="page-item <?php if($paging == 0) { echo "disabled"; } ?>">
+    </div>
+    <div class="page-item <?php if($paging == 0) { echo "disabled"; } ?>">
+	</div>
+    <div class="page-item <?php if($paging == 0) { echo "disabled"; } ?>">
       <a class="page-link" onclick="location.href='./index.php?dir=<?php echo encode_url($getdir); ?>&page=<?php echo (int)$_GET['page']-1; ?>'" href="#" tabindex="-1" aria-disabled="true">Previous</a>
-    </li>
-				<li class="nav-bar dropdown">
+    </div>
+				<div class="nav-bar dropdown">
 					<button class="page-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">
 					<?php echo (int)$_GET['page']+1; ?>/<?php 
 						echo ceil($maxlist/$maxview);					
@@ -551,12 +565,13 @@ if(strpos($fileinfo, "rclone_") !== false || strpos($dir, "rclone_") !== false){
 
 	?>
 					</div>
-				</li>
-	    <li class="page-item <?php if(($maxview*($paging+1))>=$maxlist) { echo "disabled"; } ?>">
+				</div>
+	    <div class="page-item <?php if(($maxview*($paging+1))>=$maxlist) { echo "disabled"; } ?>">
       <a class="page-link" onclick="location.href='./index.php?dir=<?php echo encode_url($getdir); ?>&page=<?php echo (int)$_GET['page']+1; ?>'" href="#">Next</a>
-    </li>
-  </ul>
+    </div>
+	</div>
+</td></tr>
+</table>
 </nav>
-<br><br>
 </body>
 </html>

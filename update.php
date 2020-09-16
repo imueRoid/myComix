@@ -1,4 +1,7 @@
 <?php
+include("config.php");
+include("function.php");
+
 $version = json_decode(file_get_contents("version.json"), true);
 $server_version =  json_decode(file_get_contents("https://raw.githubusercontent.com/imueRoid/myComix/master/version.json"), true); 
 
