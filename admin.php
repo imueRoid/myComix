@@ -86,9 +86,43 @@ $iterator = new DirectoryIterator($base_dir);
 </head>
 <body class="text-center">
 <br><div style="font-family: 'Gugi'; font-size:2.5em;" onclick="location.href='index.php'">마이코믹스</div><br>
+<ul class="nav nav-tabs">
+  <li class="nav-item">
+    <a class="nav-link active"  data-toggle="tab" href="#link"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-link-45deg" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <path d="M4.715 6.542L3.343 7.914a3 3 0 1 0 4.243 4.243l1.828-1.829A3 3 0 0 0 8.586 5.5L8 6.086a1.001 1.001 0 0 0-.154.199 2 2 0 0 1 .861 3.337L6.88 11.45a2 2 0 1 1-2.83-2.83l.793-.792a4.018 4.018 0 0 1-.128-1.287z"/>
+  <path d="M6.586 4.672A3 3 0 0 0 7.414 9.5l.775-.776a2 2 0 0 1-.896-3.346L9.12 3.55a2 2 0 0 1 2.83 2.83l-.793.792c.112.42.155.855.128 1.287l1.372-1.372a3 3 0 0 0-4.243-4.243L6.586 4.672z"/>
+</svg> Link</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link"  data-toggle="tab" href="#group"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-people" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <path fill-rule="evenodd" d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1h8zm-7.978-1h7.956a.274.274 0 0 0 .014-.002l.008-.002c-.002-.264-.167-1.03-.76-1.72C13.688 10.629 12.718 10 11 10c-1.717 0-2.687.63-3.24 1.276-.593.69-.759 1.457-.76 1.72a1.05 1.05 0 0 0 .022.004zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM6.936 9.28a5.88 5.88 0 0 0-1.23-.247A7.35 7.35 0 0 0 5 9c-4 0-5 3-5 4 0 .667.333 1 1 1h4.216A2.238 2.238 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816zM4.92 10c-1.668.02-2.615.64-3.16 1.276C1.163 11.97 1 12.739 1 13h3c0-1.045.323-2.086.92-3zM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0zm3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/>
+</svg> 유저그룹관리</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link"  data-toggle="tab" href="#folder"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-folder-check" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <path fill-rule="evenodd" d="M9.828 4H2.19a1 1 0 0 0-.996 1.09l.637 7a1 1 0 0 0 .995.91H9v1H2.826a2 2 0 0 1-1.991-1.819l-.637-7a1.99 1.99 0 0 1 .342-1.31L.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3h3.982a2 2 0 0 1 1.992 2.181L15.546 8H14.54l.265-2.91A1 1 0 0 0 13.81 4H9.828zm-2.95-1.707L7.587 3H2.19c-.24 0-.47.042-.684.12L1.5 2.98a1 1 0 0 1 1-.98h3.672a1 1 0 0 1 .707.293z"/>
+  <path fill-rule="evenodd" d="M15.854 10.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708l1.146 1.147 2.646-2.647a.5.5 0 0 1 .708 0z"/>
+</svg> 폴더권한관리</a>
+  </li>
+</ul>
+<br>
+<div class="tab-content">
 
+<div class="tab-pane fade show active" id="link">
+
+<div class="card bg-outline-success m-2 p-0">
+<div class="card-header">이번 버전의 변경점</div>
+<div class="card-body p-0">
+<p>v0.36</p>
+<p>
+인덱스와 뷰어로 나뉘었던 버전표시를 하나로 합치기로 결정.<br>
+admin.php페이지를 보다 보기좋게 바꿨다.
+</p>
+</div>
+</div>
+<br>
 <a href='login.php?mode=adduser'>
-	<div class="card bg-primary m-2 p-0">
+	<div class="card bg-success m-2 p-0">
 	<div class="card-body text-white m-1 p-1">
 	<svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-person-square" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
   <path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
@@ -98,32 +132,23 @@ $iterator = new DirectoryIterator($base_dir);
 	</div>
 </a>
 <br>
-<a href='#group'>
-	<div class="card bg-primary m-2 p-0">
+<a href='update.php'>
+	<div class="card bg-success m-2 p-0">
 	<div class="card-body text-white m-1 p-1">
-	<svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-person-square" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-  <path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
-  <path fill-rule="evenodd" d="M2 15v-1c0-1 1-4 6-4s6 3 6 4v1H2zm6-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
-	</svg> 사용자그룹관리
+	<svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-lightning" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <path fill-rule="evenodd" d="M11.251.068a.5.5 0 0 1 .227.58L9.677 6.5H13a.5.5 0 0 1 .364.843l-8 8.5a.5.5 0 0 1-.842-.49L6.323 9.5H3a.5.5 0 0 1-.364-.843l8-8.5a.5.5 0 0 1 .615-.09zM4.157 8.5H7a.5.5 0 0 1 .478.647L6.11 13.59l5.732-6.09H9a.5.5 0 0 1-.478-.647L9.89 2.41 4.157 8.5z"/>
+</svg> 업데이트실행
 	</div>
 	</div>
 </a>
-<br>
-<a href='#folder'>
-	<div class="card bg-primary m-2 p-0">
-	<div class="card-body text-white m-1 p-1">
-	<svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-person-square" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-  <path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
-  <path fill-rule="evenodd" d="M2 15v-1c0-1 1-4 6-4s6 3 6 4v1H2zm6-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
-	</svg> 폴더권한관리
-	</div>
-	</div>
-</a>
-<br><br><br><br><br><br><br><br><br>
-<br><br><br><br><br><br><br><br><br>
-<div class="card m-2 p-0" id="group">
+</div>
+
+<div class="tab-pane fade show" id="group">
+<div class="card m-2 p-0">
 	<form class="form-signin" action="<?php echo $_SERVER['PHP_SELF']; ?>" method = "post">
-	<div class="form-group card-header bg-primary text-white m-0 p-2">사용자 그룹 관리</div>
+	<div class="form-group card-header bg-success text-white m-0 p-2"><svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-people" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <path fill-rule="evenodd" d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1h8zm-7.978-1h7.956a.274.274 0 0 0 .014-.002l.008-.002c-.002-.264-.167-1.03-.76-1.72C13.688 10.629 12.718 10 11 10c-1.717 0-2.687.63-3.24 1.276-.593.69-.759 1.457-.76 1.72a1.05 1.05 0 0 0 .022.004zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM6.936 9.28a5.88 5.88 0 0 0-1.23-.247A7.35 7.35 0 0 0 5 9c-4 0-5 3-5 4 0 .667.333 1 1 1h4.216A2.238 2.238 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816zM4.92 10c-1.668.02-2.615.64-3.16 1.276C1.163 11.97 1 12.739 1 13h3c0-1.045.323-2.086.92-3zM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0zm3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/>
+</svg> 유저그룹관리</div>
 	<ul class="list-group list-group-flush">
 <?php
 $user_file = "user.php";
@@ -167,17 +192,19 @@ foreach ($user_list as $user){
 ?>
 		<li class="m-0 p-0 list-group-item bg-success">
 			<input type="hidden" name="mode" value="group_change">
-			<button class="btn m-0 p-1 btn-success btn-block btn-sm" type="submit">사용자 수정</button>
+			<button class="btn m-0 p-1 btn-success btn-block btn-sm" type="submit">유저그룹수정</button>
 		</li>
 	</ul>
 	</form>
 </div>
-<br><br><br><br><br><br><br><br><br>
-<br><br><br><br><br><br><br><br><br>
-<br><br><br><br><br><br><br><br><br>
-<div class="card m-2 p-0" id="folder">
+</div>
+<div class="tab-pane fade show" id="folder">
+<div class="card m-2 p-0">
 	<form class="form-signin" action="<?php echo $_SERVER['PHP_SELF']; ?>" method = "post">
-	<div class="form-group card-header bg-success text-white m-0 p-2">폴더 권한 관리</div>
+	<div class="form-group card-header bg-success text-white m-0 p-2"><svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-folder-check" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <path fill-rule="evenodd" d="M9.828 4H2.19a1 1 0 0 0-.996 1.09l.637 7a1 1 0 0 0 .995.91H9v1H2.826a2 2 0 0 1-1.991-1.819l-.637-7a1.99 1.99 0 0 1 .342-1.31L.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3h3.982a2 2 0 0 1 1.992 2.181L15.546 8H14.54l.265-2.91A1 1 0 0 0 13.81 4H9.828zm-2.95-1.707L7.587 3H2.19c-.24 0-.47.042-.684.12L1.5 2.98a1 1 0 0 1 1-.98h3.672a1 1 0 0 1 .707.293z"/>
+  <path fill-rule="evenodd" d="M15.854 10.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708l1.146 1.147 2.646-2.647a.5.5 0 0 1 .708 0z"/>
+</svg> 폴더권한관리</div>
 	<ul class="list-group list-group-flush">
 <?php
 $iterator = new DirectoryIterator($base_dir);
@@ -229,24 +256,12 @@ foreach ($dir_list as $dir_mode){
 ?>
 		<li class="m-0 p-0 list-group-item bg-success">
 			<input type="hidden" name="mode" value="mode_change">
-			<button class="m-0 p-1 btn btn-success btn-block btn-sm" type="submit">권한 수정</button>
+			<button class="m-0 p-1 btn btn-success btn-block btn-sm" type="submit">폴더권한수정</button>
 		</li>
 	</ul>
 	</form>
 </div>
-<br>
-<br>
-<br>
-<br>
-
-
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
+</div>
 </body>
 </html>
 <?php

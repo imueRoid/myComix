@@ -559,10 +559,10 @@ if(strpos($fileinfo, "rclone_") !== false || strpos($dir, "rclone_") !== false |
 
 <button class="btn btn-sm btn-light p-1">
 	<?php
-		if($server_version['index'] > $version['index'] || $server_version['viewer'] > $version['viewer']) {
+		if($server_version['index'] > $version['index']) {
 			echo "<a href='update.php' class='m-1 badge badge-sm badge-danger'>새버전(".$server_version['index'].")이 있습니다. 업데이트합니다.</a><br>";
 		}
-		echo "<span class=badge>현재버전 {인덱스:".$version['index'].", 뷰어:".$version['viewer']."}</span>";
+		echo "<span class=badge>현재버전 {".$version['index']."}</span>";
 		?>
 </button>
 </td></tr><tr>
