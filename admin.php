@@ -35,7 +35,25 @@ $iterator = new DirectoryIterator($base_dir);
 		}
 		unset($dir_list);
 	}
+} elseif($_POST['mode'] == "group_change"){
+	$user_file = "user.php";
+	$user_arr = array();
+	$user_list = array();
+	$user_arr = json_decode(file_get_contents($user_file), true);
+	$user_count = 0;
+	$user_id_arr = array_keys($user_arr);
+	foreach($user_arr as $user_list_tmp){
+		if($_POST[$user_id_arr[$user_count]."_group"] == "delete"){
+			unset($user_arr[$user_id_arr[$user_count]]);
+		} else {
+			$user_arr[$user_id_arr[$user_count]]['group'] = $_POST[$user_id_arr[$user_count]."_group"];
+		}
+		$user_count++;
+	}
+	$json_output = json_encode($user_arr, JSON_UNESCAPED_UNICODE);
+	file_put_contents($user_file, $json_output);
 }	
+	
 	
 
 ?>
@@ -73,10 +91,87 @@ $iterator = new DirectoryIterator($base_dir);
 	</div>
 	</div>
 </a>
-
-<div class="card m-2 p-0">
+<br>
+<a href='#group'>
+	<div class="card bg-primary m-2 p-0">
+	<div class="card-body text-white m-1 p-1">
+	<svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-person-square" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+  <path fill-rule="evenodd" d="M2 15v-1c0-1 1-4 6-4s6 3 6 4v1H2zm6-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+	</svg> 사용자그룹관리
+	</div>
+	</div>
+</a>
+<br>
+<a href='#folder'>
+	<div class="card bg-primary m-2 p-0">
+	<div class="card-body text-white m-1 p-1">
+	<svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-person-square" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+  <path fill-rule="evenodd" d="M2 15v-1c0-1 1-4 6-4s6 3 6 4v1H2zm6-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+	</svg> 폴더권한관리
+	</div>
+	</div>
+</a>
+<br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br>
+<div class="card m-2 p-0" id="group">
 	<form class="form-signin" action="<?php echo $_SERVER['PHP_SELF']; ?>" method = "post">
-	<div class="form-group card-header bg-primary text-white m-0 p-2">폴더 권한 관리</div>
+	<div class="form-group card-header bg-primary text-white m-0 p-2">사용자 그룹 관리</div>
+	<ul class="list-group list-group-flush">
+<?php
+$user_file = "user.php";
+$user_arr = array();
+$user_list = array();
+$user_arr = json_decode(file_get_contents($user_file), true);
+$user_count = 0;
+$user_id_arr = array_keys($user_arr);
+$user_group_arr = array_values($user_arr);
+foreach($user_arr as $user_list_tmp){
+$user_list[$user_count]['id'] = $user_id_arr[$user_count];
+$user_list[$user_count]['group'] = $user_group_arr[$user_count]['group'];
+$user_count++;
+}
+
+foreach ($user_list as $user){
+?>
+		<li class="list-group-item">
+						<h6 class="mb-2 p-0"><div class="form-check form-check-inline">
+						  <span class="badge badge-dark"><?php echo $user['id']; ?></span>
+						</div></h6>
+						<div class="form-check form-check-inline">
+						  <input class="form-check-input" type="radio" id="<?php echo $user['id']; ?>_inlineCheckbox1" name="<?php echo $user['id']; ?>_group" value="admin" <?php if($user['group']== "admin"){ echo "checked"; } ?>>
+						  <label class="form-check-label" for="<?php echo $user['id']; ?>_inlineCheckbox1">admin</label>
+						</div>
+						<div class="form-check form-check-inline">
+						  <input class="form-check-input" type="radio" id="<?php echo $user['id']; ?>_inlineCheckbox2" name="<?php echo $user['id']; ?>_group" value="group1" <?php if($user['group']== "group1"){ echo "checked"; } ?>>
+						  <label class="form-check-label" for="<?php echo $user['id']; ?>_inlineCheckbox2">group1</label>
+						</div>
+						<div class="form-check form-check-inline">
+						  <input class="form-check-input" type="radio" id="<?php echo $user['id']; ?>_inlineCheckbox3" name="<?php echo $user['id']; ?>_group" value="group2" <?php if($user['group']=="group2"){ echo "checked"; } ?>>
+						  <label class="form-check-label" for="<?php echo $user['id']; ?>_inlineCheckbox3">group2</label>
+						</div>
+						<div class="form-check form-check-inline">
+						  <input class="form-check-input" type="radio" id="<?php echo $user['id']; ?>_inlineCheckbox4" name="<?php echo $user['id']; ?>_group" value="delete">
+						  <label class="form-check-label" for="<?php echo $user['id']; ?>_inlineCheckbox4">삭제</label>
+						</div>
+		</li>
+<?php
+}
+?>
+		<li class="m-0 p-0 list-group-item bg-success">
+			<input type="hidden" name="mode" value="group_change">
+			<button class="btn m-0 p-1 btn-success btn-block btn-sm" type="submit">사용자 수정</button>
+		</li>
+	</ul>
+	</form>
+</div>
+<br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br>
+<div class="card m-2 p-0" id="folder">
+	<form class="form-signin" action="<?php echo $_SERVER['PHP_SELF']; ?>" method = "post">
+	<div class="form-group card-header bg-success text-white m-0 p-2">폴더 권한 관리</div>
 	<ul class="list-group list-group-flush">
 <?php
 $iterator = new DirectoryIterator($base_dir);
@@ -120,17 +215,26 @@ foreach ($dir_list as $dir_mode){
 <?php
 }
 ?>
-		<li>
+		<li class="m-0 p-0 list-group-item bg-success">
 			<input type="hidden" name="mode" value="mode_change">
-			<button class="btn btn-success btn-block btn-sm" type="submit">권한 제출</button>
+			<button class="m-0 p-1 btn btn-success btn-block btn-sm" type="submit">권한 수정</button>
 		</li>
-
 	</ul>
 	</form>
 </div>
+<br>
+<br>
+<br>
+<br>
 
 
-
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 </body>
 </html>
 <?php
