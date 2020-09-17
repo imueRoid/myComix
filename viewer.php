@@ -15,6 +15,18 @@ $title = $base_title[(count($base_title)-1)];
 $base_folder = str_replace($title, "", $base_file);
 $link_dir = str_replace("/".$title, "", $getfile);
 
+$rootdir = explode("/", $getfile);
+$getmodefile = $base_dir."/".$rootdir[1].".json";
+if(is_file($getmodefile) == true) {
+	$dirmode_arr = array();
+	$dirmode_arr = json_decode(file_get_contents($getmodefile), true);
+	if($dirmode_arr[$user_group] !== 1) {
+		echo "권한이 없습니다.";
+		exit;
+	}
+}
+
+
 if(strpos(strtolower($base_file), "zip") !== false || strpos(strtolower($base_file), "cbz") !== false) {
 	$type = "zip";
 } else {

@@ -45,6 +45,21 @@ $jpg_list = array();
 $dir_list = array();
 $title_list = array();
 foreach ($iterator as $fileinfo) {
+	$rootdir = array();
+	if($getdir == null) {
+		$getmodefile = $base_dir."/".$fileinfo.".json";
+	} else {
+		$rootdir = explode("/", $getdir);
+		$getmodefile = $base_dir."/".$rootdir[1].".json";
+	}
+	if(is_file($getmodefile) == true) {
+		$dirmode_arr = array();
+		$dirmode_arr = json_decode(file_get_contents($getmodefile), true);
+		if($dirmode_arr[$user_group] !== 1) {
+			continue;
+		}
+	}
+
     if (!$fileinfo->isDot() && $fileinfo != "@eaDir" && $fileinfo->isDir()) {
 		if(strpos($dir, "rclone_") !== false) {
 			$dir_list[$dircounter] = $fileinfo->getFilename();
@@ -72,6 +87,10 @@ foreach ($iterator as $fileinfo) {
 			}
 			unset($subdir_list);
 		}
+		
+		
+		
+		
     }
     if ($fileinfo->isFile()) {
 		if(strpos($fileinfo, ".json") !== false){

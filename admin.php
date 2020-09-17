@@ -3,6 +3,41 @@ include("config.php");
 include("function.php");
 
 if($user_group == "admin"){
+	
+
+
+if($_POST['mode'] == "mode_change"){
+$iterator = new DirectoryIterator($base_dir);
+	foreach ($iterator as $fileinfo) {
+		$dir_list = array();
+		if (!$fileinfo->isDot() && $fileinfo != "@eaDir" && $fileinfo->isDir()) {
+			if((int)$_POST[$fileinfo->getFilename()."_group1"] == 1){
+				$group1_value = 1;
+			} else {
+				$group1_value = 0;
+			}
+			if((int)$_POST[$fileinfo->getFilename()."_group2"] == 1){
+				$group2_value = 1;
+			} else {
+				$group2_value = 0;
+			}
+			
+			$mode_arr = json_decode(file_get_contents($getfile), true);
+			
+			$dir_write['admin'] = 1;
+			$dir_write['group1'] = $group1_value;
+			$dir_write['group2'] = $group2_value;
+			$dir_file = $base_dir."/".$fileinfo->getFilename().".json";
+			$json_output = json_encode($dir_write, JSON_UNESCAPED_UNICODE);
+			file_put_contents($dir_file, $json_output);
+		} else {
+			continue;
+		}
+		unset($dir_list);
+	}
+}	
+	
+
 ?>
 <html>
 <head>
@@ -26,19 +61,73 @@ if($user_group == "admin"){
 	</style>
 </head>
 <body class="text-center">
-		<br>
-		<div style="font-family: 'Gugi'; font-size:2.5em;" onclick="location.href='index.php'">마이코믹스</div>
-		<br>
+<br><div style="font-family: 'Gugi'; font-size:2.5em;" onclick="location.href='index.php'">마이코믹스</div><br>
+
 <a href='login.php?mode=adduser'>
-	<div class="card bg-primary m-1 p-0">
+	<div class="card bg-primary m-2 p-0">
 	<div class="card-body text-white m-1 p-1">
 	<svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-person-square" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
   <path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
   <path fill-rule="evenodd" d="M2 15v-1c0-1 1-4 6-4s6 3 6 4v1H2zm6-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
-</svg> 사용자 추가
+	</svg> 사용자 추가
+	</div>
+	</div>
+</a>
+
+<div class="card m-2 p-0">
+	<form class="form-signin" action="<?php echo $_SERVER['PHP_SELF']; ?>" method = "post">
+	<div class="form-group card-header bg-primary text-white m-0 p-2">폴더 권한 관리</div>
+	<ul class="list-group list-group-flush">
+<?php
+$iterator = new DirectoryIterator($base_dir);
+$dir_list = array();
+foreach ($iterator as $fileinfo) {
+    if (!$fileinfo->isDot() && $fileinfo != "@eaDir" && $fileinfo->isDir()) {
+		$dir_list[$dircounter]['dir_name'] = $fileinfo->getFilename();
+		if(is_file($base_dir."/".$fileinfo->getFilename().".json") == true) {
+			$getfile = $base_dir."/".$fileinfo->getFilename().".json";
+			$mode_arr = array();
+			$mode_arr = json_decode(file_get_contents($getfile), true);
+			$dir_list[$dircounter]['admin'] = $mode_arr['admin'];
+			$dir_list[$dircounter]['group1'] = $mode_arr['group1'];
+			$dir_list[$dircounter]['group2'] = $mode_arr['group2'];
+		} else {
+			$dir_list[$dircounter]['admin'] = 1;
+			$dir_list[$dircounter]['group1'] = 1;
+			$dir_list[$dircounter]['group2'] = 1;
+		}
+		$dircounter++;
+	} else {
+		continue;
+    }
+}
+
+foreach ($dir_list as $dir_mode){
+?>
+		<li class="list-group-item">
+						<h6 class="mb-2 p-0"><div class="form-check form-check-inline">
+						  <span class="badge badge-dark"><?php echo $dir_mode['dir_name']; ?></span>
+						</div></h6>
+						<div class="form-check form-check-inline">
+						  <input class="form-check-input" type="checkbox" id="<?php echo $dir_mode['dir_name']; ?>_inlineCheckbox1" name="<?php echo $dir_mode['dir_name']; ?>_group1" value="1" <?php if($dir_mode['group1']==1){ echo "checked"; } ?>>
+						  <label class="form-check-label" for="<?php echo $dir_mode['dir_name']; ?>_inlineCheckbox1">group1</label>
 						</div>
+						<div class="form-check form-check-inline">
+						  <input class="form-check-input" type="checkbox" id="<?php echo $dir_mode['dir_name']; ?>_inlineCheckbox2" name="<?php echo $dir_mode['dir_name']; ?>_group2" value="1" <?php if($dir_mode['group2']==1){ echo "checked"; } ?>>
+						  <label class="form-check-label" for="<?php echo $dir_mode['dir_name']; ?>_inlineCheckbox2">group2</label>
 						</div>
-						</a>
+		</li>
+<?php
+}
+?>
+		<li>
+			<input type="hidden" name="mode" value="mode_change">
+			<button class="btn btn-success btn-block btn-sm" type="submit">권한 제출</button>
+		</li>
+
+	</ul>
+	</form>
+</div>
 
 
 
