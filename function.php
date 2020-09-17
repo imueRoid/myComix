@@ -19,7 +19,7 @@ if(!isset($_COOKIE['user_id']) || !isset($_COOKIE['user_pass'])) {
 	
 $bookmark_file = $user_id."_bookmark.json";
 
-function dir_check($base_dir, $getdir) {	
+function dir_check($base_dir, $getdir, $user_group) {	
 	$rootdir = array();
 	$rootdir = explode("/", $getdir);
 	$getmodefile = $base_dir."/".$rootdir[1].".json";

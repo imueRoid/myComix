@@ -32,7 +32,7 @@ include("function.php");
 if($_GET['dir'] != null){
 	$getdir = decode_url($_GET['dir']);
 	$dir = $base_dir.$getdir;
-	dir_check($base_dir, $getdir);
+	dir_check($base_dir, $getdir, $user_group);
 } else {
 	$dir = $base_dir;
 }

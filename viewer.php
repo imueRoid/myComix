@@ -5,7 +5,7 @@ include("function.php");
 if($_GET['file']){
 	$getfile = decode_url($_GET['file']);
 	$base_file = $base_dir.$getfile;
-	dir_check($base_dir, $getfile);
+	dir_check($base_dir, $getfile, $user_group);
 } else {
 	echo "정보가 없습니다.";
 	die(header("Location: ./"));
