@@ -583,7 +583,7 @@ if(strpos($fileinfo, "rclone_") !== false || strpos($dir, "rclone_") !== false |
 					?>
 					</button>
 
-					<div class="dropdown-menu" >
+					<div class=" dropdown-menu-right dropdown-menu" >
 <?php	
 					$pagingcount = 0;
 				while($pagingcount<($maxlist/$maxview)){
