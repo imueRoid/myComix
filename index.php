@@ -105,9 +105,16 @@ foreach ($iterator as $fileinfo) {
 }
 
 sort($jpg_list, SORT_NATURAL);
-sort($file_list, SORT_NATURAL);
 sort($dir_list, SORT_NATURAL);
 sort($title_list, SORT_NATURAL);
+
+$filelist_sort = array();
+foreach($file_list as $sort_file){
+	$filelist_sort[str_replace("화.zip", "", strtolower($sort_file))] = $sort_file;
+}
+ksort($filelist_sort, SORT_NATURAL);
+
+$file_list = array_values($filelist_sort);
 
 $maxlist = count($file_list) + count($title_list) + count($dir_list);
 $startview = 0;
