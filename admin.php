@@ -21,12 +21,18 @@ $iterator = new DirectoryIterator($base_dir);
 			} else {
 				$group2_value = 0;
 			}
+			if($_POST[$fileinfo->getFilename()."_remote"] == "y"){
+				$remote_value = "y";
+			} else {
+				$remote_value = "n";
+			}
 			
 			$mode_arr = json_decode(file_get_contents($getfile), true);
 			
 			$dir_write['admin'] = 1;
 			$dir_write['group1'] = $group1_value;
 			$dir_write['group2'] = $group2_value;
+			$dir_write['remote'] = $remote_value;
 			$dir_file = $base_dir."/".$fileinfo->getFilename().".json";
 			$json_output = json_encode($dir_write, JSON_UNESCAPED_UNICODE);
 			file_put_contents($dir_file, $json_output);
@@ -186,10 +192,12 @@ foreach ($iterator as $fileinfo) {
 			$dir_list[$dircounter]['admin'] = $mode_arr['admin'];
 			$dir_list[$dircounter]['group1'] = $mode_arr['group1'];
 			$dir_list[$dircounter]['group2'] = $mode_arr['group2'];
+			$dir_list[$dircounter]['remote'] = $mode_arr['remote'];
 		} else {
 			$dir_list[$dircounter]['admin'] = 1;
 			$dir_list[$dircounter]['group1'] = 1;
 			$dir_list[$dircounter]['group2'] = 1;
+			$dir_list[$dircounter]['remote'] = "n";
 		}
 		$dircounter++;
 	} else {
@@ -210,6 +218,10 @@ foreach ($dir_list as $dir_mode){
 						<div class="form-check form-check-inline">
 						  <input class="form-check-input" type="checkbox" id="<?php echo $dir_mode['dir_name']; ?>_inlineCheckbox2" name="<?php echo $dir_mode['dir_name']; ?>_group2" value="1" <?php if($dir_mode['group2']==1){ echo "checked"; } ?>>
 						  <label class="form-check-label" for="<?php echo $dir_mode['dir_name']; ?>_inlineCheckbox2">group2</label>
+						</div>
+						<div class="form-check form-check-inline">
+						  <input class="form-check-input" type="checkbox" id="<?php echo $dir_mode['dir_name']; ?>_inlineCheckbox3" name="<?php echo $dir_mode['dir_name']; ?>_remote" value="y" <?php if($dir_mode['remote']=="y"){ echo "checked"; } ?>>
+						  <label class="form-check-label" for="<?php echo $dir_mode['dir_name']; ?>_inlineCheckbox3">is_remote</label>
 						</div>
 		</li>
 <?php

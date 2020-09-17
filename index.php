@@ -32,7 +32,7 @@ include("function.php");
 if($_GET['dir'] != null){
 	$getdir = decode_url($_GET['dir']);
 	$dir = $base_dir.$getdir;
-	dir_check($base_dir, $getdir, $user_group);
+	$is_remote = dir_check($base_dir, $getdir, $user_group);
 } else {
 	$dir = $base_dir;
 }
@@ -46,6 +46,7 @@ $jpg_list = array();
 $dir_list = array();
 $title_list = array();
 foreach ($iterator as $fileinfo) {
+	$fileis_remote = "c";
 	if($base_dir == $dir) {
 		$rootdir = array();
 		$getmodefile = $base_dir."/".$fileinfo.".json";
@@ -55,15 +56,20 @@ foreach ($iterator as $fileinfo) {
 			if($dirmode_arr[$user_group] !== 1) {
 				continue;
 			}
+			if($dirmode_arr['remote'] == "n" || $dirmode_arr['remote'] == null){
+				$fileis_remote = "n";
+			} else {
+				$fileis_remote = "y";
+			}
 		}
 	}
 
     if (!$fileinfo->isDot() && $fileinfo != "@eaDir" && $fileinfo->isDir()) {
-		if(strpos($dir, "rclone_") !== false) {
+		if(strpos($dir, "rclone_") !== false || $is_remote == "y") {
 			$dir_list[$dircounter] = $fileinfo->getFilename();
 			$dircounter++;
 		} else {
-			if(strpos($fileinfo->getFilename(), "rclone_") !== false) {
+			if(strpos($fileinfo->getFilename(), "rclone_") !== false || $fileis_remote == "y") {
 				$sub_dircounter = 1;
 			} else {
 				$sub_iterator = new DirectoryIterator($dir."/".$fileinfo->getFilename());
@@ -227,7 +233,7 @@ for($count=0;$count < count($bookmark_arr); $count++){
     <div class="card border-secondary m-1 p-0">
 				<div class="card-body text-secondary m-1 p-1">
 <?php
-if(strpos($fileinfo, "rclone_") !== false || strpos($dir, "rclone_") !== false){
+if(strpos($fileinfo, "rclone_") !== false || strpos($dir, "rclone_") !== false || $is_remote == "y"){
 ?>	
 					<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-hdd-network-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
   <path fill-rule="evenodd" d="M2 2a2 2 0 0 0-2 2v1a2 2 0 0 0 2 2h5.5v3A1.5 1.5 0 0 0 6 11.5H.5a.5.5 0 0 0 0 1H6A1.5 1.5 0 0 0 7.5 14h1a1.5 1.5 0 0 0 1.5-1.5h5.5a.5.5 0 0 0 0-1H10A1.5 1.5 0 0 0 8.5 10V7H14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H2zm.5 3a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1zm2 0a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1z"/>
@@ -295,7 +301,7 @@ if(strpos($fileinfo, "rclone_") !== false || strpos($dir, "rclone_") !== false){
 							$configfile = substr($zip_file, 0, strpos(strtolower($zip_file), ".cbz")).".json";
 						}
 
-	if(strpos($dir, "rclone_") !== false) {
+	if(strpos($dir, "rclone_") !== false || $is_remote == "y") {
 		if(is_File($configfile) === false){
 			$img_output = $null_image;
 			$totalpage = "nodata-";
@@ -570,7 +576,7 @@ if(strpos($fileinfo, "rclone_") !== false || strpos($dir, "rclone_") !== false){
     <div class="page-item <?php if($paging == 0) { echo "disabled"; } ?>">
       <a class="page-link" onclick="location.href='./index.php?dir=<?php echo encode_url($getdir); ?>&page=<?php echo (int)$_GET['page']-1; ?>'" href="#" tabindex="-1" aria-disabled="true">Previous</a>
     </div>
-				<div class="nav-bar dropdown">
+				<div class="nav-bar dropdown dropup">
 					<button class="page-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">
 					<?php echo (int)$_GET['page']+1; ?>/<?php 
 						echo ceil($maxlist/$maxview);					

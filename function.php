@@ -30,7 +30,13 @@ function dir_check($base_dir, $getdir, $user_group) {
 			echo "권한이 없습니다. 3초 후 초기화면으로 돌아갑니다.<br>";
 			echo("<meta http-equiv=\"refresh\" content=\"3; url=index.php\">"); 
 			exit();
-		}
+		} else {
+			if($dirmode_arr['remote'] == "y"){
+				return "y";
+			} elseif($dirmode_arr['remote'] == "n" || $dirmode_arr['remote'] == null){
+				return "n";
+			}
+		}		
 	}
 }
 
