@@ -32,6 +32,7 @@ include("function.php");
 if($_GET['dir'] != null){
 	$getdir = decode_url($_GET['dir']);
 	$dir = $base_dir.$getdir;
+	dir_check($base_dir, $getdir);
 } else {
 	$dir = $base_dir;
 }
@@ -45,18 +46,15 @@ $jpg_list = array();
 $dir_list = array();
 $title_list = array();
 foreach ($iterator as $fileinfo) {
-	$rootdir = array();
-	if($getdir == null) {
+	if($base_dir == $dir) {
+		$rootdir = array();
 		$getmodefile = $base_dir."/".$fileinfo.".json";
-	} else {
-		$rootdir = explode("/", $getdir);
-		$getmodefile = $base_dir."/".$rootdir[1].".json";
-	}
-	if(is_file($getmodefile) == true) {
-		$dirmode_arr = array();
-		$dirmode_arr = json_decode(file_get_contents($getmodefile), true);
-		if($dirmode_arr[$user_group] !== 1) {
-			continue;
+		if(is_file($getmodefile) == true) {
+			$dirmode_arr = array();
+			$dirmode_arr = json_decode(file_get_contents($getmodefile), true);
+			if($dirmode_arr[$user_group] !== 1) {
+				continue;
+			}
 		}
 	}
 

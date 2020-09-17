@@ -5,6 +5,7 @@ include("function.php");
 if($_GET['file']){
 	$getfile = decode_url($_GET['file']);
 	$base_file = $base_dir.$getfile;
+	dir_check($base_dir, $getfile);
 } else {
 	echo "정보가 없습니다.";
 	die(header("Location: ./"));
@@ -14,17 +15,6 @@ $base_title = explode("/", $base_file);
 $title = $base_title[(count($base_title)-1)];
 $base_folder = str_replace($title, "", $base_file);
 $link_dir = str_replace("/".$title, "", $getfile);
-
-$rootdir = explode("/", $getfile);
-$getmodefile = $base_dir."/".$rootdir[1].".json";
-if(is_file($getmodefile) == true) {
-	$dirmode_arr = array();
-	$dirmode_arr = json_decode(file_get_contents($getmodefile), true);
-	if($dirmode_arr[$user_group] !== 1) {
-		echo "권한이 없습니다.";
-		exit;
-	}
-}
 
 
 if(strpos(strtolower($base_file), "zip") !== false || strpos(strtolower($base_file), "cbz") !== false) {

@@ -1,4 +1,5 @@
 <?php
+
 $version = json_decode(file_get_contents("version.json"), true);
 $server_version = json_decode(file_get_contents("https://raw.githubusercontent.com/imueRoid/myComix/master/version.json"), true); 
 
@@ -17,6 +18,21 @@ if(!isset($_COOKIE['user_id']) || !isset($_COOKIE['user_pass'])) {
 }
 	
 $bookmark_file = $user_id."_bookmark.json";
+
+function dir_check($base_dir, $getdir) {	
+	$rootdir = array();
+	$rootdir = explode("/", $getdir);
+	$getmodefile = $base_dir."/".$rootdir[1].".json";
+	if(is_file($getmodefile) == true) {
+		$dirmode_arr = array();
+		$dirmode_arr = json_decode(file_get_contents($getmodefile), true);
+		if($dirmode_arr[$user_group] !== 1) {
+			echo "권한이 없습니다. 3초 후 초기화면으로 돌아갑니다.<br>";
+			echo("<meta http-equiv=\"refresh\" content=\"3; url=index.php\">"); 
+			exit();
+		}
+	}
+}
 
 ################################################################################
 # Return encode/decode URL for Special character
