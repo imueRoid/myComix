@@ -133,7 +133,7 @@ $iterator = new DirectoryIterator($base_dir);
 <br>
 <div class="card bg-outline-success m-2 p-0">
 <div class="card-header">README.md</div>
-<div class="card-body p-5 text-left">
+<div class="card-body p-2 text-left">
 <?php
 $readme = file_get_contents("README.md");
 echo $readme;
