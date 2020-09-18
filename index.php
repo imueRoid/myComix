@@ -35,7 +35,7 @@ include("function.php");
 if($_GET['dir'] != null){
 	$getdir = decode_url($_GET['dir']);
 	$dir = $base_dir.$getdir;
-	$is_remote = dir_check($base_dir, $getdir, $user_group);
+	$is_remote = dir_check($getdir);
 } else {
 	$dir = $base_dir;
 }
@@ -56,7 +56,7 @@ foreach ($iterator as $fileinfo) {
 		if(is_file($getmodefile) == true) {
 			$dirmode_arr = array();
 			$dirmode_arr = json_decode(file_get_contents($getmodefile), true);
-			if($dirmode_arr[$user_group] !== 1) {
+			if($dirmode_arr[$_SESSION["user_group"]] !== 1) {
 				continue;
 			}
 			if($dirmode_arr['remote'] == "n" || $dirmode_arr['remote'] == null){
@@ -188,8 +188,8 @@ for($count=0;$count < count($bookmark_arr); $count++){
 	<tr>
 	<td colspan="2" class="m-0 p-0" align="left">
 	<span class="badge badge-light badge-sm" style="font-family: 'Nanum Gothic', sans-serif;">
-	[ <?php echo $user_id;?> ]로 로그인되었습니다.</span>
-	<?php if($user_group == "admin") { echo "<a class=\"badge badge-danger badge-sm\" href=admin.php>관리자페이지</a>"; }?> <a class="badge badge-danger badge-sm" href="login.php?mode=logout">로그아웃</a>
+	[ <?php echo $_SESSION["user_id"];?> ]로 로그인되었습니다.</span>
+	<?php if($_SESSION["user_group"] == "admin") { echo "<a class=\"badge badge-danger badge-sm\" href=admin.php>관리자페이지</a>"; }?> <a class="badge badge-danger badge-sm" href="login.php?mode=logout">로그아웃</a>
 	</a>
 	<h6 style="font-family: 'Nanum Gothic', sans-serif;"><br><br>[<?php echo $getdir;?>]</h6>
 	</td>

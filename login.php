@@ -1,4 +1,5 @@
 <?php
+session_start();
 if($_POST['mode'] == "make_id"){
 	$user_file = "user.php";
 	$user_arr = array();
@@ -17,23 +18,19 @@ if($_POST['mode'] == "make_id"){
 	$user_arr = array();
 	$user_arr = json_decode(file_get_contents($user_file), true);
 	if (password_verify(hash("sha256", $_POST['pass']), $user_arr[$_POST['id']]['pass']) == true) {
-		//login ok, make cookie
-		setcookie('user_id', $_POST['id'], time() + 86400 * 7);
-		setcookie('user_pass', hash("sha256", $_POST['pass']), time() + 86400 * 7);
+		//login ok, make session
+		$_SESSION["user_id"] = $_POST['id'];
+		$_SESSION["user_pass"] = hash("sha256", $_POST['pass']);
+		$user_file = "user.php";
+		$user_arr = array();
+		$user_arr = json_decode(file_get_contents($user_file), true);
+		$_SESSION["user_group"] = $user_arr[$_POST['id']]['group'];
 		echo("<script>location.replace('index.php');</script>"); 
 	} else {
 		echo("<script>location.replace('login.php');</script>"); 
 	}
 } elseif($_GET['mode'] == "logout"){
-		//logout, unset cookie
-	if (isset($_COOKIE['user_id'])) {
-		unset($_COOKIE['user_id']); 
-		setcookie('user_id', null, -1); 
-	}
-	if (isset($_COOKIE['user_pass'])) {
-		unset($_COOKIE['user_pass']); 
-		setcookie('user_pass', null, -1); 
-	}
+	session_destroy();
 	echo("<script>location.replace('login.php');</script>"); 
 } else {
 ?>
@@ -59,16 +56,10 @@ if($_POST['mode'] == "make_id"){
 	</style>
 </head>
 <body class="text-center">
-
-
-
-
-
-
 <?php
 
 if(is_file('user.php') !== false) {
-	if(!isset($_COOKIE['user_id']) || !isset($_COOKIE['user_pass']) || $_GET['mode'] == "fail") { 
+	if(!isset($_SESSION['user_id']) || !isset($_SESSION['user_pass']) || !isset($_SESSION['user_group'])) { 
 ?>
 <form class="form-signin" action="<?php echo $_SERVER['PHP_SELF']; ?>" method = "post">
 	<div class="card" style="position: absolute; top:50%; left:50%; width:320px; margin-left:-160px; margin-top:-200px;">
@@ -86,15 +77,8 @@ if(is_file('user.php') !== false) {
 </form>
 <?php
 	} else {
-		//로그인 처리
-	$user_file = "user.php";
-	$user_arr = array();
-	$user_arr = json_decode(file_get_contents($user_file), true);
-	if (password_verify($_COOKIE['user_pass'], $user_arr[$_COOKIE['user_id']]['pass']) == true) {
-		$user_id = $_COOKIE['user_id'];
-		$user_group = $user_arr[$user_id]['group'];
-	}
-if($_GET['mode'] == "adduser" && $user_group == "admin") {
+
+	if($_GET['mode'] == "adduser" && $_SESSION["user_group"] == "admin") {
 ?>
 <form class="form-signin" action="<?php echo $_SERVER['PHP_SELF']; ?>" method = "post">
 	<div class="card" style="position: absolute; top:50%; left:50%; width:320px; margin-left:-160px; margin-top:-200px;">

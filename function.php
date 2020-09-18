@@ -1,36 +1,28 @@
 <?php
+session_start();
 
 $version = json_decode(file_get_contents("version.json"), true);
 $server_version = json_decode(file_get_contents("https://raw.githubusercontent.com/imueRoid/myComix/master/version.json"), true); 
 
-if(!isset($_COOKIE['user_id']) || !isset($_COOKIE['user_pass'])) { 
-	echo("<script>location.replace('login.php');</script>"); 
-} else {
-	$user_file = "user.php";
-	$user_arr = array();
-	$user_arr = json_decode(file_get_contents($user_file), true);
-	if (password_verify($_COOKIE['user_pass'], $user_arr[$_COOKIE['user_id']]['pass']) == true) {
-		$user_id = $_COOKIE['user_id'];
-		$user_group = $user_arr[$user_id]['group'];
-	} else {
-		echo("<script>location.replace('login.php?mode=fail');</script>"); 
-	}
+if(!isset($_SESSION["user_id"]) || !isset($_SESSION["user_pass"]) || !isset($_SESSION["user_group"])) { 
+	echo("<script>location.replace('login.php?mode=fail');</script>"); 
 }
 
-$bookmark_file = $user_id."_bookmark.json";
+$bookmark_file = $_SESSION["user_id"]."_bookmark.json";
 
 ################################################################################
 # 접근권한이 있는지 확인 및 리모트폴더 여부 반환
 ################################################################################
 
-function dir_check($base_dir, $getdir, $user_group) {
+function dir_check($getdir) {
+	global $base_dir;
 	$rootdir = array();
 	$rootdir = explode("/", $getdir);
 	$getmodefile = $base_dir."/".$rootdir[1].".json";
 	if(is_file($getmodefile) == true) {
 		$dirmode_arr = array();
 		$dirmode_arr = json_decode(file_get_contents($getmodefile), true);
-		if($dirmode_arr[$user_group] !== 1) {
+		if($dirmode_arr[$_SESSION["user_group"]] !== 1) {
 			echo "권한이 없습니다. 3초 후 초기화면으로 돌아갑니다.<br>";
 			echo("<meta http-equiv=\"refresh\" content=\"3; url=index.php\">"); 
 			exit();
