@@ -119,7 +119,9 @@ sort($title_list, SORT_NATURAL);
 
 $filelist_sort = array();
 foreach($file_list as $sort_file){
-	$filelist_sort[str_replace("화.zip", "", strtolower($sort_file))] = $sort_file;
+	$n_sort = str_replace("화.zip", "", strtolower($sort_file))
+	$n_sort = str_replace("_", " ", strtolower($sort_file))
+	$filelist_sort[$n_sort] = $sort_file;
 }
 ksort($filelist_sort, SORT_NATURAL);
 
