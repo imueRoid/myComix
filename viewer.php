@@ -256,7 +256,7 @@ if($mode == "toon"){
 		
 		foreach($file_list as $sort_file){
 			$n_sort = str_replace("화.zip", "", strtolower($sort_file));
-			$n_sort = str_replace("_", " ", strtolower($sort_file));
+			$n_sort = str_replace("_", " ", strtolower($n_sort));
 			$filelist_sort[$n_sort] = $sort_file;
 		}
 		ksort($filelist_sort, SORT_NATURAL);
