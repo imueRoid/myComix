@@ -9,7 +9,7 @@ PHP7 이상 버전 및 php-zip, php-gd 설치된 웹서버 필요.</p>
 
 <p>자신의 환경에 맞게 config.php 수정하라. 아래의 두가지 변수를 설정하면 된다.</p>
 
-<pre><code class="php language-php">$base_dir = "/myComix"; //만화가 있는 절대경로
+<pre style="background-color: #DDDDDD;"><code class="php language-php">$base_dir = "/myComix"; //만화가 있는 절대경로
 $maxview = "18"; //한페이지에 보여줄 만화 갯수(폴더도 이 숫자만큼만 한 화면에서 보여진다)
 </code></pre>
 
