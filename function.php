@@ -75,6 +75,7 @@ function cut_title($title){
 
 function encode_url($filename) {
 	$filename = str_replace("+", "{pl}", $filename);
+	$filename = str_replace(".", "{dt}", $filename);
 	$filename = str_replace("%", "{pc}", $filename);
 	$filename = urlencode($filename);
 	return $filename;
@@ -83,6 +84,7 @@ function encode_url($filename) {
 function decode_url($filename) {
 	$filename = urldecode($filename);
 	$filename = str_replace("{pl}", "+", $filename);
+	$filename = str_replace("{dt}", ".", $filename);
 	$filename = str_replace("{pc}", "%", $filename);
 	return $filename;
 }

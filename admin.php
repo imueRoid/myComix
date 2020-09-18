@@ -11,17 +11,17 @@ $iterator = new DirectoryIterator($base_dir);
 	foreach ($iterator as $fileinfo) {
 		$dir_list = array();
 		if (!$fileinfo->isDot() && $fileinfo != "@eaDir" && $fileinfo->isDir()) {
-			if((int)$_POST[$fileinfo->getFilename()."_group1"] == 1){
+			if((int)$_POST[encode_url($fileinfo->getFilename())."_group1"] == 1){
 				$group1_value = 1;
 			} else {
 				$group1_value = 0;
 			}
-			if((int)$_POST[$fileinfo->getFilename()."_group2"] == 1){
+			if((int)$_POST[encode_url($fileinfo->getFilename())."_group2"] == 1){
 				$group2_value = 1;
 			} else {
 				$group2_value = 0;
 			}
-			if($_POST[$fileinfo->getFilename()."_remote"] == "y"){
+			if($_POST[encode_url($fileinfo->getFilename())."_remote"] == "y"){
 				$remote_value = "y";
 			} else {
 				$remote_value = "n";
@@ -238,15 +238,15 @@ foreach ($dir_list as $dir_mode){
 						  <span class="badge badge-dark"><?php echo $dir_mode['dir_name']; ?></span>
 						</div></h6>
 						<div class="form-check form-check-inline">
-						  <input class="form-check-input" type="checkbox" id="<?php echo $dir_mode['dir_name']; ?>_inlineCheckbox1" name="<?php echo $dir_mode['dir_name']; ?>_group1" value="1" <?php if($dir_mode['group1']==1){ echo "checked"; } ?>>
+						  <input class="form-check-input" type="checkbox" id="<?php echo $dir_mode['dir_name']; ?>_inlineCheckbox1" name="<?php echo encode_url($dir_mode['dir_name']); ?>_group1" value="1" <?php if($dir_mode['group1']==1){ echo "checked"; } ?>>
 						  <label class="form-check-label" for="<?php echo $dir_mode['dir_name']; ?>_inlineCheckbox1">group1</label>
 						</div>
 						<div class="form-check form-check-inline">
-						  <input class="form-check-input" type="checkbox" id="<?php echo $dir_mode['dir_name']; ?>_inlineCheckbox2" name="<?php echo $dir_mode['dir_name']; ?>_group2" value="1" <?php if($dir_mode['group2']==1){ echo "checked"; } ?>>
+						  <input class="form-check-input" type="checkbox" id="<?php echo $dir_mode['dir_name']; ?>_inlineCheckbox2" name="<?php echo encode_url($dir_mode['dir_name']); ?>_group2" value="1" <?php if($dir_mode['group2']==1){ echo "checked"; } ?>>
 						  <label class="form-check-label" for="<?php echo $dir_mode['dir_name']; ?>_inlineCheckbox2">group2</label>
 						</div>
 						<div class="form-check form-check-inline">
-						  <input class="form-check-input" type="checkbox" id="<?php echo $dir_mode['dir_name']; ?>_inlineCheckbox3" name="<?php echo $dir_mode['dir_name']; ?>_remote" value="y" <?php if($dir_mode['remote']=="y"){ echo "checked"; } ?>>
+						  <input class="form-check-input" type="checkbox" id="<?php echo $dir_mode['dir_name']; ?>_inlineCheckbox3" name="<?php echo encode_url($dir_mode['dir_name']); ?>_remote" value="y" <?php if($dir_mode['remote']=="y"){ echo "checked"; } ?>>
 						  <label class="form-check-label" for="<?php echo $dir_mode['dir_name']; ?>_inlineCheckbox3">is_remote</label>
 						</div>
 		</li>
