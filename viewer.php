@@ -235,7 +235,7 @@ if($mode == "toon"){
 <a OnClick="location.href='./index.php?dir=<?php echo encode_url($link_dir); ?>&page=<?php echo $page; ?>'"><font style="font-family: 'Gugi'; font-size: 2em;">마이코믹스</font></a>
 </td>
 <td class="m-0 p-0 align-middle" align="right">
-<img id="submit_bookmark" src="" height="1" width="1"><input type="text" style="border:none;border-right:0px; border-top:0px; boder-left:0px; boder-bottom:0px;" readonly id="info" value="" size=10></input>
+<input type="text" style="border:none;border-right:0px; border-top:0px; boder-left:0px; boder-bottom:0px;" readonly id="info" value="" size=10></input>
 <button class="btn btn-sm m-0 p-0" onclick="location.replace('#<?php echo $bookmark; ?>');" id="load" value="위치저장"><svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-bookmark-check-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
   <path fill-rule="evenodd" d="M4 0a2 2 0 0 0-2 2v13.5a.5.5 0 0 0 .74.439L8 13.069l5.26 2.87A.5.5 0 0 0 14 15.5V2a2 2 0 0 0-2-2H4zm6.854 5.854a.5.5 0 0 0-.708-.708L7.5 7.793 6.354 6.646a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0l3-3z"/>
 </svg></button>&nbsp;&nbsp;
@@ -488,8 +488,9 @@ if ($mode == "toon"){
 <?php
 }
 ?>
-	document.getElementById("submit_bookmark").src = "bookmark.php?file=<?php echo encode_url($getfile); ?>&bookmark=" + bookmark;
-	document.getElementById("info").value = "저장완료";
+$.get( "bookmark.php?file=<?php echo encode_url($getfile); ?>&bookmark=" + bookmark, function( data ) {
+  	document.getElementById("info").value = data;
+});
 }
 <?php
 if ($mode == "book"){

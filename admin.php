@@ -41,6 +41,8 @@ $iterator = new DirectoryIterator($base_dir);
 		}
 		unset($dir_list);
 	}
+	$prevPage = $_SERVER["HTTP_REFERER"];
+	header("location:".$prevPage);
 } elseif($_POST['mode'] == "group_change"){
 	$user_file = "user.php";
 	$user_arr = array();
@@ -58,6 +60,8 @@ $iterator = new DirectoryIterator($base_dir);
 	}
 	$json_output = json_encode($user_arr, JSON_UNESCAPED_UNICODE);
 	file_put_contents($user_file, $json_output);
+	$prevPage = $_SERVER["HTTP_REFERER"];
+	header("location:".$prevPage);
 }	
 	
 	

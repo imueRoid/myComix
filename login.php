@@ -11,8 +11,9 @@ if($_POST['mode'] == "make_id"){
 	$json_output = json_encode($user_arr, JSON_UNESCAPED_UNICODE);
 	file_put_contents($user_file, $json_output);
 	
-	echo $_POST['id']." / ".$_POST['group']."생성에 성공했습니다.<br> 3초후 초기화면으로 돌아갑니다.";
-	echo("<meta http-equiv=\"refresh\" content=\"3; url=index.php\">"); 
+	echo $_POST['id']." / ".$_POST['group']."생성에 성공했습니다.<br> 3초후 이전화면으로 돌아갑니다.";
+	$prevPage = $_SERVER["HTTP_REFERER"];
+	echo("<meta http-equiv=\"refresh\" content=\"3; url=".$prevPage."\">"); 
 } elseif($_POST['mode'] == "login"){
 	$user_file = "user.php";
 	$user_arr = array();
@@ -25,13 +26,14 @@ if($_POST['mode'] == "make_id"){
 		$user_arr = array();
 		$user_arr = json_decode(file_get_contents($user_file), true);
 		$_SESSION["user_group"] = $user_arr[$_POST['id']]['group'];
-		echo("<script>location.replace('index.php');</script>"); 
+		header("location:index.php");
 	} else {
-		echo("<script>location.replace('login.php');</script>"); 
+		$prevPage = $_SERVER["HTTP_REFERER"];
+		header("location:".$prevPage);
 	}
 } elseif($_GET['mode'] == "logout"){
 	session_destroy();
-	echo("<script>location.replace('login.php');</script>"); 
+	header("location:login.php");
 } else {
 ?>
 <html>
@@ -71,7 +73,7 @@ if(is_file('user.php') !== false) {
 			<input type="hidden" name="mode" value="login">
 		</div>
 		<div class="card-footer">
-		<button class="btn btn-primary btn-block" type="submit">Sign in</button>
+		<button class="btn btn-primary btn-block" type="submit">Log-in</button>
 		</div>
 	</div>
 </form>
@@ -89,15 +91,15 @@ if(is_file('user.php') !== false) {
 			<input type="password" name="pass" class="form-control mb-2 pb-2" placeholder="USER_Password" required>
 			<br>
 				<div class="custom-control custom-radio custom-control-inline">
-				  <input type="radio" class="custom-control-input" id="defaultInline1" name="group" value="admin">
+				  <input type="radio" class="custom-control-input" id="defaultInline1" name="group" value="admin" required>
 				  <label class="custom-control-label" for="defaultInline1">관리자</label>
 				</div>
 				<div class="custom-control custom-radio custom-control-inline">
-				  <input type="radio" class="custom-control-input" id="defaultInline2" name="group" value="group1">
+				  <input type="radio" class="custom-control-input" id="defaultInline2" name="group" value="group1" required>
 				  <label class="custom-control-label" for="defaultInline2">1그룹</label>
 				</div>
 				<div class="custom-control custom-radio custom-control-inline">
-				  <input type="radio" class="custom-control-input" id="defaultInline3" name="group" value="group2">
+				  <input type="radio" class="custom-control-input" id="defaultInline3" name="group" value="group2" required>
 				  <label class="custom-control-label" for="defaultInline3">2그룹</label>
 				</div>
 			<input type="hidden" name="mode" value="make_id">

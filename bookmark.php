@@ -21,6 +21,6 @@ if($_GET['mode'] == "delete"){
 	$bookmark_arr[$getfile] = $_GET['bookmark'];
 	$json_output = json_encode($bookmark_arr, JSON_UNESCAPED_UNICODE);
 	file_put_contents($bookmark_file, $json_output);
-	echo base64_decode($null_image);
+	echo "#".$_GET['bookmark'];
 }
 ?>
