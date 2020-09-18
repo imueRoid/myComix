@@ -113,6 +113,11 @@ $iterator = new DirectoryIterator($base_dir);
 <div class="card bg-outline-success m-2 p-0">
 <div class="card-header">이번 버전의 변경점</div>
 <div class="card-body p-0">
+<p>v0.37</p>
+<p>
+파일 이름이 긴 경우 북마크가 화면을 넘어가는 문제 수정<br>
+북마크 삭제 아이콘 변경
+</p>
 <p>v0.36</p>
 <p>
 인덱스와 뷰어로 나뉘었던 버전표시를 하나로 합치기로 결정.<br>

@@ -22,6 +22,9 @@ include("function.php");
 		a:visited {text-decoration: none;}
 		a:active {text-decoration: none;}
 		a:hover {text-decoration: none;}
+		.user-dropdown {
+			font-size: 0.8em;
+		}
 	</style>
 </head>
 <body>
@@ -142,7 +145,7 @@ $updir = "";
 	<table class="table table-borderless m-0 p-0" width="100%">
 	<tr>
 	<td class="m-0 p-0 align-middle" align="left">
-		<div style="font-family: 'Gugi'; font-size:2.5em;" onclick="location.href='index.php'">마이코믹스</div>
+		<div style="font-family: 'Gugi'; font-size:2.5em;" onclick="location.replace('index.php')">마이코믹스</div>
 	</td>
 	<td class="m-0 p-0 align-middle" align="right">	
 <?php
@@ -165,11 +168,12 @@ if(is_file($bookmark_file) === true){
 for($count=0;$count < count($bookmark_arr); $count++){
 	$title_temp = explode("/", $bookmark_title[$count]);
 ?>
-	<div  class="dropdown-item">
-	<button class="btn btn-sm m-0 p-0" onclick="location.replace('bookmark.php?mode=delete&file=<?php echo encode_url($bookmark_title[$count]); ?>');"><svg width="1.3em" height="1.3em" viewBox="0 0 16 16" class="bi bi-bookmark-x-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-  <path fill-rule="evenodd" d="M4 0a2 2 0 0 0-2 2v13.5a.5.5 0 0 0 .74.439L8 13.069l5.26 2.87A.5.5 0 0 0 14 15.5V2a2 2 0 0 0-2-2H4zm2.854 5.146a.5.5 0 1 0-.708.708L7.293 7 6.146 8.146a.5.5 0 1 0 .708.708L8 7.707l1.146 1.147a.5.5 0 1 0 .708-.708L8.707 7l1.147-1.146a.5.5 0 0 0-.708-.708L8 6.293 6.854 5.146z"/>
-	</svg></button>
-	<button class="btn btn-sm m-1 p-0" onclick="location.href='./viewer.php?file=<?php echo encode_url($bookmark_title[$count]); ?>#<?php echo $bookmark_mark[$count]; ?>'"><?php echo $title_temp[count($title_temp) - 1]; ?></button>
+	<div  class="dropdown-item m-0 p-1">
+	<button class="btn btn-sm m-0 p-0" onclick="location.replace('bookmark.php?mode=delete&file=<?php echo encode_url($bookmark_title[$count]); ?>');"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-x-square ml-2 mr-1 p-0" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+  <path fill-rule="evenodd" d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+</svg></button>
+	<button class="user-dropdown btn btn-sm m-0 p-0 d-inline-block text-truncate text-nowrap" style="max-width:290px;" onclick="location.href='./viewer.php?file=<?php echo encode_url($bookmark_title[$count]); ?>#<?php echo $bookmark_mark[$count]; ?>'"><?php echo cut_title($title_temp[count($title_temp) - 1]); ?></button>
 	</div>
 <?php
 }
@@ -414,26 +418,7 @@ if(strpos($fileinfo, "rclone_") !== false || strpos($dir, "rclone_") !== false |
 			} else {
 				$dir_s = preg_replace("/\[[^]]*\]/","",$nowdirarr[count($nowdirarr)-1]);
 			}
-			$title_s = str_replace($dir_s, "", $fileinfo);
-			$title_s = str_replace(".zip", "", $title_s);
-			if(strpos($title_s, "|") !== false){
-				$pos = explode("|", $title_s);
-				$title_s= $pos[1];
-			} elseif(strpos($title_s, "｜") !== false){
-				$pos = explode("｜", $title_s);
-				$title_s= $pos[1];
-			} elseif(strpos($title_s, " l ") !== false){
-				$pos = explode(" l ", $title_s);
-				$title_s= $pos[1];
-			} elseif(strpos($title_s, "│") !== false){
-				$pos = explode("│", $title_s);
-				$title_s= $pos[1];
-			} else {
-				$title_s = str_replace($_GET['title'], "", $title_s);
-				$title_s = str_replace("(decensored)", "무수정", $title_s);
-				$title_s = preg_replace("~\(.*\)~","",$title_s);
-				$title_s = preg_replace("/\[[^]]*\]/","",$title_s);
-			}
+			$title_s = cut_title($fileinfo);
 		?>
 				<a href='viewer.php?mode=<?php echo $viewer; ?>&file=<?php echo encode_url($getdir."/".$fileinfo);?>'>
 				  <div class="col mb-3">
@@ -569,26 +554,26 @@ if(strpos($fileinfo, "rclone_") !== false || strpos($dir, "rclone_") !== false |
 <td width="100%" class="p-2" align="center">
   <div class="pagination pagination-sm justify-content-center pagination-outline-primary">
     <div class="page-item <?php if($dir == $base_dir) { echo "disabled"; } ?>">
-      <a class="page-link" onclick="location.href='index.php?dir=<?php echo encode_url($updir);?>'" href="#" tabindex="-1" aria-disabled="true">상위폴더로</a>
+      <button class="page-link" onclick="location.replace('index.php?dir=<?php echo encode_url($updir);?>')" tabindex="-1" aria-disabled="true">상위폴더로</button>
     </div>
     <div class="page-item <?php if($paging == 0) { echo "disabled"; } ?>">
 	</div>
     <div class="page-item <?php if($paging == 0) { echo "disabled"; } ?>">
-      <a class="page-link" onclick="location.href='./index.php?dir=<?php echo encode_url($getdir); ?>&page=<?php echo (int)$_GET['page']-1; ?>'" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+      <button class="page-link" onclick="location.replace('./index.php?dir=<?php echo encode_url($getdir); ?>&page=<?php echo (int)$_GET['page']-1; ?>')" tabindex="-1" aria-disabled="true">Previous</button>
     </div>
 				<div class="nav-bar dropdown dropup">
-					<button class="page-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">
+					<button class="page-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown">
 					<?php echo (int)$_GET['page']+1; ?>/<?php 
 						echo ceil($maxlist/$maxview);					
 					?>
 					</button>
 
-					<div class=" dropdown-menu-right dropdown-menu" >
+					<div class="dropdown-menu-right dropdown-menu m-0 p-0">
 <?php	
 					$pagingcount = 0;
 				while($pagingcount<($maxlist/$maxview)){
 			?>
-					<a onclick="location.href='./index.php?dir=<?php echo encode_url($getdir); ?>&page=<?php echo $pagingcount; ?>'" href="#" class="dropdown-item">[<?php echo $pagingcount+1; ?>페이지]</a>
+					<button onclick="location.replace('./index.php?dir=<?php echo encode_url($getdir); ?>&page=<?php echo $pagingcount; ?>')" class="btn btn-sm dropdown-item m-0 p-1">[<?php echo $pagingcount+1; ?>페이지]</button>
 			<?php
 				$pagingcount++;
 				}
@@ -597,7 +582,7 @@ if(strpos($fileinfo, "rclone_") !== false || strpos($dir, "rclone_") !== false |
 					</div>
 				</div>
 	    <div class="page-item <?php if(($maxview*($paging+1))>=$maxlist) { echo "disabled"; } ?>">
-      <a class="page-link" onclick="location.href='./index.php?dir=<?php echo encode_url($getdir); ?>&page=<?php echo (int)$_GET['page']+1; ?>'" href="#">Next</a>
+      <button class="page-link" onclick="location.replace('./index.php?dir=<?php echo encode_url($getdir); ?>&page=<?php echo (int)$_GET['page']+1; ?>')">Next</button>
     </div>
 	</div>
 </td></tr>

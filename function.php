@@ -19,6 +19,10 @@ if(!isset($_COOKIE['user_id']) || !isset($_COOKIE['user_pass'])) {
 
 $bookmark_file = $user_id."_bookmark.json";
 
+################################################################################
+# 접근권한이 있는지 확인 및 리모트폴더 여부 반환
+################################################################################
+
 function dir_check($base_dir, $getdir, $user_group) {
 	$rootdir = array();
 	$rootdir = explode("/", $getdir);
@@ -38,6 +42,39 @@ function dir_check($base_dir, $getdir, $user_group) {
 			}
 		}		
 	}
+}
+
+
+################################################################################
+# 긴 제목을 줄여줌
+################################################################################
+
+function cut_title($title){
+			$nowdir_arr = array();
+			$nowdir_arr = explode("/", decode_url($_GET['dir']));
+			$nowdir = $nowdir_arr[count($nowdir_arr) - 1];
+			$title = str_replace($nowdir, "", strtolower($title));
+			$title = str_replace(".zip", "", strtolower($title));
+			$title = str_replace(".cbz", "", $title);
+			if(strpos($title_s, "|") !== false){
+				$pos = explode("|", $title);
+				$title= $pos[1];
+			} elseif(strpos($title, "｜") !== false){
+				$pos = explode("｜", $title);
+				$title= $pos[1];
+			} elseif(strpos($title, " l ") !== false){
+				$pos = explode(" l ", $title);
+				$title= $pos[1];
+			} elseif(strpos($title, "│") !== false){
+				$pos = explode("│", $title);
+				$title= $pos[1];
+			} else {
+				$title = str_replace($_GET['title'], "", $title);
+				$title = str_replace("(decensored)", "무수정", $title);
+				$title = preg_replace("~\(.*\)~","",$title);
+				$title = preg_replace("/\[[^]]*\]/","",$title);
+			}
+			return $title;
 }
 
 ################################################################################

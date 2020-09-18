@@ -28,11 +28,11 @@ if($_POST['mode'] == "make_id"){
 		//logout, unset cookie
 	if (isset($_COOKIE['user_id'])) {
 		unset($_COOKIE['user_id']); 
-		setcookie('user_id', null, -1, '/'); 
+		setcookie('user_id', null, -1); 
 	}
 	if (isset($_COOKIE['user_pass'])) {
 		unset($_COOKIE['user_pass']); 
-		setcookie('user_pass', null, -1, '/'); 
+		setcookie('user_pass', null, -1); 
 	}
 	echo("<script>location.replace('login.php');</script>"); 
 } else {
