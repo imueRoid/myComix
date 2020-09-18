@@ -129,7 +129,6 @@ $iterator = new DirectoryIterator($base_dir);
 	</div>
 	</div>
 </a>
-</div>
 <br>
 <div class="card bg-outline-success m-2 p-0">
 <div class="card-header">README.md</div>
@@ -139,6 +138,8 @@ $readme = file_get_contents("README.md");
 echo $readme;
 ?>
 </div>
+</div>
+
 </div>
 
 <div class="tab-pane fade show" id="group">
