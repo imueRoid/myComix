@@ -1,5 +1,6 @@
 <?php
-session_start();
+session_start(["cache_expire"=> 43200, "gc_maxlifetime"=> 43200]);
+
 if($_POST['mode'] == "make_id"){
 	$user_file = "user.php";
 	$user_arr = array();

@@ -1,5 +1,5 @@
 <?php
-session_start();
+session_start(["cache_expire"=> 43200, "gc_maxlifetime"=> 43200]);
 
 $version = json_decode(file_get_contents("version.json"), true);
 $server_version = json_decode(file_get_contents("https://raw.githubusercontent.com/imueRoid/myComix/master/version.json"), true); 
