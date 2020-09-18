@@ -184,6 +184,7 @@ if($mode == "book") {
 	</style>
    </head>
 <script type="text/javascript">
+var scroll_top = 0;
 <?php
 if($mode == "toon"){
 ?>
@@ -458,6 +459,7 @@ if($mode == "toon"){
 						if ($type == "zip") {
 							$zip->close();
 						}
+						$image_counter=$image_counter-1;
 					if($loaded < $total){
 						echo "모든 파일 로딩에 실패했습니다. 인식할 수 없는 파일이 있습니다.";
 					}
@@ -472,15 +474,14 @@ function save_bookmark() {
 <?php
 if ($mode == "toon"){
 ?>
-	var scroll_top = $(this).scrollTop();
-
-	for (var i = 0; i < <?php echo $image_counter; ?>; i++) {
-		var scroll_image = $("#image"+i).position().top;
-		if (scroll_top < scroll_image) {
-			bookmark= "image" + String(i-1);
-			break;
-		}
+for (var i = 0; i <= <?php echo $image_counter; ?>; i++) {
+	var j = <?php echo $image_counter; ?> - i;
+	var scroll_image = $("#image"+j).position().top;
+	if (scroll_top > scroll_image) {
+		bookmark= "image" + String(j);
+		break;
 	}
+}
 <?php
 } else {
 ?>
