@@ -251,18 +251,16 @@ if($mode == "toon"){
 </div>
 <?php
 		$files = scandir($base_folder);
-		
+
 		$filelist_sort = array();
 		
-		foreach($file_list as $sort_file){
+		foreach($files as $sort_file){
 			$n_sort = str_replace("화.zip", "", strtolower($sort_file));
 			$n_sort = str_replace("_", " ", strtolower($n_sort));
 			$filelist_sort[$n_sort] = $sort_file;
 		}
 		ksort($filelist_sort, SORT_NATURAL);
-
 		$files = array_values($filelist_sort);
-
 		$totalfile = array();
 		
 		foreach ($files as $file) {
