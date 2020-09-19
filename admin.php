@@ -141,7 +141,7 @@ $iterator = new DirectoryIterator($base_dir);
 <div class="card-body p-2 text-left">
 <?php
 $readme = file_get_contents("README.md");
-echo $readme;
+echo substr($readme, strpos($readme, "<h2 id=\"-1\">업데이트 정보</h2>"));
 ?>
 </div>
 </div>
