@@ -10,6 +10,24 @@ if(!isset($_SESSION["user_id"]) || !isset($_SESSION["user_pass"]) || !isset($_SE
 
 $bookmark_file = $_SESSION["user_id"]."_bookmark.json";
 
+
+################################################################################
+# 파일리스트 소트
+################################################################################
+
+function n_sort($file_list) {
+	$filelist_sort = array();
+	foreach($file_list as $sort_file){
+		$n_sort = str_replace("화.zip", "", strtolower($sort_file));
+		$n_sort = str_replace("_", " ", strtolower($n_sort));
+		$n_sort = str_replace(" ", "", strtolower($n_sort));
+		$filelist_sort[$n_sort] = $sort_file;
+	}
+	ksort($filelist_sort, SORT_NATURAL);
+	$file_list = array_values($filelist_sort);
+	return $file_list;
+}
+
 ################################################################################
 # 접근권한이 있는지 확인 및 리모트폴더 여부 반환
 ################################################################################
@@ -45,7 +63,6 @@ function cut_title($title){
 			$nowdir_arr = array();
 			$nowdir_arr = explode("/", decode_url($_GET['dir']));
 			$nowdir = $nowdir_arr[count($nowdir_arr) - 1];
-			$title = str_replace($nowdir, "", strtolower($title));
 			$title = str_replace(".zip", "", strtolower($title));
 			$title = str_replace(".cbz", "", $title);
 			if(strpos($title_s, "|") !== false){
@@ -61,11 +78,17 @@ function cut_title($title){
 				$pos = explode("│", $title);
 				$title= $pos[1];
 			} else {
-				$title = str_replace($_GET['title'], "", $title);
 				$title = str_replace("(decensored)", "무수정", $title);
 				$title = preg_replace("~\(.*\)~","",$title);
 				$title = preg_replace("/\[[^]]*\]/","",$title);
 			}
+			$nowdir = str_replace("_", "", strtolower($nowdir));
+			$nowdir = str_replace(" ", "", $nowdir);
+			$nowdir = preg_replace("~\(.*\)~","",$nowdir);
+			$nowdir = preg_replace("/\[[^]]*\]/","",$nowdir);
+			$title = str_replace("_","", $title);
+			$title = str_replace(" ","", $title);
+			$title = str_replace($nowdir, "", $title);
 			return $title;
 }
 

@@ -53,6 +53,7 @@ $iterator = new DirectoryIterator($base_dir);
 	foreach($user_arr as $user_list_tmp){
 		if($_POST[$user_id_arr[$user_count]."_group"] == "delete"){
 			unset($user_arr[$user_id_arr[$user_count]]);
+			unlink($user_id_arr[$user_count]."_bookmark.json");
 		} else {
 			$user_arr[$user_id_arr[$user_count]]['group'] = $_POST[$user_id_arr[$user_count]."_group"];
 		}

@@ -116,16 +116,7 @@ foreach ($iterator as $fileinfo) {
 sort($jpg_list, SORT_NATURAL);
 sort($dir_list, SORT_NATURAL);
 sort($title_list, SORT_NATURAL);
-
-$filelist_sort = array();
-foreach($file_list as $sort_file){
-	$n_sort = str_replace("화.zip", "", strtolower($sort_file));
-	$n_sort = str_replace("_", " ", strtolower($n_sort));
-	$filelist_sort[$n_sort] = $sort_file;
-}
-ksort($filelist_sort, SORT_NATURAL);
-
-$file_list = array_values($filelist_sort);
+$file_list = n_sort($file_list);
 
 $maxlist = count($file_list) + count($title_list) + count($dir_list);
 $startview = 0;
@@ -175,7 +166,17 @@ for($count=0;$count < count($bookmark_arr); $count++){
   <path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
   <path fill-rule="evenodd" d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
 </svg></button>
+<?php
+	if(!is_array($bookmark_mark[$count])){
+?>
 	<button class="user-dropdown btn btn-sm m-0 p-0 d-inline-block text-truncate text-nowrap" style="max-width:290px;" onclick="location.href='./viewer.php?file=<?php echo encode_url($bookmark_title[$count]); ?>#<?php echo $bookmark_mark[$count]; ?>'"><?php echo cut_title($title_temp[count($title_temp) - 1]); ?></button>
+<?php
+	} else {
+?>
+	<button class="user-dropdown btn btn-sm m-0 p-0 d-inline-block text-truncate text-nowrap" style="max-width:290px;" onclick="location.href='./viewer.php?mode=<?php echo $bookmark_mark[$count]['viewer']; ?>&page_order=<?php echo $bookmark_mark[$count]['page_order']; ?>&file=<?php echo encode_url($bookmark_title[$count]); ?>#<?php echo $bookmark_mark[$count]['bookmark']; ?>'"><?php echo cut_title($title_temp[count($title_temp) - 1]); ?></button>
+<?php
+	}
+?>
 	</div>
 <?php
 }

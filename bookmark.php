@@ -18,7 +18,9 @@ if($_GET['mode'] == "delete"){
 	$prevPage = $_SERVER["HTTP_REFERER"];
 	header("location:".$prevPage);
 } else {
-	$bookmark_arr[$getfile] = $_GET['bookmark'];
+	$bookmark_arr[$getfile]['bookmark'] = $_GET['bookmark'];
+	$bookmark_arr[$getfile]['viewer'] = $_GET['viewer'];
+	$bookmark_arr[$getfile]['page_order'] = $_GET['page_order'];
 	$json_output = json_encode($bookmark_arr, JSON_UNESCAPED_UNICODE);
 	file_put_contents($bookmark_file, $json_output);
 	echo "#".$_GET['bookmark'];

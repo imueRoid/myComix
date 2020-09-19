@@ -251,16 +251,8 @@ if($mode == "toon"){
 </div>
 <?php
 		$files = scandir($base_folder);
+		$files = n_sort($files);
 
-		$filelist_sort = array();
-		
-		foreach($files as $sort_file){
-			$n_sort = str_replace("화.zip", "", strtolower($sort_file));
-			$n_sort = str_replace("_", " ", strtolower($n_sort));
-			$filelist_sort[$n_sort] = $sort_file;
-		}
-		ksort($filelist_sort, SORT_NATURAL);
-		$files = array_values($filelist_sort);
 		$totalfile = array();
 		
 		foreach ($files as $file) {
@@ -490,7 +482,7 @@ for (var i = 0; i <= <?php echo $image_counter; ?>; i++) {
 <?php
 }
 ?>
-$.get( "bookmark.php?file=<?php echo encode_url($getfile); ?>&bookmark=" + bookmark, function( data ) {
+$.get( "bookmark.php?viewer=<?php echo $mode; ?>&page_order=<?php echo $pageorder['page_order']; ?>&file=<?php echo encode_url($getfile); ?>&bookmark=" + bookmark, function( data ) {
   	document.getElementById("info").value = data;
 });
 }

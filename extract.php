@@ -6,6 +6,7 @@ if($_GET['file'] && $_GET['imgfile']){
 	$getfile = decode_url($_GET['file']);
 	$imgfile = decode_url($_GET['imgfile']);
 	$base_file = $base_dir.$getfile;
+	dir_check($getfile);
 } else {
 	echo "정보가 없습니다.";
 	die(header("Location: ./"));
