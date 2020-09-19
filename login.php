@@ -2,6 +2,10 @@
 session_start(["cache_expire"=> 43200, "gc_maxlifetime"=> 43200]);
 
 if($_POST['mode'] == "make_id"){
+if(is_dir("./src") === false){	
+	if (!mkdir("./src", 0777, true)) {
+		echo "<h1> src폴더 생성에 실패했습니다. 권한을 모두 777로 주었는지 확인하세요.</h1><br>";
+	}
 	$user_file = "./src/user.php";
 	$user_arr = array();
 	if(is_file($user_file) === true){
