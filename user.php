@@ -1,0 +1,1 @@
+<?php {"imue4u":{"pass":"$2y$10$6LRNNgGQENDPdhSwmh7eOOx.aOs.QFW.cfutA7Kw2k3l7vnJipFKa","group":"admin"},"dsafdsaf":{"pass":"$2y$10$.RHCtOe1oOVjEgWRN3sLCO9oDBVszU1PJIGFVY9sHo6Q1Dh43zPQ2","group":"group2"}} ?>

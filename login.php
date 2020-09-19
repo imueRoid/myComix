@@ -5,11 +5,12 @@ if($_POST['mode'] == "make_id"){
 	$user_file = "user.php";
 	$user_arr = array();
 	if(is_file($user_file) === true){
-		$user_arr = json_decode(file_get_contents($user_file), true);
+		$user_arr = json_decode(str_replace(" ?>", "", str_replace("<?php ", "", file_get_contents($user_file))), true);
 	}
 	$user_arr[$_POST['id']]['pass'] = password_hash(hash("sha256", $_POST['pass']), PASSWORD_DEFAULT);
 	$user_arr[$_POST['id']]['group'] = $_POST['group'];
 	$json_output = json_encode($user_arr, JSON_UNESCAPED_UNICODE);
+	$json_output = "<?php ".$json_output." ?>";
 	file_put_contents($user_file, $json_output);
 	
 	echo $_POST['id']." / ".$_POST['group']."생성에 성공했습니다.<br> 3초후 이전화면으로 돌아갑니다.";
@@ -18,14 +19,11 @@ if($_POST['mode'] == "make_id"){
 } elseif($_POST['mode'] == "login"){
 	$user_file = "user.php";
 	$user_arr = array();
-	$user_arr = json_decode(file_get_contents($user_file), true);
+	$user_arr = json_decode(str_replace(" ?>", "", str_replace("<?php ", "", file_get_contents($user_file))), true);
 	if (password_verify(hash("sha256", $_POST['pass']), $user_arr[$_POST['id']]['pass']) == true) {
 		//login ok, make session
 		$_SESSION["user_id"] = $_POST['id'];
 		$_SESSION["user_pass"] = hash("sha256", $_POST['pass']);
-		$user_file = "user.php";
-		$user_arr = array();
-		$user_arr = json_decode(file_get_contents($user_file), true);
 		$_SESSION["user_group"] = $user_arr[$_POST['id']]['group'];
 		header("location:index.php");
 	} else {

@@ -47,7 +47,7 @@ $iterator = new DirectoryIterator($base_dir);
 	$user_file = "user.php";
 	$user_arr = array();
 	$user_list = array();
-	$user_arr = json_decode(file_get_contents($user_file), true);
+	$user_arr = json_decode(str_replace(" ?>", "", str_replace("<?php ", "", file_get_contents($user_file))), true);
 	$user_count = 0;
 	$user_id_arr = array_keys($user_arr);
 	foreach($user_arr as $user_list_tmp){
@@ -60,6 +60,7 @@ $iterator = new DirectoryIterator($base_dir);
 		$user_count++;
 	}
 	$json_output = json_encode($user_arr, JSON_UNESCAPED_UNICODE);
+	$json_output = "<?php ".$json_output." ?>";
 	file_put_contents($user_file, $json_output);
 	$prevPage = $_SERVER["HTTP_REFERER"];
 	header("location:".$prevPage);
@@ -158,7 +159,7 @@ echo $readme;
 $user_file = "user.php";
 $user_arr = array();
 $user_list = array();
-$user_arr = json_decode(file_get_contents($user_file), true);
+$user_arr = json_decode(str_replace(" ?>", "", str_replace("<?php ", "", file_get_contents($user_file))), true);
 $user_count = 0;
 $user_id_arr = array_keys($user_arr);
 $user_group_arr = array_values($user_arr);
