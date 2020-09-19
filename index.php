@@ -25,6 +25,10 @@ include("function.php");
 		.user-dropdown {
 			font-size: 0.8em;
 		}
+		.dropdown-menu{
+			max-height: 300px;
+			overflow-y: auto;
+		}
 	</style>
 </head>
 <body>
