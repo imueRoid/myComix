@@ -14,10 +14,10 @@ $server_version =  json_decode(file_get_contents("https://raw.githubusercontent.
 		echo "업데이트파일을 가져오는데 실패했습니다.<br>";
 		echo "잠시 후 다시 시도해주세요.<br>";
 	} else {
-		echo "업데이트 파일<br> 용량: ".strlen($new_file)."byte, hash: ".hash("sha256", $$new_file)."<br>";
+		echo "업데이트 파일<br> 용량: ".strlen($new_file)."byte, hash: ".hash("sha256", $new_file)."<br>";
 		$write_file = file_put_contents("./update.zip", $new_file);
 		echo "기록한 파일<br> 용량: ".$write_file."byte, hash: ".hash("sha256", file_get_contents("./update.zip"))."<br>";
-		if($write_file != strlen($new_file) || hash("sha256", file_get_contents("./update.zip")) != hash("sha256", $$new_file))  {
+		if($write_file != strlen($new_file) || hash("sha256", file_get_contents("./update.zip")) != hash("sha256", $new_file))  {
 			echo "업데이트파일을 서버에 기록하는데 실패했습니다.<br>";
 			echo "잠시 후 다시 시도해주세요.<br>";
 		} else {
