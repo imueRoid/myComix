@@ -9,7 +9,7 @@ $server_version =  json_decode(file_get_contents("https://raw.githubusercontent.
 	echo "업데이트파일을 가져옵니다.<br><br>";
 
 	$new_file = file_get_contents("https://github.com/imueRoid/myComix/archive/master.zip");
-
+$fail = 0;
 	if($new_file === false) {
 		echo "업데이트파일을 가져오는데 실패했습니다.<br>";
 		echo "잠시 후 다시 시도해주세요.<br>";
@@ -35,6 +35,9 @@ $server_version =  json_decode(file_get_contents("https://raw.githubusercontent.
 						
 						if(hash("sha1", file_get_contents($file_name)) == hash("sha1", $update_temp)){
 							echo " -------------- OK <br>";
+						} else {
+							echo " -------------- Fail <br>";
+							$fail++;
 						}
 					}
 				}
@@ -50,5 +53,8 @@ $server_version =  json_decode(file_get_contents("https://raw.githubusercontent.
 #} if($server_version['index'] < $version['index'] && $server_version['viewer'] < $version['viewer']) {
 #	echo "업데이트가 필요하지 않습니다.<br>";
 #}
+if($fail > 0) {
+	echo "하나 이상의 파일 쓰기에 실패했습니다. 권한을 확인하세요.";
+}
 echo "<br><br><a href=index.php>홈으로 돌아갑니다.</a>"
 ?>
