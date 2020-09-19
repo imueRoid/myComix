@@ -63,31 +63,22 @@ function cut_title($title){
 			$nowdir_arr = array();
 			$nowdir_arr = explode("/", decode_url($_GET['dir']));
 			$nowdir = $nowdir_arr[count($nowdir_arr) - 1];
-			$title = str_replace(".zip", "", strtolower($title));
+			$nowdir = strtolower($nowdir);
+			$title = strtolower($title);
+			$title = str_replace(".zip", "", $title);
 			$title = str_replace(".cbz", "", $title);
-			if(strpos($title_s, "|") !== false){
-				$pos = explode("|", $title);
-				$title= $pos[1];
-			} elseif(strpos($title, "｜") !== false){
-				$pos = explode("｜", $title);
-				$title= $pos[1];
-			} elseif(strpos($title, " l ") !== false){
-				$pos = explode(" l ", $title);
-				$title= $pos[1];
-			} elseif(strpos($title, "│") !== false){
-				$pos = explode("│", $title);
-				$title= $pos[1];
-			} else {
-				$title = str_replace("(decensored)", "무수정", $title);
-				$title = preg_replace("~\(.*\)~","",$title);
-				$title = preg_replace("/\[[^]]*\]/","",$title);
+			$divider = array("|","｜"," l ","│","%7c");
+			foreach($divider as $div){
+				$title = substr($title, strpos($title, $div));
+				$title = str_replace($div, "", $title);
 			}
-			$nowdir = str_replace("_", "", strtolower($nowdir));
-			$nowdir = str_replace(" ", "", $nowdir);
+			$title = str_replace("%3f", "?", $title);
+			$title = str_replace("(decensored)", "-무수정", $title);
+			$title = preg_replace("~\(.*\)~","",$title);
+			$title = preg_replace("/\[[^]]*\]/","",$title);
 			$nowdir = preg_replace("~\(.*\)~","",$nowdir);
 			$nowdir = preg_replace("/\[[^]]*\]/","",$nowdir);
-			$title = str_replace("_","", $title);
-			$title = str_replace(" ","", $title);
+			$title = substr($title, strpos($title, $nowdir));
 			$title = str_replace($nowdir, "", $title);
 			return $title;
 }
