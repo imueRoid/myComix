@@ -44,7 +44,7 @@ $iterator = new DirectoryIterator($base_dir);
 	$prevPage = $_SERVER["HTTP_REFERER"];
 	header("location:".$prevPage);
 } elseif($_POST['mode'] == "group_change"){
-	$user_file = "user.php";
+	$user_file = "./src/user.php";
 	$user_arr = array();
 	$user_list = array();
 	$user_arr = json_decode(str_replace(" ?>", "", str_replace("<?php ", "", file_get_contents($user_file))), true);
@@ -53,7 +53,7 @@ $iterator = new DirectoryIterator($base_dir);
 	foreach($user_arr as $user_list_tmp){
 		if($_POST[$user_id_arr[$user_count]."_group"] == "delete"){
 			unset($user_arr[$user_id_arr[$user_count]]);
-			unlink($user_id_arr[$user_count]."_bookmark.json");
+			unlink("./src/".$user_id_arr[$user_count]."_bookmark.json");
 		} else {
 			$user_arr[$user_id_arr[$user_count]]['group'] = $_POST[$user_id_arr[$user_count]."_group"];
 		}
@@ -156,7 +156,7 @@ echo substr($readme, strpos($readme, "<h2 id=\"-1\">업데이트 정보</h2>"));
 </svg> 유저그룹관리</div>
 	<ul class="list-group list-group-flush">
 <?php
-$user_file = "user.php";
+$user_file = "./src/user.php";
 $user_arr = array();
 $user_list = array();
 $user_arr = json_decode(str_replace(" ?>", "", str_replace("<?php ", "", file_get_contents($user_file))), true);

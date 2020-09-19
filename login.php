@@ -2,7 +2,7 @@
 session_start(["cache_expire"=> 43200, "gc_maxlifetime"=> 43200]);
 
 if($_POST['mode'] == "make_id"){
-	$user_file = "user.php";
+	$user_file = "./src/user.php";
 	$user_arr = array();
 	if(is_file($user_file) === true){
 		$user_arr = json_decode(str_replace(" ?>", "", str_replace("<?php ", "", file_get_contents($user_file))), true);
@@ -17,7 +17,7 @@ if($_POST['mode'] == "make_id"){
 	$prevPage = $_SERVER["HTTP_REFERER"];
 	echo("<meta http-equiv=\"refresh\" content=\"3; url=".$prevPage."\">"); 
 } elseif($_POST['mode'] == "login"){
-	$user_file = "user.php";
+	$user_file = "./src/user.php";
 	$user_arr = array();
 	$user_arr = json_decode(str_replace(" ?>", "", str_replace("<?php ", "", file_get_contents($user_file))), true);
 	if (password_verify(hash("sha256", $_POST['pass']), $user_arr[$_POST['id']]['pass']) == true) {
@@ -59,7 +59,7 @@ if($_POST['mode'] == "make_id"){
 <body class="text-center">
 <?php
 
-if(is_file('user.php') !== false) {
+if(is_file('./src/user.php') !== false) {
 	if(!isset($_SESSION['user_id']) || !isset($_SESSION['user_pass']) || !isset($_SESSION['user_group'])) { 
 ?>
 <form class="form-signin" action="<?php echo $_SERVER['PHP_SELF']; ?>" method = "post">

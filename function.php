@@ -8,7 +8,25 @@ if(!isset($_SESSION["user_id"]) || !isset($_SESSION["user_pass"]) || !isset($_SE
 	echo("<script>location.replace('login.php?mode=fail');</script>"); 
 }
 
-$bookmark_file = $_SESSION["user_id"]."_bookmark.json";
+if(is_dir("./src") === false){	
+	echo "<h1> 사용자파일의 이동을 시작합니다..</h1><br>";
+	if (!mkdir("./src", 0777, true)) {
+		echo "<h1> src폴더 생성에 실패했습니다. 권한을 모두 777로 주었는지 확인하세요.</h1><br>";
+	}
+	if(is_file('user.php') !== false) {
+		rename("user.php", "./src/user.php");
+	}
+	$iterator = new DirectoryIterator("./");
+	foreach ($iterator as $fileinfo) {
+		if(strpos($fileinfo, "_bookmark.json") !== false){
+			rename($fileinfo, "./src/".$fileinfo);
+		}
+	}
+	echo "<h1> 사용자파일의 이동이 끝났습니다..</h1>";
+	echo("<script>location.replace('".$_SERVER['PHP_SELF']."');</script>"); 
+}
+
+$bookmark_file = "./src/".$_SESSION["user_id"]."_bookmark.json";
 
 
 ################################################################################
