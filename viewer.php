@@ -29,6 +29,9 @@ if(is_file($bookmark_file) === true){
 	$bookmark_arr = json_decode(file_get_contents($bookmark_file), true);
 	if($bookmark_arr[$getfile]) {
 		$bookmark = $bookmark_arr[$getfile];
+		if(is_array($bookmark) == true){
+			$bookmark = $bookmark['bookmark'];
+		}
 	}
 }
 $page = ceil(($now+1)/$maxview)-1;  //현재페이지
