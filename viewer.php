@@ -523,9 +523,8 @@ if ($mode == "book"){
 var img_counter = 0;
 $("body").on('DOMSubtreeModified', "#lg-counter-current", function() {
 	if(bright_toggle == 0){
-		$("img.lg-image").addClass("brightness");
-		$("img.lg-image").addClass("contrast");
-		bright_toggle = 1;
+		$(".lg-item").addClass("brightness");
+		$(".lg-item").addClass("contrast");
 	}
 	var new_counter = document.getElementById("lg-counter-current").innerHTML - 1;
 	if (new_counter == 0 || new_counter == null){
