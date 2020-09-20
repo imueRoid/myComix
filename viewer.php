@@ -181,10 +181,13 @@ if($mode == "book") {
 			top: 0;
 			bottom: 0;
 		}
+		.brightness {-webkit-filter: brightness(1.2);filter: brightness(1.2);}
+		.contrast {-webkit-filter: contrast(1.5);filter: contrast(1.5);}
 	</style>
    </head>
 <script type="text/javascript">
 var scroll_top = 0;
+var bright_toggle = 1;
 <?php
 if($mode == "toon"){
 ?>
@@ -247,6 +250,10 @@ if($mode == "toon"){
 </table>
 <div class="m-0 p-1 text-nowrap d-inline-block text-truncate">
 <?php echo $title; ?></div>
+<div class="m-0 p-0 text-nowrap d-inline-block text-truncate">
+<span id="bright" class="badge badge-lg badge-pill badge-secondary m-1 p-0" onclick="bright();"><svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-brightness-high" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <path fill-rule="evenodd" d="M8 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"/>
+</svg></span></div>
 </nav>
 </div>
 <?php
@@ -463,6 +470,22 @@ if($mode == "toon"){
 <script type="text/javascript">
 var bookmark = "image0";
 
+function bright() {
+	if(bright_toggle == 1){
+		$("img").addClass("brightness");
+		$("img").addClass("contrast");
+		$("#bright").removeClass("badge-secondary");
+		$("#bright").addClass("badge-light");
+		bright_toggle = 0;
+	} else {
+		$("img").removeClass("brightness");
+		$("img").removeClass("contrast");
+		$("#bright").removeClass("badge-light");
+		$("#bright").addClass("badge-secondary");
+		bright_toggle = 1;
+	}
+}
+
 function save_bookmark() {
 <?php
 if ($mode == "toon"){
@@ -490,8 +513,12 @@ $.get( "bookmark.php?viewer=<?php echo $mode; ?>&page_order=<?php echo $pageorde
 if ($mode == "book"){
 ?>
 var img_counter = 0;
-
 $("body").on('DOMSubtreeModified', "#lg-counter-current", function() {
+	if(bright_toggle == 0){
+		$("img.lg-image").addClass("brightness");
+		$("img.lg-image").addClass("contrast");
+		bright_toggle = 1;
+	}
 	var new_counter = document.getElementById("lg-counter-current").innerHTML - 1;
 	if (new_counter == 0 || new_counter == null){
 	} else {
