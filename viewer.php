@@ -494,6 +494,7 @@ function bright() {
 }
 
 function save_bookmark() {
+  	document.getElementById("info").value = "저장중";
 <?php
 if ($mode == "toon"){
 ?>

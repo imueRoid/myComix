@@ -23,6 +23,6 @@ if($_GET['mode'] == "delete"){
 	$bookmark_arr[$getfile]['page_order'] = $_GET['page_order'];
 	$json_output = json_encode($bookmark_arr, JSON_UNESCAPED_UNICODE);
 	file_put_contents($bookmark_file, $json_output);
-	echo "#".$_GET['bookmark'];
+	echo "#".str_replace("image", "",$_GET['bookmark'])."-OK";
 }
 ?>
