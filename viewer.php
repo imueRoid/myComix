@@ -143,6 +143,7 @@ $page = ceil(($now+1)/$maxview)-1;  //현재페이지
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
 	<link href="https://fonts.googleapis.com/css2?family=Gugi&family=Nanum+Gothic:wght@400;700&display=swap" rel="stylesheet">
 	<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/lazyload@2.0.0-rc.2/lazyload.js"></script>
 <?php
 if($mode == "book") {
 ?>
@@ -248,12 +249,15 @@ if($mode == "toon"){
   <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5V6H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V7H6a.5.5 0 0 1 0-1h1.5V4.5A.5.5 0 0 1 8 4z"/>
 </svg></button></td></tr>
 </table>
-<div class="m-0 p-1 text-nowrap d-inline-block text-truncate">
-<?php echo $title; ?></div>
-<div class="m-0 p-0 text-nowrap d-inline-block text-truncate">
+<table class="table table-borderless m-0 p-0 mw-100 w-100">
+<tr>
+<td class="m-0 p-0 align-middle">
+<?php echo $title; ?>
+</td><td class="m-0 p-0 align-middle" align="right">
 <span id="bright" class="badge badge-lg badge-pill badge-secondary m-1 p-0" onclick="bright();"><svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-brightness-high" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
   <path fill-rule="evenodd" d="M8 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"/>
-</svg></span></div>
+</svg></span>
+</td></tr></table>
 </nav>
 </div>
 <?php
@@ -438,19 +442,19 @@ if($mode == "toon"){
 						echo "<div class=\"text-center\" id=\"lightgallery\">";
 						foreach($list as $imgfile){
 							if($pageorder['page_order'] == "0" || $pageorder['page_order'] == null) {
-								echo "<div data-src=\"extract.php?".$file_type."file=".encode_url($_GET['file'])."&imgfile=".encode_url($imgfile)."\"><img class='img-fluid' id=\"image".$image_counter."\" src=\"extract.php?".$file_type."file=".encode_url($_GET['file'])."&imgfile=".encode_url($imgfile)."\" /></div>";
+								echo "<img class='lazyload img-fluid' id=\"image".$image_counter."\" data-src=\"extract.php?".$file_type."file=".encode_url($_GET['file'])."&imgfile=".encode_url($imgfile)."\" src=\"data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=\" style=\"min-height:500px;\" />";
 								$loaded++;
 								$image_counter++;
 							} elseif($pageorder['page_order'] == "1") {
-								echo "<div data-src=\"extract.php?".$file_type."order=left&file=".encode_url($_GET['file'])."&imgfile=".encode_url($imgfile)."\"><img class='img-fluid' id=\"image".$image_counter."\" src=\"extract.php?".$file_type."order=left&file=".encode_url($_GET['file'])."&imgfile=".encode_url($imgfile)."\" /></div>";
+								echo "<img class='lazyload img-fluid' id=\"image".$image_counter."\" data-src=\"extract.php?".$file_type."order=left&file=".encode_url($_GET['file'])."&imgfile=".encode_url($imgfile)."\" src=\"data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=\" style=\"min-height:500px;\" />";
 								$image_counter++;
-								echo "<div data-src=\"extract.php?".$file_type."order=right&file=".encode_url($_GET['file'])."&imgfile=".encode_url($imgfile)."\"><img class='img-fluid' id=\"image".$image_counter."\" src=\"extract.php?".$file_type."order=right&file=".encode_url($_GET['file'])."&imgfile=".encode_url($imgfile)."\" /></div>";
+								echo "<img class='lazyload img-fluid' id=\"image".$image_counter."\" data-src=\"extract.php?".$file_type."order=right&file=".encode_url($_GET['file'])."&imgfile=".encode_url($imgfile)."\" src=\"data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=\" style=\"min-height:500px;\" />";
 								$loaded++;
 								$image_counter++;
 							} elseif($pageorder['page_order'] == "2") {
-								echo "<div data-src=\"extract.php?".$file_type."order=right&file=".encode_url($_GET['file'])."&imgfile=".encode_url($imgfile)."\"><img class='img-fluid' id=\"image".$image_counter."\" src=\"extract.php?".$file_type."order=right&file=".encode_url($_GET['file'])."&imgfile=".encode_url($imgfile)."\" /></div>";
+								echo "<img class='lazyload img-fluid' id=\"image".$image_counter."\" data-src=\"extract.php?".$file_type."order=right&file=".encode_url($_GET['file'])."&imgfile=".encode_url($imgfile)."\" src=\"data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=\" style=\"min-height:500px;\" />";
 								$image_counter++;
-								echo "<div data-src=\"extract.php?".$file_type."order=left&file=".encode_url($_GET['file'])."&imgfile=".encode_url($imgfile)."\"><img class='img-fluid' id=\"image".$image_counter."\" src=\"extract.php?".$file_type."order=left&file=".encode_url($_GET['file'])."&imgfile=".encode_url($imgfile)."\" /></div>";
+								echo "<img class='lazyload img-fluid' id=\"image".$image_counter."\" data-src=\"extract.php?".$file_type."order=left&file=".encode_url($_GET['file'])."&imgfile=".encode_url($imgfile)."\" src=\"data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=\" style=\"min-height:500px;\" />";
 								$loaded++;
 								$image_counter++;
 							}
@@ -530,6 +534,7 @@ $("body").on('DOMSubtreeModified', "#lg-counter-current", function() {
 <?php
 }
 ?>
+lazyload();
 </script>
 </body>
 </html>
