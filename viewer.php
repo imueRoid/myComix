@@ -185,13 +185,17 @@ if($mode == "book") {
 			top: 0;
 			bottom: 0;
 		}
-		.brightness {-webkit-filter: brightness(1.2);filter: brightness(1.2);}
-		.contrast {-webkit-filter: contrast(1.5);filter: contrast(1.5);}
+		.lg-item {
+			-webkit-filter: brightness(1);
+			-webkit-filter: contrast(1);
+			filter: brightness(1);
+			filter: contrast(1);
+		}
 	</style>
    </head>
 <script type="text/javascript">
 var scroll_top = 0;
-var bright_toggle = 1;
+var bright_counter = 0;
 <?php
 if($mode == "toon"){
 ?>
@@ -252,15 +256,25 @@ if($mode == "toon"){
   <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5V6H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V7H6a.5.5 0 0 1 0-1h1.5V4.5A.5.5 0 0 1 8 4z"/>
 </svg></button></td></tr>
 </table>
-<table class="table table-borderless m-0 p-0 mw-100 w-100">
-<tr>
-<td class="m-0 p-0 align-middle">
-<?php echo $title; ?>
-</td><td class="m-0 p-0 align-middle" align="right">
-<span id="bright" class="badge badge-lg badge-pill badge-secondary m-1 p-0" onclick="bright();"><svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-brightness-high" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+<div class="text-nowrap d-inline-block text-truncate"><?php echo $title; ?></div>
+<div style="margin-right: 0;">
+<span id="bright-down" class="btn btn-sm m-1 p-0" onclick="bright_down();">
+<svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-brightness-low-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <path d="M12 8a4 4 0 1 1-8 0 4 4 0 0 1 8 0zM8.5 2.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm0 11a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm5-5a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1zm-11 0a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1zm9.743-4.036a.5.5 0 1 1-.707-.707.5.5 0 0 1 .707.707zm-7.779 7.779a.5.5 0 1 1-.707-.707.5.5 0 0 1 .707.707zm7.072 0a.5.5 0 1 1 .707-.707.5.5 0 0 1-.707.707zM3.757 4.464a.5.5 0 1 1 .707-.707.5.5 0 0 1-.707.707z"/>
+</svg>
+</span>
+<span id="bright" class="btn btn-sm m-1 p-0" onclick="bright();">
+<svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-brightness-low" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <path fill-rule="evenodd" d="M8 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/>
+  <path d="M8.5 2.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm0 11a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm5-5a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1zm-11 0a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1zm9.743-4.036a.5.5 0 1 1-.707-.707.5.5 0 0 1 .707.707zm-7.779 7.779a.5.5 0 1 1-.707-.707.5.5 0 0 1 .707.707zm7.072 0a.5.5 0 1 1 .707-.707.5.5 0 0 1-.707.707zM3.757 4.464a.5.5 0 1 1 .707-.707.5.5 0 0 1-.707.707z"/>
+</svg>
+</span>
+<span id="bright-up" class="btn btn-sm m-1 p-0" onclick="bright_up();">
+<svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-brightness-high" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
   <path fill-rule="evenodd" d="M8 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"/>
-</svg></span>
-</td></tr></table>
+</svg>
+</span>
+</div>
 </nav>
 </div>
 <?php
@@ -445,19 +459,19 @@ if($mode == "toon"){
 						echo "<div class=\"text-center\" id=\"lightgallery\">";
 						foreach($list as $imgfile){
 							if($pageorder['page_order'] == "0" || $pageorder['page_order'] == null) {
-								echo "<img class='lazyload img-fluid' id=\"image".$image_counter."\" data-src=\"extract.php?".$file_type."file=".encode_url($_GET['file'])."&imgfile=".encode_url($imgfile)."\" src=\"data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=\" style=\"min-height:250px;\" />";
+								echo "<img class='lazyload img-fluid lg-item' id=\"image".$image_counter."\" data-src=\"extract.php?".$file_type."file=".encode_url($_GET['file'])."&imgfile=".encode_url($imgfile)."\" src=\"data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=\" style=\"min-height:250px;\" />";
 								$loaded++;
 								$image_counter++;
 							} elseif($pageorder['page_order'] == "1") {
-								echo "<img class='lazyload img-fluid' id=\"image".$image_counter."\" data-src=\"extract.php?".$file_type."order=left&file=".encode_url($_GET['file'])."&imgfile=".encode_url($imgfile)."\" src=\"data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=\" style=\"min-height:250px;\" />";
+								echo "<img class='lazyload img-fluid lg-item' id=\"image".$image_counter."\" data-src=\"extract.php?".$file_type."order=left&file=".encode_url($_GET['file'])."&imgfile=".encode_url($imgfile)."\" src=\"data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=\" style=\"min-height:250px;\" />";
 								$image_counter++;
-								echo "<img class='lazyload img-fluid' id=\"image".$image_counter."\" data-src=\"extract.php?".$file_type."order=right&file=".encode_url($_GET['file'])."&imgfile=".encode_url($imgfile)."\" src=\"data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=\" style=\"min-height:250px;\" />";
+								echo "<img class='lazyload img-fluid lg-item' id=\"image".$image_counter."\" data-src=\"extract.php?".$file_type."order=right&file=".encode_url($_GET['file'])."&imgfile=".encode_url($imgfile)."\" src=\"data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=\" style=\"min-height:250px;\" />";
 								$loaded++;
 								$image_counter++;
 							} elseif($pageorder['page_order'] == "2") {
-								echo "<img class='lazyload img-fluid' id=\"image".$image_counter."\" data-src=\"extract.php?".$file_type."order=right&file=".encode_url($_GET['file'])."&imgfile=".encode_url($imgfile)."\" src=\"data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=\" style=\"min-height:250px;\" />";
+								echo "<img class='lazyload img-fluid lg-item' id=\"image".$image_counter."\" data-src=\"extract.php?".$file_type."order=right&file=".encode_url($_GET['file'])."&imgfile=".encode_url($imgfile)."\" src=\"data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=\" style=\"min-height:250px;\" />";
 								$image_counter++;
-								echo "<img class='lazyload img-fluid' id=\"image".$image_counter."\" data-src=\"extract.php?".$file_type."order=left&file=".encode_url($_GET['file'])."&imgfile=".encode_url($imgfile)."\" src=\"data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=\" style=\"min-height:250px;\" />";
+								echo "<img class='lazyload img-fluid lg-item' id=\"image".$image_counter."\" data-src=\"extract.php?".$file_type."order=left&file=".encode_url($_GET['file'])."&imgfile=".encode_url($imgfile)."\" src=\"data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=\" style=\"min-height:250px;\" />";
 								$loaded++;
 								$image_counter++;
 							}
@@ -476,23 +490,35 @@ if($mode == "toon"){
 
 <script type="text/javascript">
 var bookmark = "image0";
-
-function bright() {
-	if(bright_toggle == 1){
-		$("img").addClass("brightness");
-		$("img").addClass("contrast");
-		$("#bright").removeClass("badge-secondary");
-		$("#bright").addClass("badge-light");
-		bright_toggle = 0;
+var bright_value = 1;
+var contrast_value = 1;
+function bright_up() {
+	if(bright_counter < 5){
+	bright_counter = bright_counter + 1;
+	change_bright();
 	} else {
-		$("img").removeClass("brightness");
-		$("img").removeClass("contrast");
-		$("#bright").removeClass("badge-light");
-		$("#bright").addClass("badge-secondary");
-		bright_toggle = 1;
 	}
 }
-
+function bright_down() {
+	if(bright_counter > -5){
+	bright_counter = bright_counter - 1;
+	change_bright();
+	} else {
+	}
+}
+function bright() {
+	bright_counter = 0;
+	change_bright();
+}
+function change_bright(){
+	bright_value = "brightness(" + (1 + (bright_counter * 0.04)) + ")";
+	contrast_value = "contrast(" + (1 + (bright_counter * 0.1)) + ")";
+	$(".lg-item").css('-webkit-filter', bright_value);
+	$(".lg-item").css('-webkit-filter', contrast_value);
+	$(".lg-item").css('filter', bright_value);
+	$(".lg-item").css('filter', contrast_value);
+		console.log(bright_value);
+}
 function save_bookmark() {
   	document.getElementById("info").value = "저장중";
 <?php
@@ -522,10 +548,6 @@ if ($mode == "book"){
 ?>
 var img_counter = 0;
 $("body").on('DOMSubtreeModified', "#lg-counter-current", function() {
-	if(bright_toggle == 0){
-		$(".lg-item").addClass("brightness");
-		$(".lg-item").addClass("contrast");
-	}
 	var new_counter = document.getElementById("lg-counter-current").innerHTML - 1;
 	if (new_counter == 0 || new_counter == null){
 	} else {
