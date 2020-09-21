@@ -185,12 +185,6 @@ if($mode == "book") {
 			top: 0;
 			bottom: 0;
 		}
-		.lg-item {
-			-webkit-filter: brightness(1);
-			-webkit-filter: contrast(1);
-			filter: brightness(1);
-			filter: contrast(1);
-		}
 	</style>
    </head>
 <script type="text/javascript">
@@ -513,14 +507,22 @@ function bright() {
 function change_bright(){
 	bright_value = "brightness(" + (1 + (bright_counter * 0.04)) + ")";
 	contrast_value = "contrast(" + (1 + (bright_counter * 0.1)) + ")";
-	$(".lg-item").css('-webkit-filter', bright_value);
-	$(".lg-item").css('-webkit-filter', contrast_value);
-	$(".lg-item").css('filter', bright_value);
-	$(".lg-item").css('filter', contrast_value);
+	$(".img-fluid").css('-webkit-filter', bright_value);
+	$(".img-fluid").css('-webkit-filter', contrast_value);
+	$(".img-fluid").css('filter', bright_value);
+	$(".img-fluid").css('filter', contrast_value);
+	$(".lg-image").css('-webkit-filter', bright_value);
+	$(".lg-image").css('-webkit-filter', contrast_value);
+	$(".lg-image").css('filter', bright_value);
+	$(".lg-image").css('filter', contrast_value);
 }
 $('#lightgallery').on('onAfterOpen.lg',function(event){
     change_bright();
 });
+$('#lightgallery').on('onAfterSlide.lg',function(event){
+    change_bright();
+});
+
 function save_bookmark() {
   	document.getElementById("info").value = "저장중";
 <?php
