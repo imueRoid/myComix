@@ -146,7 +146,7 @@ $page = ceil(($now+1)/$maxview)-1;  //현재페이지
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
 	<link href="https://fonts.googleapis.com/css2?family=Gugi&family=Nanum+Gothic:wght@400;700&display=swap" rel="stylesheet">
 	<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/lazyload@2.0.0-rc.2/lazyload.js"></script>
+	<script src="https://polyfill.io/v3/polyfill.min.js?features=IntersectionObserver"></script>
 <?php
 if($mode == "book") {
 ?>
@@ -537,7 +537,34 @@ $("body").on('DOMSubtreeModified', "#lg-counter-current", function() {
 <?php
 }
 ?>
-lazyload();
+const options = { 
+  rootMargin: '1000px 0px',
+  threshold: 0
+};
+
+document.addEventListener("DOMContentLoaded", function() {
+  var lazyImages = [].slice.call(document.querySelectorAll("img.lazyload"));
+
+  if ("IntersectionObserver" in window) {
+    let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          let lazyImage = entry.target;
+          lazyImage.src = lazyImage.dataset.src;		  
+          lazyImage.classList.remove("lazyload");
+          lazyImageObserver.unobserve(lazyImage);
+        }
+      });
+    }
+	, options);
+
+    lazyImages.forEach(function(lazyImage) {
+      lazyImageObserver.observe(lazyImage);
+    });
+  } else {
+    // Possibly fall back to event handlers here
+  }
+});
 </script>
 </body>
 </html>
