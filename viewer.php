@@ -517,8 +517,10 @@ function change_bright(){
 	$(".lg-item").css('-webkit-filter', contrast_value);
 	$(".lg-item").css('filter', bright_value);
 	$(".lg-item").css('filter', contrast_value);
-		console.log(bright_value);
 }
+$('#lightgallery').on('onAfterOpen.lg',function(event){
+    change_bright();
+});
 function save_bookmark() {
   	document.getElementById("info").value = "저장중";
 <?php
