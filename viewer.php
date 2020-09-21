@@ -225,6 +225,7 @@ if($mode == "toon"){
 					});
 					function run_gallery() {
 						$('#lightgallery').lightGallery({
+							selector: '.lg-item',
 							loop: false,
 							hideBarsDelay: 1000,
 							controls: false,
@@ -481,19 +482,19 @@ if($mode == "toon"){
 						echo "<div class=\"text-center\" id=\"lightgallery\">";
 						foreach($list as $imgfile){
 							if($pageorder['page_order'] == "0" || $pageorder['page_order'] == null) {
-								echo "<img class='lazyload img-fluid lg-item' id=\"image".$image_counter."\" data-src=\"extract.php?".$file_type."file=".encode_url($_GET['file'])."&imgfile=".encode_url($imgfile)."\" src=\"data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=\" style=\"min-height:250px;\" />";
+								echo "<img class='lazyload img-fluid lg-item' id=\"image".$image_counter."\" data-src=\"extract.php?".$file_type."file=".encode_url($_GET['file'])."&imgfile=".encode_url($imgfile)."\" src=\"data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=\" style=\"min-height:250px;\" /><br>";
 								$loaded++;
 								$image_counter++;
 							} elseif($pageorder['page_order'] == "1") {
-								echo "<img class='lazyload img-fluid lg-item' id=\"image".$image_counter."\" data-src=\"extract.php?".$file_type."order=left&file=".encode_url($_GET['file'])."&imgfile=".encode_url($imgfile)."\" src=\"data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=\" style=\"min-height:250px;\" />";
+								echo "<img class='lazyload img-fluid lg-item' id=\"image".$image_counter."\" data-src=\"extract.php?".$file_type."order=left&file=".encode_url($_GET['file'])."&imgfile=".encode_url($imgfile)."\" src=\"data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=\" style=\"min-height:250px;\" /><br>";
 								$image_counter++;
-								echo "<img class='lazyload img-fluid lg-item' id=\"image".$image_counter."\" data-src=\"extract.php?".$file_type."order=right&file=".encode_url($_GET['file'])."&imgfile=".encode_url($imgfile)."\" src=\"data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=\" style=\"min-height:250px;\" />";
+								echo "<img class='lazyload img-fluid lg-item' id=\"image".$image_counter."\" data-src=\"extract.php?".$file_type."order=right&file=".encode_url($_GET['file'])."&imgfile=".encode_url($imgfile)."\" src=\"data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=\" style=\"min-height:250px;\" /><br>";
 								$loaded++;
 								$image_counter++;
 							} elseif($pageorder['page_order'] == "2") {
-								echo "<img class='lazyload img-fluid lg-item' id=\"image".$image_counter."\" data-src=\"extract.php?".$file_type."order=right&file=".encode_url($_GET['file'])."&imgfile=".encode_url($imgfile)."\" src=\"data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=\" style=\"min-height:250px;\" />";
+								echo "<img class='lazyload img-fluid lg-item' id=\"image".$image_counter."\" data-src=\"extract.php?".$file_type."order=right&file=".encode_url($_GET['file'])."&imgfile=".encode_url($imgfile)."\" src=\"data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=\" style=\"min-height:250px;\" /><br>";
 								$image_counter++;
-								echo "<img class='lazyload img-fluid lg-item' id=\"image".$image_counter."\" data-src=\"extract.php?".$file_type."order=left&file=".encode_url($_GET['file'])."&imgfile=".encode_url($imgfile)."\" src=\"data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=\" style=\"min-height:250px;\" />";
+								echo "<img class='lazyload img-fluid lg-item' id=\"image".$image_counter."\" data-src=\"extract.php?".$file_type."order=left&file=".encode_url($_GET['file'])."&imgfile=".encode_url($imgfile)."\" src=\"data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=\" style=\"min-height:250px;\" /><br>";
 								$loaded++;
 								$image_counter++;
 							}
