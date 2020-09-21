@@ -233,9 +233,8 @@ if($mode == "toon"){
 ?>
 </script>
 <body>
-<div>
 <nav class="navbar navbar-light fixed-top bg-white p-1 m-0">
-<table class="table table-borderless m-0 p-0" width=100%>
+<table class="table table-borderless mb-2 p-0" width=100%>
 <tr>
 <td class="m-0 p-0 align-middle">
 <a OnClick="location.href='./index.php?dir=<?php echo encode_url($link_dir); ?>&page=<?php echo $page; ?>'"><font style="font-family: 'Gugi'; font-size: 2em;">마이코믹스</font></a>
@@ -250,27 +249,26 @@ if($mode == "toon"){
   <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5V6H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V7H6a.5.5 0 0 1 0-1h1.5V4.5A.5.5 0 0 1 8 4z"/>
 </svg></button></td></tr>
 </table>
-<div class="text-nowrap d-inline-block text-truncate"><?php echo $title; ?></div>
-<div style="margin-right: 0;">
-<span id="bright-down" class="btn btn-sm m-1 p-0" onclick="bright_down();">
+<span class="text-nowrap d-inline-block text-truncate"><?php echo cut_title($title); ?></span>
+<div class="btn-group" role="group">
+<button id="bright-down" class="btn btn-sm btn-outline-warning" onclick="bright_down();">
 <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-brightness-low-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
   <path d="M12 8a4 4 0 1 1-8 0 4 4 0 0 1 8 0zM8.5 2.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm0 11a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm5-5a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1zm-11 0a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1zm9.743-4.036a.5.5 0 1 1-.707-.707.5.5 0 0 1 .707.707zm-7.779 7.779a.5.5 0 1 1-.707-.707.5.5 0 0 1 .707.707zm7.072 0a.5.5 0 1 1 .707-.707.5.5 0 0 1-.707.707zM3.757 4.464a.5.5 0 1 1 .707-.707.5.5 0 0 1-.707.707z"/>
 </svg>
-</span>
-<span id="bright" class="btn btn-sm m-1 p-0" onclick="bright();">
+</button>
+<button id="bright" class="btn btn-sm btn-outline-warning" onclick="bright();">
 <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-brightness-low" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
   <path fill-rule="evenodd" d="M8 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/>
   <path d="M8.5 2.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm0 11a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm5-5a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1zm-11 0a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1zm9.743-4.036a.5.5 0 1 1-.707-.707.5.5 0 0 1 .707.707zm-7.779 7.779a.5.5 0 1 1-.707-.707.5.5 0 0 1 .707.707zm7.072 0a.5.5 0 1 1 .707-.707.5.5 0 0 1-.707.707zM3.757 4.464a.5.5 0 1 1 .707-.707.5.5 0 0 1-.707.707z"/>
 </svg>
-</span>
-<span id="bright-up" class="btn btn-sm m-1 p-0" onclick="bright_up();">
+</button>
+<button id="bright-up" class="btn btn-sm btn-outline-warning" onclick="bright_up();">
 <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-brightness-high" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
   <path fill-rule="evenodd" d="M8 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"/>
 </svg>
-</span>
+</button>
 </div>
 </nav>
-</div>
 <?php
 		$files = scandir($base_folder);
 		$files = n_sort($files);
@@ -515,6 +513,7 @@ function change_bright(){
 	$(".lg-image").css('-webkit-filter', contrast_value);
 	$(".lg-image").css('filter', bright_value);
 	$(".lg-image").css('filter', contrast_value);
+  	document.getElementById("info").value = "밝기 " + bright_counter;
 }
 $('#lightgallery').on('onAfterOpen.lg',function(event){
     change_bright();
