@@ -386,7 +386,7 @@ if($dirinfo[$fileinfo] == "remote"){
 						
 						
 		?>
-				<a href='viewer.php?filetype=images&mode=<?php echo $viewer; ?>&file=<?php echo encode_url($getdir."/".$fileinfo);?>'>
+				<a href='viewer.php?filetype=images&mode=<?php echo $viewer; ?>&file=<?php echo encode_url($getdir."/".str_replace("_imgfolder","", $fileinfo);?>'>
 				  <div class="col mb-3">
 					<div class="card text-black m-0 p-1">
 						<img src="data:<?php echo mime_type("jpg").";base64,".$img_output; ?>" class="rounded card-img-top card-img" alt="thumbnail">
