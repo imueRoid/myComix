@@ -37,6 +37,11 @@ function n_sort($file_list) {
 	$filelist_sort = array();
 	foreach($file_list as $sort_file){
 		$n_sort = str_replace("화.zip", "", strtolower($sort_file));
+		$n_sort = str_replace("권.zip", "", strtolower($n_sort));
+		$n_sort = str_replace("화.cbz", "", strtolower($n_sort));
+		$n_sort = str_replace("권.cbz", "", strtolower($n_sort));
+		$n_sort = str_replace(".zip", "", strtolower($n_sort));
+		$n_sort = str_replace(".cbz", "", strtolower($n_sort));
 		$n_sort = str_replace("_", " ", strtolower($n_sort));
 		$n_sort = str_replace(" ", "", strtolower($n_sort));
 		$filelist_sort[$n_sort] = $sort_file;
