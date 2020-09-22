@@ -81,6 +81,7 @@ foreach ($iterator as $fileinfo) {
 			$sub_dircounter = 0;
 			$subdir_list = array();
 			$jpg_c = 0;
+			$jpg_folder[$fileinfo->getFilename()] = array();
 			foreach ($sub_iterator as $subfileinfo) {
 				if (!$subfileinfo->isDot() && $subfileinfo != "@eaDir") {
 						if($subfileinfo->isDir() == true) {	
@@ -101,7 +102,7 @@ foreach ($iterator as $fileinfo) {
 					$file_list[$filecounter] = $fileinfo->getFilename()."_imgfolder";
 					$filecounter++;
 				} else {
-					unset($jpg_folder[$fileinfo]);
+					unset($jpg_folder[$fileinfo->getFilename()]);
 					$title_list[$titlecounter] = $fileinfo->getFilename();
 					$titlecounter++;
 				}

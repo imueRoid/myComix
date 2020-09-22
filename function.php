@@ -102,7 +102,9 @@ function cut_title($title){
 			$title = preg_replace("/\[[^]]*\]/","",$title);
 			$nowdir = preg_replace("~\(.*\)~","",$nowdir);
 			$nowdir = preg_replace("/\[[^]]*\]/","",$nowdir);
-			$title = substr($title, strpos($title, $nowdir));
+			if($nowdir != null){
+				$title = substr($title, strpos($title, $nowdir));
+			}
 			$title = str_replace($nowdir, "", $title);
 			return $title;
 }
