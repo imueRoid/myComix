@@ -4,10 +4,20 @@ include("function.php");
 
 $getfile = decode_url($_GET['file']);
 
-if($_GET['mode'] == "delete"){
+if($_GET['mode'] == "delete_bookmark"){
+	$bookmark_arr = array();
+	$bookmark_arr = json_decode(file_get_contents($bookmark_file), true);
 	unset($bookmark_arr[$getfile]);
 	$json_output = json_encode($bookmark_arr, JSON_UNESCAPED_UNICODE);
 	file_put_contents($bookmark_file, $json_output);
+	$prevPage = $_SERVER["HTTP_REFERER"];
+	header("location:".$prevPage);
+} elseif($_GET['mode'] == "delete_autosave"){
+	$autosave_arr = array();
+	$autosave_arr = json_decode(file_get_contents($autosave_file), true);
+	unset($autosave_arr[$getfile]);
+	$json_output = json_encode($autosave_arr, JSON_UNESCAPED_UNICODE);
+	file_put_contents($autosave_file, $json_output);
 	$prevPage = $_SERVER["HTTP_REFERER"];
 	header("location:".$prevPage);
 } elseif($_GET['mode'] == "autosave"){
