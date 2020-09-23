@@ -635,8 +635,9 @@ document.addEventListener("DOMContentLoaded", function() {
     // Possibly fall back to event handlers here
   }
 });
-$(window).on("beforeunload", function () {
-	<?php
+
+function autosave(){	
+		<?php
 	if ($mode == "toon"){
 	?>
 	for (var i = 0; i <= <?php echo $image_counter; ?>; i++) {
@@ -671,6 +672,19 @@ $(window).on("beforeunload", function () {
 	$.get( "bookmark.php?mode=autosave&viewer=<?php echo $mode; ?>&page_order=<?php echo $pageorder['page_order']; ?>&file=<?php echo encode_url($getfile); ?>&bookmark=" + bookmark, function( data ) {
 		document.getElementById("info").value = data;
 	});
+}
+
+
+$(window).on("beforeunload", function () {
+	autosave();
+});
+
+window.addEventListener("visibilitychange", function(e)
+{
+    if (document.visibilityState == 'hidden')
+    {
+		autosave();
+    }
 });
 </script>
 </body>
