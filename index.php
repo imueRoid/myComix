@@ -215,7 +215,7 @@ for($count=0;$count < count($autosave_arr); $count++){
 	<path fill-rule="evenodd" d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
 </svg></button></td>
 <td>
-	<button class="btn btn-sm m-0 p-0 d-inline-block text-truncate text-nowrap" style="max-width:290px;" onclick="location.href='./viewer.php?mode=<?php echo $autosave_mark[$count]['viewer']; ?>&page_order=<?php echo $autosave_mark[$count]['page_order']; ?>&file=<?php echo encode_url($autosave_title[$count]); ?>#<?php echo $autosave_mark[$count]['bookmark']; ?>'"><?php echo cut_title($title_temp[count($title_temp) - 1]); ?></button></td></tr>
+	<button class="btn btn-sm m-0 p-0 d-inline-block text-truncate text-nowrap" style="max-width:280px;" onclick="location.href='./viewer.php?mode=<?php echo $autosave_mark[$count]['viewer']; ?>&page_order=<?php echo $autosave_mark[$count]['page_order']; ?>&file=<?php echo encode_url($autosave_title[$count]); ?>#<?php echo $autosave_mark[$count]['bookmark']; ?>'"><?php echo cut_title($title_temp[count($title_temp) - 1]); ?></button></td></tr>
 <?php
 	}
 	}
@@ -233,11 +233,11 @@ for($count=0;$count < count($bookmark_arr); $count++){
 <?php
 	if(!is_array($bookmark_mark[$count])){
 ?>
-	<button class="btn btn-sm m-0 p-0 d-inline-block text-truncate text-nowrap" style="max-width:290px;" onclick="location.href='./viewer.php?file=<?php echo encode_url($bookmark_title[$count]); ?>#<?php echo $bookmark_mark[$count]; ?>'"><?php echo cut_title($title_temp[count($title_temp) - 1]); ?></button></td></tr>
+	<button class="btn btn-sm m-0 p-0 d-inline-block text-truncate text-nowrap" style="max-width:280px;" onclick="location.href='./viewer.php?file=<?php echo encode_url($bookmark_title[$count]); ?>#<?php echo $bookmark_mark[$count]; ?>'"><?php echo cut_title($title_temp[count($title_temp) - 1]); ?></button></td></tr>
 <?php
 	} else {
 ?>
-	<button class="btn btn-sm m-0 p-0 d-inline-block text-truncate text-nowrap" style="max-width:290px;" onclick="location.href='./viewer.php?mode=<?php echo $bookmark_mark[$count]['viewer']; ?>&page_order=<?php echo $bookmark_mark[$count]['page_order']; ?>&file=<?php echo encode_url($bookmark_title[$count]); ?>#<?php echo $bookmark_mark[$count]['bookmark']; ?>'"><?php echo cut_title($title_temp[count($title_temp) - 1]); ?></button></td></tr>
+	<button class="btn btn-sm m-0 p-0 d-inline-block text-truncate text-nowrap" style="max-width:280px;" onclick="location.href='./viewer.php?mode=<?php echo $bookmark_mark[$count]['viewer']; ?>&page_order=<?php echo $bookmark_mark[$count]['page_order']; ?>&file=<?php echo encode_url($bookmark_title[$count]); ?>#<?php echo $bookmark_mark[$count]['bookmark']; ?>'"><?php echo cut_title($title_temp[count($title_temp) - 1]); ?></button></td></tr>
 <?php
 	}
 	}
