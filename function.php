@@ -1,4 +1,5 @@
 <?php
+ini_set('display_errors', '0');
 session_start(["cache_expire"=> 43200, "gc_maxlifetime"=> 43200]);
 
 $version = json_decode(file_get_contents("version.json"), true);

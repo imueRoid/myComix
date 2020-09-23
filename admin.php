@@ -64,10 +64,12 @@ $iterator = new DirectoryIterator($base_dir);
 	file_put_contents($user_file, $json_output);
 	$prevPage = $_SERVER["HTTP_REFERER"];
 	header("location:".$prevPage);
-}	
-	
-	
-
+} elseif($_POST['mode'] == "config_change"){
+	$config_output = "<?php\n\$base_dir = \"".$_POST['base_dir']."\";\n\$maxview = \"".$_POST['maxview']."\";\n?>";
+	file_put_contents("config.php", $config_output);
+	echo "config파일이 수정되었습니다. 3초 후 새로고침합니다.";	
+	echo("<meta http-equiv=\"refresh\" content=\"3; url=".$_SERVER["PHP_SELF"]."\">"); 
+} else {
 ?>
 <html>
 <head>
@@ -118,7 +120,7 @@ $iterator = new DirectoryIterator($base_dir);
 <a href='login.php?mode=adduser'>
 	<div class="card bg-success m-2 p-0">
 	<div class="card-body text-white m-1 p-1">
-	<svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-person-square" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+	<svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-person-square" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
   <path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
   <path fill-rule="evenodd" d="M2 15v-1c0-1 1-4 6-4s6 3 6 4v1H2zm6-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
 	</svg> 사용자 추가
@@ -129,12 +131,39 @@ $iterator = new DirectoryIterator($base_dir);
 <a href='update.php'>
 	<div class="card bg-success m-2 p-0">
 	<div class="card-body text-white m-1 p-1">
-	<svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-lightning" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+	<svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-lightning" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
   <path fill-rule="evenodd" d="M11.251.068a.5.5 0 0 1 .227.58L9.677 6.5H13a.5.5 0 0 1 .364.843l-8 8.5a.5.5 0 0 1-.842-.49L6.323 9.5H3a.5.5 0 0 1-.364-.843l8-8.5a.5.5 0 0 1 .615-.09zM4.157 8.5H7a.5.5 0 0 1 .478.647L6.11 13.59l5.732-6.09H9a.5.5 0 0 1-.478-.647L9.89 2.41 4.157 8.5z"/>
 </svg> 업데이트실행
 	</div>
 	</div>
 </a>
+<br>
+<div class="card m-2 p-0">
+	<form class="form-signin" action="<?php echo $_SERVER['PHP_SELF']; ?>" method = "post">
+	<div class="form-group card-header bg-primary text-white m-0 p-2">	<svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-gear" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <path fill-rule="evenodd" d="M8.837 1.626c-.246-.835-1.428-.835-1.674 0l-.094.319A1.873 1.873 0 0 1 4.377 3.06l-.292-.16c-.764-.415-1.6.42-1.184 1.185l.159.292a1.873 1.873 0 0 1-1.115 2.692l-.319.094c-.835.246-.835 1.428 0 1.674l.319.094a1.873 1.873 0 0 1 1.115 2.693l-.16.291c-.415.764.42 1.6 1.185 1.184l.292-.159a1.873 1.873 0 0 1 2.692 1.116l.094.318c.246.835 1.428.835 1.674 0l.094-.319a1.873 1.873 0 0 1 2.693-1.115l.291.16c.764.415 1.6-.42 1.184-1.185l-.159-.291a1.873 1.873 0 0 1 1.116-2.693l.318-.094c.835-.246.835-1.428 0-1.674l-.319-.094a1.873 1.873 0 0 1-1.115-2.692l.16-.292c.415-.764-.42-1.6-1.185-1.184l-.291.159A1.873 1.873 0 0 1 8.93 1.945l-.094-.319zm-2.633-.283c.527-1.79 3.065-1.79 3.592 0l.094.319a.873.873 0 0 0 1.255.52l.292-.16c1.64-.892 3.434.901 2.54 2.541l-.159.292a.873.873 0 0 0 .52 1.255l.319.094c1.79.527 1.79 3.065 0 3.592l-.319.094a.873.873 0 0 0-.52 1.255l.16.292c.893 1.64-.902 3.434-2.541 2.54l-.292-.159a.873.873 0 0 0-1.255.52l-.094.319c-.527 1.79-3.065 1.79-3.592 0l-.094-.319a.873.873 0 0 0-1.255-.52l-.292.16c-1.64.893-3.433-.902-2.54-2.541l.159-.292a.873.873 0 0 0-.52-1.255l-.319-.094c-1.79-.527-1.79-3.065 0-3.592l.319-.094a.873.873 0 0 0 .52-1.255l-.16-.292c-.892-1.64.902-3.433 2.541-2.54l.292.159a.873.873 0 0 0 1.255-.52l.094-.319z"/>
+  <path fill-rule="evenodd" d="M8 5.754a2.246 2.246 0 1 0 0 4.492 2.246 2.246 0 0 0 0-4.492zM4.754 8a3.246 3.246 0 1 1 6.492 0 3.246 3.246 0 0 1-6.492 0z"/>
+</svg> 설정 변경
+</div>
+	<ul class="list-group list-group-flush">
+		<li class="list-group-item">
+		<table width="100%">
+		<tr>
+		<td class="m-1 p-1 text-right">base_dir</td>
+		<td class="m-1 p-1 text-left"><input type="text" name="base_dir" class="form-control mb-1 pb-2" placeholder="<?php echo $base_dir; ?>" value="<?php echo $base_dir; ?>" required autofocus></td>
+		</tr>
+		<td class="m-1 p-1 text-right">maxview</td>
+		<td class="m-1 p-1 text-left"><input type="number" name="maxview" class="form-control mb-2 pb-2" placeholder="<?php echo $maxview; ?>" value="<?php echo $maxview; ?>" required></td>
+		</tr>
+		</table>
+		</li>
+		<li class="m-0 p-0 list-group-item">
+			<input type="hidden" name="mode" value="config_change">
+			<button class="btn m-0 p-1 btn-primary btn-block btn-sm" type="submit">설정변경</button>
+		</li>
+	</ul>
+</form>
+</div>
 <br>
 <div class="card bg-outline-success m-2 p-0">
 <div class="card-header">README.md</div>
@@ -270,6 +299,7 @@ foreach ($dir_list as $dir_mode){
 </body>
 </html>
 <?php
+}
 } else {
 	echo "현재 로그인한 사용자는 관리자가 아닙니다. 3초후 초기화면으로 돌아갑니다.";
 	echo("<meta http-equiv=\"refresh\" content=\"3; url=index.php\">"); 

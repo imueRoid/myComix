@@ -43,110 +43,115 @@ if($_GET['dir'] != null){
 } else {
 	$dir = $base_dir;
 }
-$iterator = new DirectoryIterator($dir);
-$dircounter = 0;
-$titlecounter = 0;
-$filecounter = 0;
-$file_list = array();
-$jpgcounter = 0;
-$jpg_list = array();
-$jpg_folder = array();
-$dir_list = array();
-$title_list = array();
-$dirinfo = array();
-if(str_replace("/", "", $base_dir) == str_replace("/", "", $dir)){
-	$is_root = true;
-}
-foreach ($iterator as $fileinfo) {
-	$fileis_remote = "c";
-	if($is_root == true) {
-		$getmodefile = $base_dir."/".$fileinfo->getFilename().".json";
-		if(is_file($getmodefile) == true) {
-			$dirmode_arr = array();
-			$dirmode_arr = json_decode(file_get_contents($getmodefile), true);
-			if($dirmode_arr[$_SESSION["user_group"]] !== 1) {
-				continue;
-			} elseif($dirmode_arr['remote'] == "y"){
-				$fileis_remote = "y";
+
+if(is_dir($dir) == true){
+	$iterator = new DirectoryIterator($dir);
+	$dircounter = 0;
+	$titlecounter = 0;
+	$filecounter = 0;
+	$file_list = array();
+	$jpgcounter = 0;
+	$jpg_list = array();
+	$jpg_folder = array();
+	$dir_list = array();
+	$title_list = array();
+	$dirinfo = array();
+	if(str_replace("/", "", $base_dir) == str_replace("/", "", $dir)){
+		$is_root = true;
+	}
+	foreach ($iterator as $fileinfo) {
+		$fileis_remote = "c";
+		if($is_root == true) {
+			$getmodefile = $base_dir."/".$fileinfo->getFilename().".json";
+			if(is_file($getmodefile) == true) {
+				$dirmode_arr = array();
+				$dirmode_arr = json_decode(file_get_contents($getmodefile), true);
+				if($dirmode_arr[$_SESSION["user_group"]] !== 1) {
+					continue;
+				} elseif($dirmode_arr['remote'] == "y"){
+					$fileis_remote = "y";
+				}
+			}
+		}
+		if (!$fileinfo->isDot() && $fileinfo != "@eaDir" && $fileinfo->isDir()) {
+			if(strpos($dir, "rclone_") !== false || $is_remote == "y" || strpos($fileinfo->getFilename(), "rclone_") !== false || $fileis_remote == "y") {
+				$dir_list[$dircounter] = $fileinfo->getFilename();
+				$dirinfo[$fileinfo->getFilename()] = "remote";
+				$dircounter++;
+			} else {
+				$sub_iterator = new DirectoryIterator($dir."/".$fileinfo->getFilename());
+				$sub_dircounter = 0;
+				$subdir_list = array();
+				$jpg_c = 0;
+				$jpg_folder[$fileinfo->getFilename()] = array();
+				foreach ($sub_iterator as $subfileinfo) {
+					if (!$subfileinfo->isDot() && $subfileinfo != "@eaDir") {
+							if($subfileinfo->isDir() == true) {	
+								$jpg_c = 0;
+								$sub_dircounter++;
+								break;
+							} elseif(strpos(strtolower($subfileinfo->getFilename()),".jpg") !== false || strpos(strtolower($subfileinfo->getFilename()),".png") !== false) {
+								$jpg_folder[$fileinfo->getFilename()][$jpg_c] = $subfileinfo->getFilename();
+								$jpg_c++;
+							}
+					}
+				}
+				if($sub_dircounter>0){
+					$dir_list[$dircounter] = $fileinfo->getFilename();
+					$dircounter++;
+				} else {
+					if(count($jpg_folder[$fileinfo->getFilename()]) > 5){
+						$file_list[$filecounter] = $fileinfo->getFilename()."_imgfolder";
+						$filecounter++;
+					} else {
+						unset($jpg_folder[$fileinfo->getFilename()]);
+						$title_list[$titlecounter] = $fileinfo->getFilename();
+						$titlecounter++;
+					}
+				}
+				unset($subdir_list);
+			}
+			
+			
+			
+			
+		}
+		if ($fileinfo->isFile()) {
+			if(strpos($fileinfo, ".json") !== false){
+			} else {
+				if(strpos(strtolower($fileinfo), ".zip") !== false || strpos(strtolower($fileinfo), ".cbz") !== false) {
+					$file_list[$filecounter] = $fileinfo->getFilename();
+					$filecounter++;
+				} elseif(strpos(strtolower($fileinfo), ".jpg") !== false || strpos(strtolower($fileinfo), ".jpeg") !== false || strpos(strtolower($fileinfo), ".png") !== false) {
+					$jpg_list[$jpgcounter] = $fileinfo->getFilename();
+					$jpgcounter++;
+				}
 			}
 		}
 	}
-    if (!$fileinfo->isDot() && $fileinfo != "@eaDir" && $fileinfo->isDir()) {
-		if(strpos($dir, "rclone_") !== false || $is_remote == "y" || strpos($fileinfo->getFilename(), "rclone_") !== false || $fileis_remote == "y") {
-			$dir_list[$dircounter] = $fileinfo->getFilename();
-			$dirinfo[$fileinfo->getFilename()] = "remote";
-			$dircounter++;
-		} else {
-			$sub_iterator = new DirectoryIterator($dir."/".$fileinfo->getFilename());
-			$sub_dircounter = 0;
-			$subdir_list = array();
-			$jpg_c = 0;
-			$jpg_folder[$fileinfo->getFilename()] = array();
-			foreach ($sub_iterator as $subfileinfo) {
-				if (!$subfileinfo->isDot() && $subfileinfo != "@eaDir") {
-						if($subfileinfo->isDir() == true) {	
-							$jpg_c = 0;
-							$sub_dircounter++;
-							break;
-						} elseif(strpos(strtolower($subfileinfo->getFilename()),".jpg") !== false || strpos(strtolower($subfileinfo->getFilename()),".png") !== false) {
-							$jpg_folder[$fileinfo->getFilename()][$jpg_c] = $subfileinfo->getFilename();
-							$jpg_c++;
-						}
-				}
-			}
-			if($sub_dircounter>0){
-				$dir_list[$dircounter] = $fileinfo->getFilename();
-				$dircounter++;
-			} else {
-				if(count($jpg_folder[$fileinfo->getFilename()]) > 5){
-					$file_list[$filecounter] = $fileinfo->getFilename()."_imgfolder";
-					$filecounter++;
-				} else {
-					unset($jpg_folder[$fileinfo->getFilename()]);
-					$title_list[$titlecounter] = $fileinfo->getFilename();
-					$titlecounter++;
-				}
-			}
-			unset($subdir_list);
-		}
-		
-		
-		
-		
-    }
-    if ($fileinfo->isFile()) {
-		if(strpos($fileinfo, ".json") !== false){
-		} else {
-			if(strpos(strtolower($fileinfo), ".zip") !== false || strpos(strtolower($fileinfo), ".cbz") !== false) {
-				$file_list[$filecounter] = $fileinfo->getFilename();
-				$filecounter++;
-			} elseif(strpos(strtolower($fileinfo), ".jpg") !== false || strpos(strtolower($fileinfo), ".jpeg") !== false || strpos(strtolower($fileinfo), ".png") !== false) {
-				$jpg_list[$jpgcounter] = $fileinfo->getFilename();
-				$jpgcounter++;
-			}
-		}
-    }
-}
 
-sort($jpg_list, SORT_NATURAL);
-sort($dir_list, SORT_NATURAL);
-sort($title_list, SORT_NATURAL);
-$file_list = n_sort($file_list);
+	sort($jpg_list, SORT_NATURAL);
+	sort($dir_list, SORT_NATURAL);
+	sort($title_list, SORT_NATURAL);
+	$file_list = n_sort($file_list);
 
-$maxlist = count($file_list) + count($title_list) + count($dir_list);
-$startview = 0;
-if(!$_GET['page']){
-	$paging = 0; //현재 보여주는 페이지
-}  else {
-    $paging = (int)$_GET['page'];
-}
+	$maxlist = count($file_list) + count($title_list) + count($dir_list);
+	$startview = 0;
+	if(!$_GET['page']){
+		$paging = 0; //현재 보여주는 페이지
+	}  else {
+		$paging = (int)$_GET['page'];
+	}
 
-$startview = $paging*$maxview;
-$endview = $startview+$maxview;
-if($endview >= $maxlist){
-	$endview = $maxlist;
+	$startview = $paging*$maxview;
+	$endview = $startview+$maxview;
+	if($endview >= $maxlist){
+		$endview = $maxlist;
+	}
+	$updir = "";
+} else {
+	echo "설정된 dir이 없거나 읽을 수 없습니다. 다시 설정하세요.<br>"; 
 }
-$updir = "";
 ?>
 	<div>
 	<br>
