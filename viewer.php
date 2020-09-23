@@ -143,12 +143,12 @@ $page = ceil(($now+1)/$maxview)-1;  //현재페이지
    <head>
       <title>myComix - <?php echo $title; ?></title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-	<link href="https://fonts.googleapis.com/css2?family=Gugi&family=Nanum+Gothic:wght@400;700&display=swap" rel="stylesheet">
-	<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gugi&family=Nanum+Gothic:wght@400;700&display=swap">
+	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 	<script src="https://polyfill.io/v3/polyfill.min.js?features=IntersectionObserver"></script>
-	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 <?php
 if($mode == "book") {
@@ -634,6 +634,43 @@ document.addEventListener("DOMContentLoaded", function() {
   } else {
     // Possibly fall back to event handlers here
   }
+});
+$(window).on("beforeunload", function () {
+	<?php
+	if ($mode == "toon"){
+	?>
+	for (var i = 0; i <= <?php echo $image_counter; ?>; i++) {
+		var j = <?php echo $image_counter; ?> - i;
+		var scroll_image = $("#image"+j).position().top;
+		if (scroll_top > scroll_image) {
+			bookmark= "image" + String(j);
+			break;
+		}
+	}
+	<?php
+	} else {
+	?>
+	for (var i = 0; i <= <?php echo $image_counter; ?>; i++) {
+		var j = <?php echo $image_counter; ?> - i;
+		var scroll_top = $(this).scrollTop();
+		var scroll_image = $("#image"+j).position().top;
+		if (scroll_top > scroll_image) {
+			scroll_counter = j;
+			break;
+		}
+	}
+		if(scroll_counter > img_counter){
+			bookmark = "image" + scroll_counter;
+		} else {
+			bookmark = "image" + img_counter;
+			location.replace('#' + bookmark);
+		}
+	<?php
+	}
+	?>
+	$.get( "bookmark.php?mode=autosave&viewer=<?php echo $mode; ?>&page_order=<?php echo $pageorder['page_order']; ?>&file=<?php echo encode_url($getfile); ?>&bookmark=" + bookmark, function( data ) {
+		document.getElementById("info").value = data;
+	});
 });
 </script>
 </body>

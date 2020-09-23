@@ -28,6 +28,7 @@ if(is_dir("./src") === false){
 }
 
 $bookmark_file = "./src/".$_SESSION["user_id"]."_bookmark.json";
+$autosave_file = "./src/".$_SESSION["user_id"]."_autosave.json";
 
 
 ################################################################################
