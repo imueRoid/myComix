@@ -473,7 +473,7 @@ if($mode == "toon"){
 					}
 
 						$total = count($list);
-						sort($list,SORT_NATURAL);
+						$list = n_sort($list);
 						
 						echo "<div class=\"text-center\" id=\"lightgallery\">";
 						foreach($list as $imgfile){

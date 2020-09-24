@@ -254,7 +254,7 @@ for($count=0;$count < count($bookmark_arr); $count++){
 
 <?php
 if(is_file($dir."/[cover].jpg") == true && $use_cover == "y"){
-	echo "<tr><td class=\"m-0 p-0\"><img class=\"border border-white rounded-lg mt-2 mb-2 p-0\" src=\"data:".mime_type("jpg").";base64,".base64_encode(file_get_contents($dir."/[cover].jpg"))."\" style=\"max-height:300px;object-fit:contain;\"></td></tr>";
+	echo "<tr><td class=\"m-0 p-0\"><img class=\"border border-white rounded-lg mt-2 mb-2 p-0\" src=\"data:".mime_type("jpg").";base64,".base64_encode(file_get_contents($dir."/[cover].jpg"))."\" style=\"max-height:300px;max-width:90vw;object-fit:contain;\"></td></tr>";
 }
 ?>
 <tr><td class="m-0 p-0">
@@ -274,7 +274,7 @@ if(is_file($dir."/[cover].jpg") == true && $use_cover == "y"){
 			}
 	?>
 <div class="row row-cols-2 row-cols-md-4">
-			<a href='index.php?dir=<?php echo encode_url($updir);?>'>
+			<a href='index.php?dir=<?php echo encode_url($updir);?>&page=<?php echo $_GET['uppage']; ?>'>
 			<div class="card bg-primary m-1 p-0">
 						<div class="card-body text-white m-1 p-1 align-middle">
 						<svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-arrow-90deg-up" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -287,7 +287,7 @@ if(is_file($dir."/[cover].jpg") == true && $use_cover == "y"){
 	<?php
 	}
 ?>
-<div class="row row-cols-1 row-cols-md-3">
+<div class="row row-cols-1 row-cols-md-2">
 	<?php
 	$dir_start = $startview;
 	if(count($dir_list) > 0){
@@ -301,7 +301,7 @@ if(is_file($dir."/[cover].jpg") == true && $use_cover == "y"){
 
 	?>	
 			 
-	<a href='index.php?dir=<?php echo encode_url($getdir."/".$fileinfo);?>'>
+	<a href='index.php?uppage=<?php echo $_GET['page']; ?>&dir=<?php echo encode_url($getdir."/".$fileinfo);?>'>
     <div class="card border-secondary m-1 p-0">
 				<div class="card-body text-secondary m-1 p-1">
 				
@@ -337,7 +337,7 @@ if($dirinfo[$fileinfo] == "remote"){
 				break;
 			}
 	?>	
-	<a href='index.php?dir=<?php echo encode_url($getdir."/".$fileinfo); ?>'>			 
+	<a href='index.php?uppage=<?php echo $_GET['page']; ?>&dir=<?php echo encode_url($getdir."/".$fileinfo); ?>'>			 
     <div class="card bg-secondary text-white text-left m-1 p-0">
 				<div class="card-body m-1 p-1 d-inline-block text-truncate text-nowrap">
 <?php
@@ -631,7 +631,7 @@ if(is_file($dir."/".$fileinfo."/[cover].jpg") == true && $use_cover == "y"){
 <td width="100%" class="p-2" align="center">
   <div class="pagination pagination-sm justify-content-center pagination-outline-primary">
     <div class="page-item <?php if($dir == $base_dir) { echo "disabled"; } ?>">
-      <button class="page-link" onclick="location.replace('index.php?dir=<?php echo encode_url($updir);?>')" tabindex="-1" aria-disabled="true">상위폴더로</button>
+      <button class="page-link" onclick="location.replace('index.php?dir=<?php echo encode_url($updir);?>&page=<?php echo $_GET['uppage']; ?>')" tabindex="-1" aria-disabled="true">상위폴더로</button>
     </div>
     <div class="page-item <?php if($paging == 0) { echo "disabled"; } ?>">
 	</div>
