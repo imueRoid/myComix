@@ -264,8 +264,6 @@ if(is_file($dir."/[cover].jpg") == true && $use_cover == "y"){
 	<br>
 	</div>
 <div class="grid">
-<div class="row row-cols-1 row-cols-md-2">
-
 	<?php
 	if($is_root == true) {
 	} else {
@@ -274,19 +272,23 @@ if(is_file($dir."/[cover].jpg") == true && $use_cover == "y"){
 			for($i = 1;$i<$temp-1;$i++) {
 				$updir = $updir."/".$nowdirarr[$i];
 			}
-	?>	
-
+	?>
+<div class="row row-cols-2 row-cols-md-4">
 			<a href='index.php?dir=<?php echo encode_url($updir);?>'>
 			<div class="card bg-primary m-1 p-0">
-						<div class="card-body text-white m-1 p-1">
-						<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-90deg-up" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+						<div class="card-body text-white m-1 p-1 align-middle">
+						<svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-arrow-90deg-up" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
 					  <path fill-rule="evenodd" d="M4.854 1.146a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L4 2.707V12.5A2.5 2.5 0 0 0 6.5 15h8a.5.5 0 0 0 0-1h-8A1.5 1.5 0 0 1 5 12.5V2.707l3.146 3.147a.5.5 0 1 0 .708-.708l-4-4z"/>
 					</svg> 상위폴더로
 						</div>
 						</div>
 						</a>
+</div>
 	<?php
 	}
+?>
+<div class="row row-cols-1 row-cols-md-3">
+	<?php
 	$dir_start = $startview;
 	if(count($dir_list) > 0){
 		for($i=$dir_start;$i<$endview;$i++) {
