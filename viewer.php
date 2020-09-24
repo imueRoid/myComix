@@ -82,9 +82,9 @@ if(is_file($bookmark_file) === true){
 									$thumbnail_index = 0;
 									for ($findthumb = 0; $findthumb < $zip->numFiles; $findthumb++) {
 										$find_img = $zip->getNameIndex($findthumb);
-										if(!strpos(strtolower($find_img), ".jpg") && !strpos(strtolower($find_img), ".jpeg") && !strpos(strtolower($find_img), ".png")){
+										if(!strpos(strtolower($find_img), ".jpg") && !strpos(strtolower($find_img), ".jpeg") && !strpos(strtolower($find_img), ".png") && !strpos(strtolower($find_img), ".gif")){
 											continue;
-										} elseif (strpos(strtolower($find_img), ".jpg") !== false || strpos(strtolower($find_img), ".jpeg") !== false || strpos(strtolower($find_img), ".png") !== false) {
+										} elseif (strpos(strtolower($find_img), ".jpg") !== false || strpos(strtolower($find_img), ".jpeg") !== false || strpos(strtolower($find_img), ".png") !== false || strpos(strtolower($find_img), ".gif") !== false) {
 											$thumbnail_index = $findthumb;
 											break;
 										}
@@ -240,6 +240,12 @@ if($mode == "toon"){
 						$('.collapse').fadeToggle();
 						document.getElementById("info").value = "";
 					};
+function set_cover() {
+	document.getElementById("info").value = "설정중...";
+	$.get( "bookmark.php?mode=set_cover&file=<?php echo encode_url($getfile); ?>", function( data ) {
+		document.getElementById("info").value = data;
+	});
+}
 </script>
 <body>
 <nav class="navbar navbar-light fixed-top bg-white p-1 m-0">
@@ -295,6 +301,9 @@ if($mode == "toon"){
 			</button>
 		</div>
 	</div>
+</td></tr>
+<tr><td align="right">
+<button class="btn btn-sm btn-success mt-2 p-0" onclick="set_cover();">이 파일의 첫번째 이미지를 커버로 설정</button>
 </td></tr></table>
 <span class="text-nowrap d-inline-block text-truncate"><?php echo cut_title($title); ?></span>
 </nav>
@@ -442,7 +451,7 @@ if($mode == "toon"){
 						$zip = new ZipArchive;
 						if ($zip->open($base_file) == TRUE) {
 							for ($i = 0; $i < $zip->numFiles; $i++) {
-								if(!strpos(strtolower($zip->getNameIndex($i)), ".jpg") && !strpos(strtolower($zip->getNameIndex($i)), ".jpeg") && !strpos(strtolower($zip->getNameIndex($i)), ".png")){
+								if(!strpos(strtolower($zip->getNameIndex($i)), ".jpg") && !strpos(strtolower($zip->getNameIndex($i)), ".jpeg") && !strpos(strtolower($zip->getNameIndex($i)), ".png") && !strpos(strtolower($zip->getNameIndex($i)), ".gif")){
 									continue;
 								} else {
 									$list[$i] = $zip->getNameIndex($i);
@@ -455,7 +464,7 @@ if($mode == "toon"){
 						$counter = 0;
 						$iterator = new DirectoryIterator($base_file);
 						foreach ($iterator as $jpgfile) {
-							if (strpos(strtolower($jpgfile), ".jpg") !== false || strpos(strtolower($jpgfile), ".jpeg") !== false || strpos(strtolower($jpgfile), ".png") !== false) {
+							if (strpos(strtolower($jpgfile), ".jpg") !== false || strpos(strtolower($jpgfile), ".jpeg") !== false || strpos(strtolower($jpgfile), ".png") !== false || strpos(strtolower($jpgfile), ".gif") !== false) {
 								$list[$counter] = $base_file."/".$jpgfile;
 								$counter++;
 							}
@@ -581,6 +590,8 @@ $.get( "bookmark.php?viewer=<?php echo $mode; ?>&page_order=<?php echo $pageorde
   	document.getElementById("info").value = data;
 });
 }
+
+
 <?php
 if ($mode == "book"){
 ?>
