@@ -122,15 +122,15 @@ if(is_dir($dir) == true){
 			
 			
 		}
-		if ($fileinfo->isFile()) {
+		if ($fileinfo->isFile() && $fileinfo->getFilename() != "[cover].jpg") {
 			if(strpos($fileinfo, ".json") !== false){
 			} else {
-				if(strpos(strtolower($fileinfo), ".zip") !== false || strpos(strtolower($fileinfo), ".cbz") !== false) {
+				if(strpos(strtolower($fileinfo->getFilename()), ".zip") !== false || strpos(strtolower($fileinfo->getFilename()), ".cbz") !== false) {
 					$file_list[$filecounter] = $fileinfo->getFilename();
 					$filecounter++;
-				} elseif(strpos(strtolower($fileinfo), ".jpg") !== false || strpos(strtolower($fileinfo), ".jpeg") !== false || strpos(strtolower($fileinfo), ".png") !== false) {
-					$jpg_list[$jpgcounter] = $fileinfo->getFilename();
-					$jpgcounter++;
+				} elseif(strpos(strtolower($fileinfo->getFilename()), ".jpg") !== false || strpos(strtolower($fileinfo->getFilename()), ".jpeg") !== false || strpos(strtolower($fileinfo), ".png") !== false) {
+						$jpg_list[$jpgcounter] = $fileinfo->getFilename();
+						$jpgcounter++;
 				}
 			}
 		}
@@ -140,7 +140,6 @@ if(is_dir($dir) == true){
 	sort($dir_list, SORT_NATURAL);
 	sort($title_list, SORT_NATURAL);
 	$file_list = n_sort($file_list);
-
 	$maxlist = count($file_list) + count($title_list) + count($dir_list);
 	$startview = 0;
 	if(!$_GET['page']){
@@ -369,10 +368,9 @@ if(is_file($dir."/".$fileinfo."/[cover].jpg") == true && $use_cover == "y"){
 			if($i>$endview) {
 				break;
 			}
-			
 					$fileinfo = $file_list[$i-count($dir_list)-count($title_list)];
 					$zip_file = $dir."/".$fileinfo;
-	if(is_dir(str_replace("_imgfolder","", $zip_file)) == true){
+	if(strpos($zip_file, "_imgfolder") == true){
 		$zip_file = str_replace("_imgfolder","", $zip_file);
 		$configfile = $zip_file."/image_files.json";
 					if(is_File($configfile) === false){
@@ -395,7 +393,6 @@ if(is_file($dir."/".$fileinfo."/[cover].jpg") == true && $use_cover == "y"){
 							imagedestroy($cropimage);
 							$cropimage = ob_get_contents();
 							ob_end_clean();
-
 						} else {
 							$originimage = imagecreatefromstring($jpg_cover);
 							$y_point = ($size[1] - $size[0])/2;
@@ -440,7 +437,7 @@ if(is_file($dir."/".$fileinfo."/[cover].jpg") == true && $use_cover == "y"){
 						
 			if(is_file($dir."/[cover].jpg") == false && $i == $startview){
 				file_put_contents($dir."/[cover].jpg", base64_decode($img_output));
-			}			
+			}
 		?>
 				<a href='viewer.php?filetype=images&mode=<?php echo $viewer; ?>&file=<?php echo encode_url($getdir."/".str_replace("_imgfolder","", $fileinfo));?>'>
 				  <div class="col mb-3">
@@ -462,6 +459,7 @@ if(is_file($dir."/".$fileinfo."/[cover].jpg") == true && $use_cover == "y"){
 				</a>
 						<?php
 	} elseif(is_File($zip_file) == true){
+		
 						if(strpos(strtolower($zip_file), ".zip") !== false){
 							$configfile = substr($zip_file, 0, strpos(strtolower($zip_file), ".zip")).".json";
 						} elseif(strpos(strtolower($zip_file), ".cbz") !== false){
@@ -610,101 +608,8 @@ if(is_file($dir."/".$fileinfo."/[cover].jpg") == true && $use_cover == "y"){
 						<?php
 		}
 		}
-	} else {
 	}
-	if($maxlist == 0 && $jpgcounter > 0){
-					$configfile = $dir."/image_files.json";
-					if(is_File($configfile) === false){
-						$jpg_cover = file_get_contents($dir."/".$jpg_list[0]);
-						$size = getimagesizefromstring($jpg_cover);
-						if($size[0] > $size[1]) {
-							$x_point = ($size[0]/2) - $size[1];
-							$originimage = imagecreatefromstring($jpg_cover);
-								if($x_point > 0){
-									$cropimage = imagecrop($originimage, ['x' => $x_point, 'y' => 0, 'width' => $size[1], 'height' => $size[1]]);
-								} else {
-									$cropimage = imagecrop($originimage, ['x' => 0, 'y' => 0, 'width' => $size[1], 'height' => $size[1]]);
-								}
-							$originimage = $cropimage;
-							$cropimage = imagecreatetruecolor(400, 400);
-							imagecopyresampled($cropimage, $originimage, 0, 0, 0, 0, 400, 400, $size[1], $size[1]);
-							imagedestroy($originimage);
-							ob_start();
-							imagejpeg($cropimage, null, 75 );
-							imagedestroy($cropimage);
-							$cropimage = ob_get_contents();
-							ob_end_clean();
-
-						} else {
-							$originimage = imagecreatefromstring($jpg_cover);
-							$y_point = ($size[1] - $size[0])/2;
-							$cropimage = imagecrop($originimage, ['x' => 0, 'y' => 0, 'width' => $size[0], 'height' => $size[0]]);
-							$originimage = $cropimage;
-							$cropimage = imagecreatetruecolor(400, 400);
-							imagecopyresampled($cropimage, $originimage, 0, 0, 0, 0, 400, 400, $size[0], $size[0]);
-							imagedestroy($originimage);
-							ob_start();
-							imagejpeg($cropimage, null, 75 );
-							imagedestroy($cropimage);
-							$cropimage = ob_get_contents();
-							ob_end_clean();
-						}
-						$cache_data = array();
-						$cache_data['totalpage'] = $jpgcounter;
-						$cache_data['page_order'] = "0";
-						$cache_data['viewer'] = "toon";
-						$cache_data['thumbnail'] = base64_encode($cropimage);
-						$cache_output = json_encode($cache_data, JSON_UNESCAPED_UNICODE);
-						file_put_contents($configfile, $cache_output);
-					}
-					$json_data = json_decode(file_get_contents($configfile), true);
-					$img_output = $json_data['thumbnail'];
-					$totalpage = $json_data['totalpage'];
-					$pageorder = $json_data['page_order'];
-					if((int)$json_data['page_order'] == 0) {
-						$pageorder = "[ - ]";
-					} elseif((int)$json_data['page_order'] == 1) {
-						$pageorder = "[1|2]";
-					} elseif((int)$json_data['page_order'] == 2) {
-						$pageorder = "[2|1]";
-					}
-					if($json_data['viewer'] !== null){
-						$viewer = $json_data['viewer'];
-					} else {
-						$json_data['viewer'] = "toon";
-						$json_output = json_encode($json_data, JSON_UNESCAPED_UNICODE);
-						file_put_contents($configfile, $json_output);
-						$viewer = $json_data['viewer'];
-					}
-						
-						
-						
-						
-		?>
-				<a href='viewer.php?filetype=images&mode=<?php echo $viewer; ?>&file=<?php echo encode_url($getdir);?>'>
-				  <div class="col mb-3">
-					<div class="card text-black m-0 p-1">
-						<img src="data:<?php echo mime_type("jpg").";base64,".$img_output; ?>" class="rounded card-img-top card-img" alt="thumbnail">
-									<div class="card-img-overlay m-1 p-0">
-									<span class="badge badge-pill badge-success"><?php echo $totalpage; ?>p</span>
-									<span class="badge badge-pill badge-success"><?php echo $pageorder; ?></span>
-									<span class="badge badge-pill badge-success"><?php echo $viewer; ?></span>
-									</div>
-						<div class="card-body m-0 p-0 text-center text-nowrap" style="text-overflow: ellipsis; overflow: hidden;">
-							<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-file-earmark-image" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-  <path fill-rule="evenodd" d="M12 16a2 2 0 0 0 2-2V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8zM3 2a1 1 0 0 1 1-1h5.5v2A1.5 1.5 0 0 0 11 4.5h2V10l-2.083-2.083a.5.5 0 0 0-.76.063L8 11 5.835 9.7a.5.5 0 0 0-.611.076L3 12V2z"/>
-  <path fill-rule="evenodd" d="M6.502 7a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/>
-</svg> 이미지파일보기
-						</div>
-					</div>
-				  </div>
-				</a>
-						<?php
-
-
-
-				}
-		?>
+?>
 	</div>
 </div>
 <br>
