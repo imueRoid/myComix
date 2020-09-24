@@ -3,6 +3,12 @@ include("config.php");
 include("function.php");
 
 $getfile = decode_url($_GET['file']);
+	if($max_bookmark == null){
+		$max_bookmark = 10;
+	}
+	if($max_autosave == null){
+		$max_autosave = 3;
+	}
 
 if($_GET['mode'] == "delete_bookmark"){
 	$bookmark_arr = array();
@@ -24,7 +30,7 @@ if($_GET['mode'] == "delete_bookmark"){
 	$autosave_arr = array();
 	if(is_file($autosave_file) === true){
 		$autosave_arr = json_decode(file_get_contents($autosave_file), true);
-		if(count($autosave_arr) > 2) {
+		if(count($autosave_arr) > (int)$max_autosave) {
 			array_shift($autosave_arr);		
 		}
 	}
@@ -37,7 +43,7 @@ if($_GET['mode'] == "delete_bookmark"){
 	$bookmark_arr = array();
 	if(is_file($bookmark_file) === true){
 		$bookmark_arr = json_decode(file_get_contents($bookmark_file), true);
-		if(count($bookmark_arr) > 10) {
+		if(count($bookmark_arr) > (int)$max_bookmark) {
 			array_shift($bookmark_arr);		
 		}
 	}

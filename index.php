@@ -198,24 +198,22 @@ if(is_file($autosave_file) === true){
 </td></tr></table>
 
 <div class="collapse" width="100%" align="right">
-<table>
+<table class="mb-2 mt-2">
 <?php
 if(count($autosave_arr)>0){
 for($count=0;$count < count($autosave_arr); $count++){
 	$title_temp = explode("/", $autosave_title[$count]);
 ?>
-	<tr><td align=right>
+	<tr class="border-bottom border-success"><td align=right>
 	<button class="btn btn-sm m-0 p-0">
-	<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-exclamation-square m-0 p-0" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-	<path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
-	<path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
+	<svg width="1em" height="1em" viewBox="0 0 18 18" class="bi bi-exclamation-circle-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <path fill-rule="evenodd" d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
 </svg></button>	<button class="btn btn-sm m-0 p-0" onclick="location.replace('bookmark.php?mode=delete_autosave&file=<?php echo encode_url($autosave_title[$count]); ?>');">
-	<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-x-square mr-1 p-0" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-	<path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
-	<path fill-rule="evenodd" d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+	<svg width="1em" height="1em" viewBox="0 0 18 18" class="bi bi-x-circle-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <path fill-rule="evenodd" d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/>
 </svg></button></td>
 <td>
-	<button class="btn btn-sm m-0 p-0 d-inline-block text-truncate text-nowrap" style="max-width:280px;" onclick="location.href='./viewer.php?mode=<?php echo $autosave_mark[$count]['viewer']; ?>&page_order=<?php echo $autosave_mark[$count]['page_order']; ?>&file=<?php echo encode_url($autosave_title[$count]); ?>#<?php echo $autosave_mark[$count]['bookmark']; ?>'"><?php echo cut_title($title_temp[count($title_temp) - 1]); ?></button></td></tr>
+	<button class="btn btn-sm mr-1 p-0 d-inline-block text-truncate text-nowrap" style="max-width:280px;" onclick="location.href='./viewer.php?mode=<?php echo $autosave_mark[$count]['viewer']; ?>&page_order=<?php echo $autosave_mark[$count]['page_order']; ?>&file=<?php echo encode_url($autosave_title[$count]); ?>#<?php echo $autosave_mark[$count]['bookmark']; ?>'"><?php echo cut_title($title_temp[count($title_temp) - 1]); ?></button></td></tr>
 <?php
 	}
 	}
@@ -224,20 +222,19 @@ if(count($bookmark_arr)>0){
 for($count=0;$count < count($bookmark_arr); $count++){
 	$title_temp = explode("/", $bookmark_title[$count]);
 ?>
-	<tr><td align=right>
+	<tr class="border-bottom border-light"><td align=right>
 	<button class="btn btn-sm m-0 p-0" onclick="location.replace('bookmark.php?mode=delete_bookmark&file=<?php echo encode_url($bookmark_title[$count]); ?>');">
-	<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-x-square ml-2 mr-1 p-0" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-	<path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
-	<path fill-rule="evenodd" d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+	<svg width="1em" height="1em" viewBox="0 0 18 18" class="bi bi-x-circle-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <path fill-rule="evenodd" d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/>
 </svg></button></td><td>
 <?php
 	if(!is_array($bookmark_mark[$count])){
 ?>
-	<button class="btn btn-sm m-0 p-0 d-inline-block text-truncate text-nowrap" style="max-width:280px;" onclick="location.href='./viewer.php?file=<?php echo encode_url($bookmark_title[$count]); ?>#<?php echo $bookmark_mark[$count]; ?>'"><?php echo cut_title($title_temp[count($title_temp) - 1]); ?></button></td></tr>
+	<button class="btn btn-sm mr-1 p-0 d-inline-block text-truncate text-nowrap" style="max-width:280px;" onclick="location.href='./viewer.php?file=<?php echo encode_url($bookmark_title[$count]); ?>#<?php echo $bookmark_mark[$count]; ?>'"><?php echo cut_title($title_temp[count($title_temp) - 1]); ?></button></td></tr>
 <?php
 	} else {
 ?>
-	<button class="btn btn-sm m-0 p-0 d-inline-block text-truncate text-nowrap" style="max-width:280px;" onclick="location.href='./viewer.php?mode=<?php echo $bookmark_mark[$count]['viewer']; ?>&page_order=<?php echo $bookmark_mark[$count]['page_order']; ?>&file=<?php echo encode_url($bookmark_title[$count]); ?>#<?php echo $bookmark_mark[$count]['bookmark']; ?>'"><?php echo cut_title($title_temp[count($title_temp) - 1]); ?></button></td></tr>
+	<button class="btn btn-sm mr-1 p-0 d-inline-block text-truncate text-nowrap" style="max-width:280px;" onclick="location.href='./viewer.php?mode=<?php echo $bookmark_mark[$count]['viewer']; ?>&page_order=<?php echo $bookmark_mark[$count]['page_order']; ?>&file=<?php echo encode_url($bookmark_title[$count]); ?>#<?php echo $bookmark_mark[$count]['bookmark']; ?>'"><?php echo cut_title($title_temp[count($title_temp) - 1]); ?></button></td></tr>
 <?php
 	}
 	}
