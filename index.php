@@ -248,12 +248,20 @@ for($count=0;$count < count($bookmark_arr); $count++){
 	<td class="m-0 p-0" align="left">
 	<span class="badge badge-light badge-sm" style="font-family: 'Nanum Gothic', sans-serif;">
 	[ <?php echo $_SESSION["user_id"];?> ]로 로그인되었습니다.</span>
-	<?php if($_SESSION["user_group"] == "admin") { echo "<a class=\"badge badge-danger badge-sm\" href=admin.php>관리자페이지</a>"; }?> <a class="badge badge-danger badge-sm" href="login.php?mode=logout">로그아웃</a>
+	<?php if($_SESSION["user_group"] == "admin") { echo "<a class=\"badge badge-danger badge-sm\" href=admin.php>관리자페이지</a>"; }?> <a class="badge badge-danger badge-sm" href="login.php?mode=logout">로그아웃</a><br><br>
 	</a>
-	<h6 style="font-family: 'Nanum Gothic', sans-serif;"><br><br>[<?php echo $getdir;?>]</h6>
 	</td>
 	</tr>
-	</table>
+
+<?php
+if(is_file($dir."/[cover].jpg") == true && $use_cover == "y"){
+	echo "<tr><td class=\"m-0 p-0\"><img class=\"border border-white rounded-lg mt-2 mb-2 p-0\" src=\"data:".mime_type("jpg").";base64,".base64_encode(file_get_contents($dir."/[cover].jpg"))."\" style=\"max-height:300px;object-fit:contain;\"></td></tr>";
+}
+?>
+<tr><td class="m-0 p-0">
+	<h6 style="font-family: 'Nanum Gothic', sans-serif;">[<?php echo $getdir;?>]</h6>
+</td></tr>
+</table>
 	<br>
 	</div>
 <div class="grid">
@@ -329,8 +337,14 @@ if($dirinfo[$fileinfo] == "remote"){
 			}
 	?>	
 	<a href='index.php?dir=<?php echo encode_url($getdir."/".$fileinfo); ?>'>			 
-    <div class="card text-white bg-secondary m-1 p-0">
-				<div class="card-body m-1 p-1">
+    <div class="card bg-secondary text-white text-left m-1 p-0">
+				<div class="card-body m-1 p-1 d-inline-block text-truncate text-nowrap">
+<?php
+
+if(is_file($dir."/".$fileinfo."/[cover].jpg") == true && $use_cover == "y"){
+	echo "<img class=\"border border-white rounded-lg mr-2\" src=\"data:".mime_type("jpg").";base64,".base64_encode(file_get_contents($dir."/".$fileinfo."/[cover].jpg"))."\" style=\"max-height:120px;object-fit:contain;\">";
+}
+?>
 					<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-book" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
   <path fill-rule="evenodd" d="M1 2.828v9.923c.918-.35 2.107-.692 3.287-.81 1.094-.111 2.278-.039 3.213.492V2.687c-.654-.689-1.782-.886-3.112-.752-1.234.124-2.503.523-3.388.893zm7.5-.141v9.746c.935-.53 2.12-.603 3.213-.493 1.18.12 2.37.461 3.287.811V2.828c-.885-.37-2.154-.769-3.388-.893-1.33-.134-2.458.063-3.112.752zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783z"/>
 </svg> <?php echo $fileinfo;?>
@@ -424,9 +438,9 @@ if($dirinfo[$fileinfo] == "remote"){
 						$viewer = $json_data['viewer'];
 					}
 						
-						
-						
-						
+			if(is_file($dir."/[cover].jpg") == false && $i == $startview){
+				file_put_contents($dir."/[cover].jpg", base64_decode($img_output));
+			}			
 		?>
 				<a href='viewer.php?filetype=images&mode=<?php echo $viewer; ?>&file=<?php echo encode_url($getdir."/".str_replace("_imgfolder","", $fileinfo));?>'>
 				  <div class="col mb-3">
@@ -485,20 +499,25 @@ if($dirinfo[$fileinfo] == "remote"){
 					$zip = new ZipArchive;
 					if ($zip->open($zip_file) == TRUE) {
 						$thumbnail_index = 0;
-						for ($findthumb = 0; $findthumb < $zip->numFiles; $findthumb++) {
-							$find_img = $zip->getNameIndex($findthumb);
-							if(!strpos(strtolower($find_img), ".jpg") && !strpos(strtolower($find_img), ".jpeg") && !strpos(strtolower($find_img), ".png")){
+						$find_img = array();
+						$zip_numfile = $zip->numFiles;
+						for ($findthumb = 0; $findthumb < $zip_numfile; $findthumb++) {
+							$find_img[$findthumb] = $zip->getNameIndex($findthumb);
+						}
+						$find_img = n_sort($find_img);
+						for ($findthumb = 0; $findthumb < $zip_numfile; $findthumb++) {
+							if(!strpos(strtolower($find_img[$findthumb]), ".jpg") && !strpos(strtolower($find_img[$findthumb]), ".jpeg") && !strpos(strtolower($find_img[$findthumb]), ".png")){
 								continue;
-							} elseif (strpos(strtolower($find_img), ".jpg") !== false || strpos(strtolower($find_img), ".jpeg") !== false || strpos(strtolower($find_img), ".png") !== false) {
+							} elseif (strpos(strtolower($find_img[$findthumb]), ".jpg") !== false || strpos(strtolower($find_img[$findthumb]), ".jpeg") !== false || strpos(strtolower($find_img[$findthumb]), ".png") !== false) {
 								$thumbnail_index = $findthumb;
 								break;
 							}
 						}						
-						
-						$size = getimagesizefromstring($zip->getFromIndex($thumbnail_index));
+
+						$size = getimagesizefromstring($zip->getFromName($find_img[$thumbnail_index]));
 						if($size[0] > $size[1]) {
 							$x_point = ($size[0]/2) - $size[1];
-							$originimage = imagecreatefromstring($zip->getFromIndex($thumbnail_index));
+							$originimage = imagecreatefromstring($zip->getFromName($find_img[$thumbnail_index]));
 								if($x_point > 0){
 									$cropimage = imagecrop($originimage, ['x' => $x_point, 'y' => 0, 'width' => $size[1], 'height' => $size[1]]);
 								} else {
@@ -515,7 +534,7 @@ if($dirinfo[$fileinfo] == "remote"){
 							ob_end_clean();
 
 						} else {
-							$originimage = imagecreatefromstring($zip->getFromIndex($thumbnail_index));
+							$originimage = imagecreatefromstring($zip->getFromName($find_img[$thumbnail_index]));
 							$y_point = ($size[1] - $size[0])/2;
 							$cropimage = imagecrop($originimage, ['x' => 0, 'y' => 0, 'width' => $size[0], 'height' => $size[0]]);
 							$originimage = $cropimage;
@@ -558,6 +577,9 @@ if($dirinfo[$fileinfo] == "remote"){
 				$viewer = $json_data['viewer'];
 			}
 	}
+			if(is_file($dir."/[cover].jpg") == false && $i == $startview){
+				file_put_contents($dir."/[cover].jpg", base64_decode($img_output));
+			}
 
 			if(strpos($nowdirarr[count($nowdirarr)-1],"] ") !== false){
 				$dir_s = preg_replace("/\[[^]]*\]/","",$nowdirarr[count($nowdirarr)-1]);

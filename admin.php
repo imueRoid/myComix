@@ -65,7 +65,7 @@ $iterator = new DirectoryIterator($base_dir);
 	$prevPage = $_SERVER["HTTP_REFERER"];
 	header("location:".$prevPage);
 } elseif($_POST['mode'] == "config_change"){
-	$config_output = "<?php\n\$base_dir = \"".$_POST['base_dir']."\";\n\$maxview = \"".$_POST['maxview']."\";\n\$max_autosave = \"".$_POST['max_autosave']."\";\n\$max_bookmark = \"".$_POST['max_bookmark']."\";\n?>";
+	$config_output = "<?php\n\$base_dir = \"".$_POST['base_dir']."\";\n\$maxview = \"".$_POST['maxview']."\";\n\$max_autosave = \"".$_POST['max_autosave']."\";\n\$max_bookmark = \"".$_POST['max_bookmark']."\";\n\$use_cover = \"".$_POST['use_cover']."\";\n?>";
 	file_put_contents("config.php", $config_output);
 	echo "<h1>config파일이 수정되었습니다. 3초 후 새로고침합니다.</h1>";	
 	echo("<meta http-equiv=\"refresh\" content=\"3; url=".$_SERVER["PHP_SELF"]."\">"); 
@@ -188,6 +188,18 @@ echo substr($readme, strpos($readme, "<h2 id=\"-1\">업데이트 정보</h2>"));
 		</tr>
 		<td class="m-1 p-1 text-right">max-bookmark</td>
 		<td class="m-1 p-1 text-left"><input type="number" name="max_bookmark" class="form-control mb-2 pb-2" placeholder="<?php echo $max_bookmark; ?>" value="<?php echo $max_bookmark; ?>" required></td>
+		</tr>
+		<td class="m-1 p-1 text-right">폴더커버이미지</td>
+		<td class="m-1 p-1 text-left">
+			<div class="form-check form-check-inline ml-2">
+				<input class="form-check-input" type="radio" id="use_cover_inlineCheckbox1" name="use_cover" value="y" <?php if($use_cover == "y"){ echo "checked"; } ?>>
+				<label class="form-check-label" for="use_cover_inlineCheckbox1">사용</label>
+			</div>
+			<div class="form-check form-check-inline ml-2">
+				<input class="form-check-input" type="radio" id="use_cover_inlineCheckbox2" name="use_cover" value="n" <?php if($use_cover == "n"){ echo "checked"; } ?>>
+				<label class="form-check-label" for="use_cover_inlineCheckbox2">사용안함</label>		
+			</div>
+		</td>
 		</tr>
 		</table>
 		</li>
