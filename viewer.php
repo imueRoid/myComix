@@ -136,6 +136,24 @@ if(is_file($bookmark_file) === true){
 							}
 						}
 							
+		$files = scandir($base_folder);
+		$files = n_sort($files);
+
+		$totalfile = array();
+		
+		foreach ($files as $file) {
+			if(strpos($file, "json") !== false){
+			} elseif (strpos(strtolower($file), "zip") !== false || strpos(strtolower($file), "cbz") !== false || strpos(strtolower($file), "rar") !== false || strpos(strtolower($file), "cbr") !== false) {
+				$totalfile[] = $file;
+			}
+		}
+
+		$now = array_search ($title, $totalfile);
+
+		$next = $now + 1;
+		$pre = $now - 1;
+
+		$page = ceil(($now+1)/$maxview)-1;  //현재페이지
 ?>
 <!DOCTYPE html>
 <html lang="ko">
@@ -307,27 +325,6 @@ function set_cover() {
 </td></tr></table>
 <span class="text-nowrap d-inline-block text-truncate"><?php echo cut_title($title); ?></span>
 </nav>
-
-<?php
-		$files = scandir($base_folder);
-		$files = n_sort($files);
-
-		$totalfile = array();
-		
-		foreach ($files as $file) {
-			if(strpos($file, "json") !== false){
-			} elseif (strpos(strtolower($file), "zip") !== false || strpos(strtolower($file), "cbz") !== false || strpos(strtolower($file), "rar") !== false || strpos(strtolower($file), "cbr") !== false) {
-				$totalfile[] = $file;
-			}
-		}
-
-		$now = array_search ($title, $totalfile);
-
-		$next = $now + 1;
-		$pre = $now - 1;
-
-		$page = ceil(($now+1)/$maxview)-1;  //현재페이지
-?>
 <div>
 <nav class="navbar navbar-light fixed-bottom bg-white m-0 p-1 ">
 <table width="100%">
