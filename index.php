@@ -93,7 +93,7 @@ if(is_dir($dir) == true){
 								$jpg_c = 0;
 								$sub_dircounter++;
 								break;
-							} elseif(strpos(strtolower($subfileinfo->getFilename()),".jpg") !== false || strpos(strtolower($subfileinfo->getFilename()),".png") !== false) {
+							} elseif(strpos(strtolower($subfileinfo->getFilename()),".jpg") !== false || strpos(strtolower($subfileinfo->getFilename()),".png") !== false || strpos(strtolower($subfileinfo->getFilename()),".gif") !== false || strpos(strtolower($subfileinfo->getFilename()),".jpeg") !== false) {
 								$jpg_folder[$fileinfo->getFilename()][$jpg_c] = $subfileinfo->getFilename();
 								$jpg_c++;
 							}
@@ -125,7 +125,7 @@ if(is_dir($dir) == true){
 				if(strpos(strtolower($fileinfo->getFilename()), ".zip") !== false || strpos(strtolower($fileinfo->getFilename()), ".cbz") !== false) {
 					$file_list[$filecounter] = $fileinfo->getFilename();
 					$filecounter++;
-				} elseif(strpos(strtolower($fileinfo->getFilename()), ".jpg") !== false || strpos(strtolower($fileinfo->getFilename()), ".jpeg") !== false || strpos(strtolower($fileinfo), ".png") !== false) {
+				} elseif(strpos(strtolower($fileinfo->getFilename()), ".jpg") !== false || strpos(strtolower($fileinfo->getFilename()), ".jpeg") !== false || strpos(strtolower($fileinfo), ".png") !== false || strpos(strtolower($fileinfo), ".gif") !== false) {
 						$jpg_list[$jpgcounter] = $fileinfo->getFilename();
 						$jpgcounter++;
 				}
@@ -506,9 +506,9 @@ if(is_file($dir."/".$fileinfo."/[cover].jpg") == true && $use_listcover == "y"){
 						}
 						$find_img = n_sort($find_img);
 						for ($findthumb = 0; $findthumb < $zip_numfile; $findthumb++) {
-							if(!strpos(strtolower($find_img[$findthumb]), ".jpg") && !strpos(strtolower($find_img[$findthumb]), ".jpeg") && !strpos(strtolower($find_img[$findthumb]), ".png")){
+							if(!strpos(strtolower($find_img[$findthumb]), ".jpg") && !strpos(strtolower($find_img[$findthumb]), ".jpeg") && !strpos(strtolower($find_img[$findthumb]), ".png") && !strpos(strtolower($find_img[$findthumb]), ".gif")){
 								continue;
-							} elseif (strpos(strtolower($find_img[$findthumb]), ".jpg") !== false || strpos(strtolower($find_img[$findthumb]), ".jpeg") !== false || strpos(strtolower($find_img[$findthumb]), ".png") !== false) {
+							} elseif (strpos(strtolower($find_img[$findthumb]), ".jpg") !== false || strpos(strtolower($find_img[$findthumb]), ".jpeg") !== false || strpos(strtolower($find_img[$findthumb]), ".png") !== false || strpos(strtolower($find_img[$findthumb]), ".gif") !== false) {
 								$thumbnail_index = $findthumb;
 								break;
 							}

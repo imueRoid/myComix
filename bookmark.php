@@ -51,29 +51,29 @@ if($_GET['mode'] == "delete_bookmark"){
 		$zip = new ZipArchive;
 		if ($zip->open($base_file) == TRUE) {
 			for ($i = 0; $i < $zip->numFiles; $i++) {
-				if(!strpos(strtolower($zip->getNameIndex($i)), ".jpg") && !strpos(strtolower($zip->getNameIndex($i)), ".jpeg") && !strpos(strtolower($zip->getNameIndex($i)), ".png")){
+				if(!strpos(strtolower($zip->getNameIndex($i)), ".jpg") && !strpos(strtolower($zip->getNameIndex($i)), ".jpeg") && !strpos(strtolower($zip->getNameIndex($i)), ".png") && !strpos(strtolower($zip->getNameIndex($i)), ".gif")){
 					continue;
 				} else {
 					$list[$i] = $zip->getNameIndex($i);
 				}
 			}
 			$list = n_sort($list);
-			$cover_output = $zip->getFromName($list[0]);
+			$cover_output = imagecreatefromstring($zip->getFromName($list[0]));
 		}
 	} else {
 		$list = array();
 		$counter = 0;
 		$iterator = new DirectoryIterator($base_file);
 		foreach ($iterator as $jpgfile) {
-			if (strpos(strtolower($jpgfile), ".jpg") !== false || strpos(strtolower($jpgfile), ".jpeg") !== false || strpos(strtolower($jpgfile), ".png") !== false) {
+			if (strpos(strtolower($jpgfile), ".jpg") !== false || strpos(strtolower($jpgfile), ".jpeg") !== false || strpos(strtolower($jpgfile), ".png") !== false || strpos(strtolower($jpgfile), ".gif") !== false) {
 				$list[$counter] = $base_file."/".$jpgfile;
 				$counter++;
 			}
 		}
 		$list = n_sort($list);
-		$cover_output = file_get_contents($list[0]);
+		$cover_output = imagecreatefromstring(file_get_contents($list[0]));
 	}
-	file_put_contents($cover_file, $cover_output);
+	imagejpeg($cover_output, $cover_file);
 	echo "설정됨";
 } else {
 	$bookmark_arr = array();

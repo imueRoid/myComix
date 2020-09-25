@@ -62,6 +62,17 @@ $maxview = "18"; //한페이지에 보여줄 만화 갯수(폴더도 이 숫자�
 <p><br></p>
 
 <ul>
+<li>index 0.466 </li>
+</ul>
+
+<p>
+GIF지원
+</p>
+
+
+<p><br></p>
+
+<ul>
 <li>index 0.465 </li>
 </ul>
 
