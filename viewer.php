@@ -19,10 +19,12 @@ $link_dir = str_replace("/".$title, "", $getfile);
 
 if(strpos(strtolower($base_file), "zip") !== false || strpos(strtolower($base_file), "cbz") !== false) {
 	$type = "zip";
-} else {
+} elseif($_GET['filetype'] == "pdf" || strpos(strtolower($getfile), ".pdf")) {
+	$type = "pdf";	
+} elseif(is_file($base_file."/image_files.json") == true) {
 	$type = "images";
 }
-
+if($type != "pdf"){
 $bookmark_arr = array();
 $bookmark = 0;
 if(is_file($bookmark_file) === true){
@@ -135,19 +137,16 @@ if(is_file($bookmark_file) === true){
 								$mode = $pageorder['viewer'];
 							}
 						}
-							
+}							
 		$files = scandir($base_folder);
 		$files = n_sort($files);
-
 		$totalfile = array();
-		
 		foreach ($files as $file) {
-			if(strpos($file, "json") !== false){
-			} elseif (strpos(strtolower($file), "zip") !== false || strpos(strtolower($file), "cbz") !== false || strpos(strtolower($file), "rar") !== false || strpos(strtolower($file), "cbr") !== false) {
+			if(strpos($file, "json") !== false || $file == "." || $file == ".." || $file == "@eaDir"){
+			} elseif (strpos(strtolower($file), "zip") !== false || strpos(strtolower($file), "cbz") !== false || strpos(strtolower($file), "rar") !== false || strpos(strtolower($file), "cbr") !== false || strpos(strtolower($file), "pdf") !== false || is_file($base_folder."/".$file."/image_files.json") == true) {
 				$totalfile[] = $file;
 			}
 		}
-
 		$now = array_search ($title, $totalfile);
 
 		$next = $now + 1;
@@ -174,6 +173,11 @@ if($mode == "book") {
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/1.8.2/js/lightgallery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-mousewheel/3.1.13/jquery.mousewheel.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/lg-fullscreen/dist/lg-fullscreen.min.js"></script>
+<?php
+}
+if($type == "pdf") {
+?>
+	<script src="https://cdn.jsdelivr.net/npm/pdfobject@2.2.3/pdfobject.min.js"></script>
 <?php
 }
 ?>
@@ -253,6 +257,7 @@ if($mode == "toon"){
 					};
 <?php
 }
+if($type != "pdf") {
 ?>
 					function sub_toggle() {
 						$('.collapse').fadeToggle();
@@ -264,6 +269,9 @@ function set_cover() {
 		document.getElementById("info").value = data;
 	});
 }
+<?php
+}
+?>
 </script>
 <body>
 <nav class="navbar navbar-light fixed-top bg-white p-1 m-0">
@@ -281,6 +289,9 @@ function set_cover() {
 </button>
 </td></tr>
 </table>
+<?php
+if($type != "pdf"){
+?>
 <table class="collapse" width="100%">
 <tr><td align="right">
 	<div class="justify-content-end btn-toolbar" role="toolbar">
@@ -323,6 +334,9 @@ function set_cover() {
 <tr><td align="right">
 <button class="btn btn-sm btn-success mt-2 p-0" onclick="set_cover();">이 파일의 첫번째 이미지를 커버로 설정</button>
 </td></tr></table>
+<?php
+}
+?>
 <span class="text-nowrap d-inline-block text-truncate"><?php echo cut_title($title); ?></span>
 </nav>
 <div>
@@ -384,6 +398,7 @@ function set_cover() {
 <div class="btn-group btn-group-toggle" data-toggle="buttons">
 
 <?php
+if($type != "pdf"){
 if($mode == "toon"){
 ?>
 <label class="btn btn-outline-secondary btn-sm mr-1">
@@ -424,6 +439,9 @@ if($mode == "toon"){
   ?>-secondary btn-sm">
     <input type="radio" name="options" id="option3" OnClick="location.replace('./viewer.php?<?php if($_GET['filetype'] == "images") { echo "filetype=images&";} ?>file=<?php echo encode_url($getfile); ?>&pageorder=2')">2|1
   </label>
+<?php
+}
+?>
 </div>  
 </td></tr></table>  
 </nav>
@@ -437,7 +455,26 @@ if($mode == "toon"){
 ?>
 <div class="container-fluid m-0 p-0" onclick="run_gallery();">
 <?php
+} elseif($type == "pdf") { 
+?>
+<div class="container-fluid m-0 p-0 vh-100 vw-100" id="pdfviewer" onclick="hidenav();">
+<script>
+function hidenav() {
+	$('.navbar').fadeToggle();
+};
+
+var options = {
+    pdfOpenParams: {
+        view: 'FitV',
+        pagemode: 'thumbs',
+        search: 'lorem ipsum'
+    }
+};
+PDFObject.embed("extract.php?filetype=pdf&file=<?php echo encode_url($getfile); ?>&imgfile=pdf", "#pdfviewer", options);
+</script>
+<?php
 }
+if($type != "pdf"){
 ?>
             <p class="m-0 p-0" align='center'>
               <?php
@@ -502,8 +539,14 @@ if($mode == "toon"){
 					}
                ?>
             </p>
+<?php
+}
+?>
 </div>
 
+<?php
+if($type != "pdf"){
+?>
 <script type="text/javascript">
 var bookmark = "image0";
 var bright_value = 1;
@@ -680,5 +723,8 @@ window.addEventListener("visibilitychange", function(e)
     }
 });
 </script>
+<?php
+}
+?>
 </body>
 </html>

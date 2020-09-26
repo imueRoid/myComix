@@ -40,6 +40,9 @@ if($_GET['filetype'] == "images") {
 			imagedestroy($cropimage_l);
 		}
 	}
+} elseif($_GET['filetype'] == "pdf") {
+	header('Content-Type: '.mime_type('pdf'));
+	echo file_get_contents($base_file);
 } else {
 	$base_title = explode("/", $base_file);
 	$title = $base_title[(count($base_title)-1)];
