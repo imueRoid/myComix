@@ -250,8 +250,12 @@ for($count=0;$count < count($bookmark_arr); $count++){
 	</tr>
 
 <?php
-if(is_file($dir."/[cover].jpg") == true && $use_cover == "y"){
-	echo "<tr><td class=\"m-0 p-0\"><img class=\"border border-white rounded-lg mt-2 mb-2 p-0\" src=\"data:".mime_type("jpg").";base64,".base64_encode(file_get_contents($dir."/[cover].jpg"))."\" style=\"max-height:300px;max-width:90vw;object-fit:contain;\"></td></tr>";
+if ($use_cover == "y"){
+	if(is_file($dir."/[cover].jpg") == true) {
+		echo "<tr><td class=\"m-0 p-0\"><img class=\"border border-white rounded-lg mt-2 mb-2 p-0\" src=\"data:".mime_type("jpg").";base64,".base64_encode(file_get_contents($dir."/[cover].jpg"))."\" style=\"max-height:300px;max-width:90vw;object-fit:contain;\"></td></tr>";
+	} else {
+		echo "<tr><td class=\"m-0 p-0\"><img class=\"border border-white rounded-lg mt-2 mb-2 p-0\" src=\"data:".mime_type("jpg").";base64,".$null_image."\" style=\"max-height:300px;max-width:90vw;object-fit:contain;\"></td></tr>";
+	}
 }
 ?>
 <tr><td class="m-0 p-0">
@@ -283,9 +287,15 @@ if(is_file($dir."/[cover].jpg") == true && $use_cover == "y"){
 </div>
 	<?php
 	}
-?>
+if($use_listcover == "y"){
+?>	
+<div class="row row-cols-2 row-cols-md-4">
+<?php
+} else {
+?>	
 <div class="row row-cols-1 row-cols-md-2">
 	<?php
+}
 	$dir_start = $startview;
 	if(count($dir_list) > 0){
 		for($i=$dir_start;$i<$endview;$i++) {
@@ -310,8 +320,12 @@ if($dirinfo[$fileinfo] == "remote"){
 					</svg> <?php echo str_replace("rclone_", "", $fileinfo); ?>
 <?php
 } else {
-if(is_file($dir."/".$fileinfo."/[cover].jpg") == true && $use_listcover == "y"){
-	echo "<img class=\"border border-white rounded-lg mr-2\" src=\"data:".mime_type("jpg").";base64,".base64_encode(file_get_contents($dir."/".$fileinfo."/[cover].jpg"))."\" style=\"max-height:120px;object-fit:contain;\">";
+if($use_listcover == "y"){
+	if(is_file($dir."/".$fileinfo."/[cover].jpg") == true){
+		echo "<img class=\"rounded-lg mb-2\" src=\"data:".mime_type("jpg").";base64,".base64_encode(file_get_contents($dir."/".$fileinfo."/[cover].jpg"))."\" style=\"height:120px;max-width:100%;min-width:100%;object-fit:contain;\"><br>";
+	} else {
+		echo "<img class=\"rounded-lg mb-2\" src=\"data:".mime_type("jpg").";base64,".$null_image."\" style=\"height:120px;max-width:100%;min-width:100%;object-fit:fill;\"><br>";
+	}
 }
 ?>
 					<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-folder-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -342,8 +356,12 @@ if(is_file($dir."/".$fileinfo."/[cover].jpg") == true && $use_listcover == "y"){
 				<div class="card-body m-1 p-1 d-inline-block text-truncate text-nowrap">
 <?php
 
-if(is_file($dir."/".$fileinfo."/[cover].jpg") == true && $use_listcover == "y"){
-	echo "<img class=\"border border-white rounded-lg mr-2\" src=\"data:".mime_type("jpg").";base64,".base64_encode(file_get_contents($dir."/".$fileinfo."/[cover].jpg"))."\" style=\"max-height:120px;object-fit:contain;\">";
+if($use_listcover == "y"){
+	if(is_file($dir."/".$fileinfo."/[cover].jpg") == true){
+		echo "<img class=\"rounded-lg mb-2\" src=\"data:".mime_type("jpg").";base64,".base64_encode(file_get_contents($dir."/".$fileinfo."/[cover].jpg"))."\" style=\"height:120px;max-width:100%;min-width:100%;object-fit:contain;\"><br>";
+	} else {
+		echo "<img class=\"rounded-lg mb-2\" src=\"data:".mime_type("jpg").";base64,".$null_image."\" style=\"height:120px;max-width:100%;min-width:100%;object-fit:fill;\"><br>";
+	}
 }
 ?>
 					<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-book" fill="currentColor" xmlns="http://www.w3.org/2000/svg">

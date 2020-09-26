@@ -100,7 +100,6 @@ function cut_title($title){
 			}
 			$title = str_replace("%3f", "?", $title);
 			$title = str_replace("(decensored)", "-무수정", $title);
-			$title = preg_replace("~\(.*\)~","",$title);
 			$title = preg_replace("/\[[^]]*\]/","",$title);
 			$nowdir = preg_replace("~\(.*\)~","",$nowdir);
 			$nowdir = preg_replace("/\[[^]]*\]/","",$nowdir);
@@ -108,6 +107,9 @@ function cut_title($title){
 				$title = substr($title, strpos($title, $nowdir));
 			}
 			$title = str_replace($nowdir, "", $title);
+			if(strlen($title) > 10){
+				$title = preg_replace("~\(.*\)~","",$title);
+			}
 			return $title;
 }
 
