@@ -177,7 +177,7 @@ if($mode == "book") {
 }
 if($type == "pdf") {
 ?>
-	<script src="https://cdn.jsdelivr.net/npm/pdfobject@2.2.3/pdfobject.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@2.6.347/build/pdf.min.js"></script>
 <?php
 }
 ?>
@@ -458,19 +458,68 @@ if($mode == "toon"){
 } elseif($type == "pdf") { 
 ?>
 <div class="container-fluid m-0 p-0 vh-100 vw-100" id="pdfviewer" onclick="hidenav();">
+
 <script>
 function hidenav() {
 	$('.navbar').fadeToggle();
 };
 
-var options = {
-    pdfOpenParams: {
-        view: 'FitV',
-        pagemode: 'thumbs',
-        search: 'lorem ipsum'
-    }
-};
-PDFObject.embed("extract.php?filetype=pdf&file=<?php echo encode_url($getfile); ?>&imgfile=pdf", "#pdfviewer", options);
+var url = "extract.php?filetype=pdf&file=<?php echo encode_url($getfile); ?>&imgfile=pdf";
+
+var pdfjsLib = window['pdfjs-dist/build/pdf'];
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@2.6.347/build/pdf.worker.min.js';
+
+var pdfDoc = null,
+    pageNum = 1,
+    pageRendering = true,
+    pageNumPending = null,
+    scale = 1.5;
+
+function renderPage(num, canvas) {
+  var ctx = canvas.getContext('2d');
+  pageRendering = true;
+  // Using promise to fetch the page
+  pdfDoc.getPage(num).then(function(page) {
+    var viewport = page.getViewport({scale: scale});
+	canvas.width = viewport.width;
+	canvas.height = viewport.height;
+
+    // Render PDF page into canvas context
+    var renderContext = {
+      canvasContext: ctx,
+      viewport: viewport
+    };
+    var renderTask = page.render(renderContext);
+
+    // Wait for rendering to finish
+    renderTask.promise.then(function() {
+      pageRendering = true;
+      if (pageNumPending !== null) {
+        // New page rendering is pending
+        renderPage(pageNumPending);
+        pageNumPending = null;
+      }
+    });
+  });
+}
+
+pdfjsLib.getDocument(url).promise.then(function(pdfDoc_) {
+  pdfDoc = pdfDoc_;
+
+  const pages = parseInt(pdfDoc.numPages);
+
+  var canvasHtml = '';
+  for (var i = 0; i < pages; i++) {
+  	canvasHtml += '<canvas style="max-width:100vw; max-height:100vh;" id="canvas_' + i + '"></canvas><br>';
+  }
+
+  document.getElementById('pdfviewer').innerHTML = canvasHtml;
+
+  for (var i = 0; i < pages; i++) {
+  	var canvas = document.getElementById('canvas_' + i);
+  	renderPage(i+1, canvas);
+  }
+});
 </script>
 <?php
 }
