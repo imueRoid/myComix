@@ -8,7 +8,7 @@ $server_version =  json_decode(file_get_contents("https://raw.githubusercontent.
 #if($server_version['index'] > $version['index'] || $server_version['viewer'] > $version['viewer']) {
 	echo "업데이트파일을 가져옵니다.<br><br>";
 
-	$new_file = file_get_contents("https://github.com/imueRoid/myComix/archive/master.zip");
+	$new_file = file_get_contents("https://codeload.github.com/imueRoid/myComix/zip/master");
 $fail = 0;
 	if($new_file === false) {
 		echo "업데이트파일을 가져오는데 실패했습니다.<br>";
