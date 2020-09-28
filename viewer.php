@@ -177,6 +177,8 @@ if($mode == "book") {
 }
 if($type == "pdf") {
 ?>
+	<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+	<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@2.6.347/build/pdf.min.js"></script>
 <?php
 }
@@ -257,12 +259,14 @@ if($mode == "toon"){
 					};
 <?php
 }
-if($type != "pdf") {
 ?>
 					function sub_toggle() {
 						$('.collapse').fadeToggle();
 						document.getElementById("info").value = "";
 					};
+<?php
+if($type != "pdf") {
+?>
 function set_cover() {
 	document.getElementById("info").value = "설정중...";
 	$.get( "bookmark.php?mode=set_cover&file=<?php echo encode_url($getfile); ?>", function( data ) {
@@ -289,9 +293,6 @@ function set_cover() {
 </button>
 </td></tr>
 </table>
-<?php
-if($type != "pdf"){
-?>
 <table class="collapse" width="100%">
 <tr><td align="right">
 	<div class="justify-content-end btn-toolbar" role="toolbar">
@@ -331,12 +332,16 @@ if($type != "pdf"){
 		</div>
 	</div>
 </td></tr>
+<?php
+if($type != "pdf"){
+?>
 <tr><td align="right">
 <button class="btn btn-sm btn-success mt-2 p-0" onclick="set_cover();">이 파일의 첫번째 이미지를 커버로 설정</button>
-</td></tr></table>
+</td></tr>
 <?php
 }
 ?>
+</table>
 <span class="text-nowrap d-inline-block text-truncate"><?php echo cut_title($title); ?></span>
 </nav>
 <div>
@@ -442,13 +447,17 @@ if($mode == "toon"){
 <?php
 } else {
 ?>
-<!-- 정상동작불가
-<a href="./extract.php?filetype=pdf&file=<?php #echo encode_url($getfile); ?>&imgfile=pdf" target="_blank" download>
+<a href="#" onclick="toprevpage();">
 <svg width="5em" height="2.5em" viewBox="0 0 16 16" class="bi bi-cloud-arrow-down" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
   <path fill-rule="evenodd" d="M4.406 3.342A5.53 5.53 0 0 1 8 2c2.69 0 4.923 2 5.166 4.579C14.758 6.804 16 8.137 16 9.773 16 11.569 14.502 13 12.687 13H3.781C1.708 13 0 11.366 0 9.318c0-1.763 1.266-3.223 2.942-3.593.143-.863.698-1.723 1.464-2.383zm.653.757c-.757.653-1.153 1.44-1.153 2.056v.448l-.445.049C2.064 6.805 1 7.952 1 9.318 1 10.785 2.23 12 3.781 12h8.906C13.98 12 15 10.988 15 9.773c0-1.216-1.02-2.228-2.313-2.228h-.5v-.5C12.188 4.825 10.328 3 8 3a4.53 4.53 0 0 0-2.941 1.1z"/>
   <path fill-rule="evenodd" d="M7.646 10.854a.5.5 0 0 0 .708 0l2-2a.5.5 0 0 0-.708-.708L8.5 9.293V5.5a.5.5 0 0 0-1 0v3.793L6.354 8.146a.5.5 0 1 0-.708.708l2 2z"/>
 </svg></a>
--->
+<a href="#" onclick="tonextpage();">
+<svg width="5em" height="2.5em" viewBox="0 0 16 16" class="bi bi-cloud-arrow-down" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <path fill-rule="evenodd" d="M4.406 3.342A5.53 5.53 0 0 1 8 2c2.69 0 4.923 2 5.166 4.579C14.758 6.804 16 8.137 16 9.773 16 11.569 14.502 13 12.687 13H3.781C1.708 13 0 11.366 0 9.318c0-1.763 1.266-3.223 2.942-3.593.143-.863.698-1.723 1.464-2.383zm.653.757c-.757.653-1.153 1.44-1.153 2.056v.448l-.445.049C2.064 6.805 1 7.952 1 9.318 1 10.785 2.23 12 3.781 12h8.906C13.98 12 15 10.988 15 9.773c0-1.216-1.02-2.228-2.313-2.228h-.5v-.5C12.188 4.825 10.328 3 8 3a4.53 4.53 0 0 0-2.941 1.1z"/>
+  <path fill-rule="evenodd" d="M7.646 10.854a.5.5 0 0 0 .708 0l2-2a.5.5 0 0 0-.708-.708L8.5 9.293V5.5a.5.5 0 0 0-1 0v3.793L6.354 8.146a.5.5 0 1 0-.708.708l2 2z"/>
+</svg>
+</a>
 <?php
 }
 ?>
@@ -468,12 +477,34 @@ if($mode == "toon"){
 } elseif($type == "pdf") { 
 ?>
 <div class="container-fluid m-0 p-0 vh-100 vw-100 text-center" onclick="hidenav();">
-<div  id="pdfviewer" ></div>
-<script>
+<div class="swiper-container vh-100 vw-100">
+    <!-- Additional required wrapper -->
+    <div class="swiper-wrapper" id="swiper">
+        <!-- Slides -->
+    </div>
+    <!-- If we need scrollbar -->
+    <div class="swiper-scrollbar"></div>
+</div><script>
 function hidenav() {
 	$('.navbar').fadeToggle();
 };
 
+var bookmark_page = location.hash.slice(1);
+bookmark_page = bookmark_page.replace('pdf_','') * 1;
+
+console.log('bookmark:'+ bookmark_page + '+');
+var current_page = 1;
+
+if(bookmark_page > 0){
+	current_page = bookmark_page;
+}
+var page_number = 1;
+var canvas_number = 0;
+var max_pages;
+
+var pages_loaded;
+var pdf_data;
+var canvas_context = [];
 var url = "extract.php?filetype=pdf&file=<?php echo encode_url($getfile); ?>&imgfile=pdf";
 
 var pdfjsLib = window['pdfjs-dist/build/pdf'];
@@ -483,7 +514,7 @@ var pdfDoc = null,
     pageNum = 1,
     pageRendering = true,
     pageNumPending = null,
-    scale = 2;
+    scale = 3;
 
 function renderPage(num, canvas) {
   var ctx = canvas.getContext('2d');
@@ -519,16 +550,61 @@ pdfjsLib.getDocument(url).promise.then(function(pdfDoc_) {
   const pages = parseInt(pdfDoc.numPages);
 
   var canvasHtml = '';
+  var imgHtml = '';
   for (var i = 0; i < pages; i++) {
-  	canvasHtml += '<canvas class="img-fluid" style="max-width:100vw; max-height:100vh" id="canvas_' + i + '"></canvas><br>';
+  	canvasHtml += '<div class="swiper-slide align-middle vh-100"><canvas style="max-width:100vw; max-height:100vh;" id="slide_canvas' + i + '"></canvas></div>';
   }
+  document.getElementById('swiper').innerHTML = canvasHtml;
+  var canvas = document.getElementById('slide_canvas' + (current_page-1));
+  renderPage(current_page, canvas);
+  var canvas = document.getElementById('slide_canvas' + current_page);
+  renderPage((current_page+1), canvas);
+if(current_page >=2){
+  var canvas = document.getElementById('slide_canvas' + (current_page-2));
+  renderPage(current_page-1, canvas);
+}
+var mySwiper = new Swiper('.swiper-container', {
+  // Optional parameters
+  loop: false,
+  initialSlide: current_page-1,
+  // If we need pagination
+  pagination: {
+    el: '.swiper-pagination',
+  },
+  keyboard: {
+    enabled: true,
+    onlyInViewport: false,
+  },
+  // Navigation arrows
+  navigation: {
+    nextEl: '.swiper-button-next',
+    prevEl: '.swiper-button-prev',
+  },
+  // And if we need scrollbar
+  scrollbar: {
+    el: '.swiper-scrollbar',
+  },
+});
+mySwiper.on('slidePrevTransitionStart', function () {
+		current_page--;
+		if(current_page >=3){
+			var canvas = document.getElementById('slide_canvas' + (current_page-3));
+			renderPage((current_page-2), canvas);
 
-  document.getElementById('pdfviewer').innerHTML = canvasHtml;
+console.log('activeIndex:'+ mySwiper.activeIndex + '+');
+console.log('current_page:'+ current_page + '+');
 
-  for (var i = 0; i < pages; i++) {
-  	var canvas = document.getElementById('canvas_' + i);
-  	renderPage(i+1, canvas);
-  }
+		}
+});
+mySwiper.on('slideNextTransitionStart', function () {
+		current_page++;
+		var canvas = document.getElementById('slide_canvas' + (current_page+1));
+		renderPage((current_page+2), canvas);
+
+console.log('activeIndex:'+ mySwiper.activeIndex + '+');
+console.log('current_page:'+ current_page + '+');
+
+});
 });
 </script>
 <?php
@@ -602,17 +678,17 @@ if($type != "pdf"){
 }
 ?>
 </div>
-
-<?php
-if($type != "pdf"){
-?>
 <script type="text/javascript">
 var bookmark = "image0";
 var bright_value = 1;
 var contrast_value = 1;
 var img_counter = 0;
 var scroll_counter = 0;
-
+<?php
+if($type == "pdf"){
+	$image_counter = 400;
+}
+?>
 function bright_up() {
 	if(bright_counter < 5){
 	bright_counter = bright_counter + 1;
@@ -664,8 +740,11 @@ for (var i = 0; i <= <?php echo $image_counter; ?>; i++) {
 		break;
 	}
 }
+$.get( "bookmark.php?viewer=<?php echo $mode; ?>&page_order=<?php echo $pageorder['page_order']; ?>&file=<?php echo encode_url($getfile); ?>&bookmark=" + bookmark, function( data ) {
+  	document.getElementById("info").value = data;
+});
 <?php
-} else {
+} elseif ($mode == "book") {
 ?>
 for (var i = 0; i <= <?php echo $image_counter; ?>; i++) {
 	var j = <?php echo $image_counter; ?> - i;
@@ -682,14 +761,23 @@ for (var i = 0; i <= <?php echo $image_counter; ?>; i++) {
 		bookmark = "image" + img_counter;
 		location.replace('#' + bookmark);
 	}
-<?php
-}
-?>
 $.get( "bookmark.php?viewer=<?php echo $mode; ?>&page_order=<?php echo $pageorder['page_order']; ?>&file=<?php echo encode_url($getfile); ?>&bookmark=" + bookmark, function( data ) {
   	document.getElementById("info").value = data;
 });
+<?php
 }
+if($type == "pdf"){
+?>
+bookmark = "pdf_" + current_page;
 
+$.get( "bookmark.php?viewer=pdf&page_order=pdf&file=<?php echo encode_url($getfile); ?>&bookmark=" + bookmark, function( data ) {
+  	document.getElementById("info").value = data;
+});
+<?php
+}
+?>
+
+}
 
 <?php
 if ($mode == "book"){
@@ -708,7 +796,10 @@ const options = {
   rootMargin: '1000px 0px',
   threshold: 0
 };
-
+<?php
+if($type == "pdf"){
+} else {
+?>
 document.addEventListener("DOMContentLoaded", function() {
   var lazyImages = [].slice.call(document.querySelectorAll("img.lazyload"));
 
@@ -720,6 +811,7 @@ document.addEventListener("DOMContentLoaded", function() {
           lazyImage.src = lazyImage.dataset.src;		  
           lazyImage.classList.remove("lazyload");
           lazyImageObserver.unobserve(lazyImage);
+
         }
       });
     }
@@ -732,7 +824,9 @@ document.addEventListener("DOMContentLoaded", function() {
     // Possibly fall back to event handlers here
   }
 });
-
+<?php
+}
+?>
 function autosave(){	
 		<?php
 	if ($mode == "toon"){
@@ -745,8 +839,11 @@ function autosave(){
 			break;
 		}
 	}
+	$.get( "bookmark.php?mode=autosave&viewer=<?php echo $mode; ?>&page_order=<?php echo $pageorder['page_order']; ?>&file=<?php echo encode_url($getfile); ?>&bookmark=" + bookmark, function( data ) {
+		document.getElementById("info").value = data;
+	});
 	<?php
-	} else {
+	} elseif($mode == "book") {
 	?>
 	for (var i = 0; i <= <?php echo $image_counter; ?>; i++) {
 		var j = <?php echo $image_counter; ?> - i;
@@ -763,12 +860,21 @@ function autosave(){
 			bookmark = "image" + img_counter;
 			location.replace('#' + bookmark);
 		}
-	<?php
-	}
-	?>
 	$.get( "bookmark.php?mode=autosave&viewer=<?php echo $mode; ?>&page_order=<?php echo $pageorder['page_order']; ?>&file=<?php echo encode_url($getfile); ?>&bookmark=" + bookmark, function( data ) {
 		document.getElementById("info").value = data;
 	});
+	<?php
+	}
+	if($type == "pdf"){
+?>
+	bookmark = "pdf_" + current_page;
+
+	$.get( "bookmark.php?mode=autosave&viewer=pdf&page_order=pdf&file=<?php echo encode_url($getfile); ?>&bookmark=" + bookmark, function( data ) {
+  	document.getElementById("info").value = data;
+	});
+<?php
+}
+?>
 }
 
 $(window).on("beforeunload", function () {
@@ -782,8 +888,5 @@ window.addEventListener("visibilitychange", function(e)
     }
 });
 </script>
-<?php
-}
-?>
 </body>
 </html>
