@@ -106,7 +106,8 @@ if(is_dir($dir) == true){
 					$dircounter++;
 				} else {
 					if(count($jpg_folder[$fileinfo->getFilename()]) > 5){
-						$file_list[$filecounter] = $fileinfo->getFilename()."_imgfolder";
+						$file_list[$filecounter]['name'] = $fileinfo->getFilename()."_imgfolder";
+						$file_list[$filecounter]['time'] = $fileinfo->getMTime();
 						$filecounter++;
 					} else {
 						unset($jpg_folder[$fileinfo->getFilename()]);
@@ -121,7 +122,9 @@ if(is_dir($dir) == true){
 			if(strpos($fileinfo, ".json") !== false){
 			} else {
 				if(strpos(strtolower($fileinfo->getFilename()), ".zip") !== false || strpos(strtolower($fileinfo->getFilename()), ".cbz") !== false || strpos(strtolower($fileinfo->getFilename()), ".pdf") !== false) {
-					$file_list[$filecounter] = $fileinfo->getFilename();
+					$file_list[$filecounter]['name'] = $fileinfo->getFilename();
+					$file_list[$filecounter]['time'] = $fileinfo->getMTime();
+					$file_list[$filecounter]['size'] = $fileinfo->getSize();
 					$filecounter++;
 				} elseif(strpos(strtolower($fileinfo->getFilename()), ".jpg") !== false || strpos(strtolower($fileinfo->getFilename()), ".jpeg") !== false || strpos(strtolower($fileinfo), ".png") !== false || strpos(strtolower($fileinfo), ".gif") !== false) {
 						$jpg_list[$jpgcounter] = $fileinfo->getFilename();
@@ -134,7 +137,42 @@ if(is_dir($dir) == true){
 	sort($jpg_list, SORT_NATURAL);
 	sort($dir_list, SORT_NATURAL);
 	sort($title_list, SORT_NATURAL);
-	$file_list = n_sort($file_list);
+	if($_GET['sort'] == "name" || $_GET['sort'] == null){
+		$tempcc = 0;
+		foreach($file_list as $file_n){
+			$file_list_temp[$tempcc] = $file_list[$tempcc]['name'];
+			$tempcc++;
+		}
+		$file_list = n_sort($file_list_temp);
+	} elseif($_GET['sort'] == "timeasc"){
+		$file_list_temp = arr_sort($file_list, 'time', 'asc');
+		$tempcc = 0;
+		foreach($file_list_temp as $file_n){
+			$file_list[$tempcc] = $file_list_temp[$tempcc]['name'];
+			$tempcc++;
+		}
+	} elseif($_GET['sort'] == "timedesc"){
+		$file_list_temp = arr_sort($file_list, 'time', 'desc');
+		$tempcc = 0;
+		foreach($file_list_temp as $file_n){
+			$file_list[$tempcc] = $file_list_temp[$tempcc]['name'];
+			$tempcc++;
+		}
+	} elseif($_GET['sort'] == "sizeasc"){
+		$file_list_temp = arr_sort($file_list, 'size', 'asc');
+		$tempcc = 0;
+		foreach($file_list_temp as $file_n){
+			$file_list[$tempcc] = $file_list_temp[$tempcc]['name'];
+			$tempcc++;
+		}
+	} elseif($_GET['sort'] == "sizedesc"){
+		$file_list_temp = arr_sort($file_list, 'size', 'desc');
+		$tempcc = 0;
+		foreach($file_list_temp as $file_n){
+			$file_list[$tempcc] = $file_list_temp[$tempcc]['name'];
+			$tempcc++;
+		}
+	}
 	$maxlist = count($file_list) + count($title_list) + count($dir_list);
 	$startview = 0;
 	if(!$_GET['page']){
@@ -287,16 +325,53 @@ if ($use_cover == "y"){
 				$updir = $updir."/".$nowdirarr[$i];
 			}
 	?>
-<div class="row row-cols-2 row-cols-md-4">
-			<a href='index.php?dir=<?php echo encode_url($updir);?>&page=<?php echo $_GET['uppage']; ?>'>
-			<div class="card bg-primary m-1 p-0">
-						<div class="card-body text-white m-1 p-1 align-middle">
-						<svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-arrow-90deg-up" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-					  <path fill-rule="evenodd" d="M4.854 1.146a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L4 2.707V12.5A2.5 2.5 0 0 0 6.5 15h8a.5.5 0 0 0 0-1h-8A1.5 1.5 0 0 1 5 12.5V2.707l3.146 3.147a.5.5 0 1 0 .708-.708l-4-4z"/>
-					</svg> 상위폴더로
-						</div>
-						</div>
-						</a>
+<div class="row">
+<table width=100%><tr><td align=left>
+			<button class="btn btn-primary m-1" onclick="location.replace('index.php?dir=<?php echo encode_url($updir);?>&page=<?php echo $_GET['uppage']; ?>')">
+			<svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-arrow-90deg-up" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+			<path fill-rule="evenodd" d="M4.854 1.146a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L4 2.707V12.5A2.5 2.5 0 0 0 6.5 15h8a.5.5 0 0 0 0-1h-8A1.5 1.5 0 0 1 5 12.5V2.707l3.146 3.147a.5.5 0 1 0 .708-.708l-4-4z"/>
+			</svg> 상위폴더로
+			</button>
+			<?php
+			if(count($file_list) > 0){
+			?>
+			</td><td align=right>
+			<button onclick="location.replace('index.php?dir=<?php echo encode_url($getdir);?>&page=<?php echo $_GET['page']; ?>')" class="btn btn-sm btn-<?php if($_GET['sort'] != "" && $_GET['sort'] != null){ ?>outline-<?php } ?>warning m-1">
+			기본
+			</button>
+			<button onclick="location.replace('index.php?sort=<?php if($_GET['sort'] == "timeasc") { echo "timedesc"; } else { echo "timeasc"; } ?>&dir=<?php echo encode_url($getdir);?>&page=<?php echo $_GET['page']; ?>')" class="btn btn-sm btn-<?php if($_GET['sort'] != "timeasc" && $_GET['sort'] != "timedesc"){ ?>outline-<?php } ?>warning m-1">시간
+			<?php if($_GET['sort'] == "timedesc") { ?>
+<svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-sort-numeric-up" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <path fill-rule="evenodd" d="M4 14a.5.5 0 0 0 .5-.5v-11a.5.5 0 0 0-1 0v11a.5.5 0 0 0 .5.5z"/>
+  <path fill-rule="evenodd" d="M6.354 4.854a.5.5 0 0 0 0-.708l-2-2a.5.5 0 0 0-.708 0l-2 2a.5.5 0 1 0 .708.708L4 3.207l1.646 1.647a.5.5 0 0 0 .708 0z"/>
+  <path d="M12.438 7V1.668H11.39l-1.262.906v.969l1.21-.86h.052V7h1.046zm-2.84 5.82c.054.621.625 1.278 1.761 1.278 1.422 0 2.145-.98 2.145-2.848 0-2.05-.973-2.688-2.063-2.688-1.125 0-1.972.688-1.972 1.836 0 1.145.808 1.758 1.719 1.758.69 0 1.113-.351 1.261-.742h.059c.031 1.027-.309 1.856-1.133 1.856-.43 0-.715-.227-.773-.45H9.598zm2.757-2.43c0 .637-.43.973-.933.973-.516 0-.934-.34-.934-.98 0-.625.407-1 .926-1 .543 0 .941.375.941 1.008z"/>
+</svg>
+			<?php	} else { ?>
+<svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-sort-numeric-down" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <path fill-rule="evenodd" d="M4 2a.5.5 0 0 1 .5.5v11a.5.5 0 0 1-1 0v-11A.5.5 0 0 1 4 2z"/>
+  <path fill-rule="evenodd" d="M6.354 11.146a.5.5 0 0 1 0 .708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 0 1 .708-.708L4 12.793l1.646-1.647a.5.5 0 0 1 .708 0z"/>
+  <path d="M12.438 7V1.668H11.39l-1.262.906v.969l1.21-.86h.052V7h1.046zm-2.84 5.82c.054.621.625 1.278 1.761 1.278 1.422 0 2.145-.98 2.145-2.848 0-2.05-.973-2.688-2.063-2.688-1.125 0-1.972.688-1.972 1.836 0 1.145.808 1.758 1.719 1.758.69 0 1.113-.351 1.261-.742h.059c.031 1.027-.309 1.856-1.133 1.856-.43 0-.715-.227-.773-.45H9.598zm2.757-2.43c0 .637-.43.973-.933.973-.516 0-.934-.34-.934-.98 0-.625.407-1 .926-1 .543 0 .941.375.941 1.008z"/>
+</svg>
+			<?php } ?>
+			</button>
+			<button onclick="location.replace('index.php?sort=<?php if($_GET['sort'] == "sizeasc") { echo "sizedesc"; } else { echo "sizeasc"; } ?>&dir=<?php echo encode_url($getdir);?>&page=<?php echo $_GET['page']; ?>')" class="btn btn-sm btn-<?php if($_GET['sort'] != "sizeasc" && $_GET['sort'] != "sizedesc"){ ?>outline-<?php } ?>warning m-1">크기
+			<?php if($_GET['sort'] == "sizedesc") { ?>
+<svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-sort-up-alt" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <path fill-rule="evenodd" d="M3 14a.5.5 0 0 0 .5-.5v-10a.5.5 0 0 0-1 0v10a.5.5 0 0 0 .5.5z"/>
+  <path fill-rule="evenodd" d="M5.354 5.854a.5.5 0 0 0 0-.708l-2-2a.5.5 0 0 0-.708 0l-2 2a.5.5 0 1 0 .708.708L3 4.207l1.646 1.647a.5.5 0 0 0 .708 0zM7 6.5a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 0-1h-3a.5.5 0 0 0-.5.5zm0 3a.5.5 0 0 0 .5.5h5a.5.5 0 0 0 0-1h-5a.5.5 0 0 0-.5.5zm0 3a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 0-1h-7a.5.5 0 0 0-.5.5zm0-9a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0-.5.5z"/>
+</svg>
+			<?php } else { ?>
+<svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-sort-down-alt" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <path fill-rule="evenodd" d="M3 3a.5.5 0 0 1 .5.5v10a.5.5 0 0 1-1 0v-10A.5.5 0 0 1 3 3z"/>
+  <path fill-rule="evenodd" d="M5.354 11.146a.5.5 0 0 1 0 .708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 0 1 .708-.708L3 12.793l1.646-1.647a.5.5 0 0 1 .708 0zM7 6.5a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 0-1h-3a.5.5 0 0 0-.5.5zm0 3a.5.5 0 0 0 .5.5h5a.5.5 0 0 0 0-1h-5a.5.5 0 0 0-.5.5zm0 3a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 0-1h-7a.5.5 0 0 0-.5.5zm0-9a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0-.5.5z"/>
+</svg>
+			<?php }?>
+			</button>
+			<?php
+			}
+			?>
+</td></tr>
+</table>
 </div>
 	<?php
 	}
@@ -848,7 +923,7 @@ if($use_listcover == "y"){
     <div class="page-item <?php if($paging == 0) { echo "disabled"; } ?>">
 	</div>
     <div class="page-item <?php if($paging == 0) { echo "disabled"; } ?>">
-      <button class="page-link" onclick="location.replace('./index.php?dir=<?php echo encode_url($getdir); ?>&page=<?php echo (int)$_GET['page']-1; ?>')" tabindex="-1" aria-disabled="true">Previous</button>
+      <button class="page-link" onclick="location.replace('./index.php?sort=<?php echo $_GET['sort']; ?>&dir=<?php echo encode_url($getdir); ?>&page=<?php echo (int)$_GET['page']-1; ?>')" tabindex="-1" aria-disabled="true">Previous</button>
     </div>
 				<div class="nav-bar dropdown dropup">
 					<button class="page-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown">
@@ -862,7 +937,7 @@ if($use_listcover == "y"){
 					$pagingcount = 0;
 				while($pagingcount<($maxlist/$maxview)){
 			?>
-					<button onclick="location.replace('./index.php?dir=<?php echo encode_url($getdir); ?>&page=<?php echo $pagingcount; ?>')" class="btn btn-sm dropdown-item m-0 p-1">[<?php echo $pagingcount+1; ?>페이지]</button>
+					<button onclick="location.replace('./index.php?sort=<?php echo $_GET['sort']; ?>&dir=<?php echo encode_url($getdir); ?>&page=<?php echo $pagingcount; ?>')" class="btn btn-sm dropdown-item m-0 p-1">[<?php echo $pagingcount+1; ?>페이지]</button>
 			<?php
 				$pagingcount++;
 				}
@@ -871,7 +946,7 @@ if($use_listcover == "y"){
 					</div>
 				</div>
 	    <div class="page-item <?php if(($maxview*($paging+1))>=$maxlist) { echo "disabled"; } ?>">
-      <button class="page-link" onclick="location.replace('./index.php?dir=<?php echo encode_url($getdir); ?>&page=<?php echo (int)$_GET['page']+1; ?>')">Next</button>
+      <button class="page-link" onclick="location.replace('./index.php?sort=<?php echo $_GET['sort']; ?>&dir=<?php echo encode_url($getdir); ?>&page=<?php echo (int)$_GET['page']+1; ?>')">Next</button>
     </div>
 	</div>
 </td></tr>
