@@ -26,6 +26,11 @@ $iterator = new DirectoryIterator($base_dir);
 			} else {
 				$remote_value = "n";
 			}
+			if($_POST[encode_url($fileinfo->getFilename())."_checknew"] == "y"){
+				$checknew_value = "y";
+			} else {
+				$checknew_value = "n";
+			}
 			
 			$mode_arr = json_decode(file_get_contents($getfile), true);
 			
@@ -33,6 +38,7 @@ $iterator = new DirectoryIterator($base_dir);
 			$dir_write['group1'] = $group1_value;
 			$dir_write['group2'] = $group2_value;
 			$dir_write['remote'] = $remote_value;
+			$dir_write['checknew'] = $checknew_value;
 			$dir_file = $base_dir."/".$fileinfo->getFilename().".json";
 			$json_output = json_encode($dir_write, JSON_UNESCAPED_UNICODE);
 			file_put_contents($dir_file, $json_output);
@@ -307,11 +313,13 @@ foreach ($iterator as $fileinfo) {
 			$dir_list[$dircounter]['group1'] = $mode_arr['group1'];
 			$dir_list[$dircounter]['group2'] = $mode_arr['group2'];
 			$dir_list[$dircounter]['remote'] = $mode_arr['remote'];
+			$dir_list[$dircounter]['checknew'] = $mode_arr['checknew'];
 		} else {
 			$dir_list[$dircounter]['admin'] = 1;
 			$dir_list[$dircounter]['group1'] = 1;
 			$dir_list[$dircounter]['group2'] = 1;
 			$dir_list[$dircounter]['remote'] = "n";
+			$dir_list[$dircounter]['checknew'] = "y";
 		}
 		$dircounter++;
 	} else {
@@ -335,7 +343,11 @@ foreach ($dir_list as $dir_mode){
 						</div>
 						<div class="form-check form-check-inline">
 						  <input class="form-check-input" type="checkbox" id="<?php echo $dir_mode['dir_name']; ?>_inlineCheckbox3" name="<?php echo encode_url($dir_mode['dir_name']); ?>_remote" value="y" <?php if($dir_mode['remote']=="y"){ echo "checked"; } ?>>
-						  <label class="form-check-label" for="<?php echo $dir_mode['dir_name']; ?>_inlineCheckbox3">is_remote</label>
+						  <label class="form-check-label" for="<?php echo $dir_mode['dir_name']; ?>_inlineCheckbox3">remote</label>
+						</div>
+						<div class="form-check form-check-inline">
+						  <input class="form-check-input" type="checkbox" id="<?php echo $dir_mode['dir_name']; ?>_inlineCheckbox4" name="<?php echo encode_url($dir_mode['dir_name']); ?>_checknew" value="y" <?php if($dir_mode['checknew']=="y"){ echo "checked"; } ?>>
+						  <label class="form-check-label" for="<?php echo $dir_mode['dir_name']; ?>_inlineCheckbox4">chk_new</label>
 						</div>
 		</li>
 <?php

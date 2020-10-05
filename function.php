@@ -80,6 +80,26 @@ function dir_check($getdir) {
 	}
 }
 
+################################################################################
+# 새파일체크여부 반환
+################################################################################
+
+function checknew_value($chkdir) {
+	global $base_dir;
+	$rootdir = array();
+	$rootdir = explode("/", $chkdir);
+	$getmodefile = $base_dir."/".$rootdir[1].".json";
+	if(is_file($getmodefile) == true) {
+		$dirmode_arr = array();
+		$dirmode_arr = json_decode(file_get_contents($getmodefile), true);
+		if($dirmode_arr['checknew'] == "y" || $dirmode_arr['checknew'] == null){
+			return "y";
+		} elseif($dirmode_arr['checknew'] == "n"){
+			return "n";
+		}
+	}
+}
+
 
 ################################################################################
 # 긴 제목을 줄여줌
