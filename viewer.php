@@ -137,7 +137,7 @@ if(is_file($bookmark_file) === true){
 								$mode = $pageorder['viewer'];
 							}
 						}
-}							
+}
 		$files = scandir($base_folder);
 		$files = n_sort($files);
 		$totalfile = array();
@@ -153,6 +153,24 @@ if(is_file($bookmark_file) === true){
 		$pre = $now - 1;
 
 		$page = ceil(($now+1)/$maxview)-1;  //현재페이지
+
+		$recent = array();
+		if(is_file($recent_file) == true){
+			$recent = json_decode(file_get_contents($recent_file), true);
+			if($recent[$link_dir] != null){
+				$recent_num = array_search ($recent[$link_dir], $totalfile);
+				if($recent_num < $now){
+					$recent[$link_dir] = $totalfile[$now];
+				} else {
+				}				
+			} else {
+			}
+		} else {
+			$recent[$link_dir] = $totalfile[$now];
+		}
+		$recent_output = json_encode($recent, JSON_UNESCAPED_UNICODE);
+		file_put_contents($recent_file, $recent_output);
+
 ?>
 <!DOCTYPE html>
 <html lang="ko">
@@ -336,6 +354,7 @@ function set_cover() {
 if($type != "pdf"){
 ?>
 <tr><td align="right">
+<br>
 <button class="btn btn-sm btn-success mt-2 p-0" onclick="set_cover();">이 파일의 첫번째 이미지를 커버로 설정</button>
 </td></tr>
 <?php

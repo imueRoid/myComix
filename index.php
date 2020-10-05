@@ -263,6 +263,21 @@ if ($use_cover == "y"){
 <tr><td class="m-0 p-0">
 	<h6 style="font-family: 'Nanum Gothic', sans-serif;">[<?php echo $getdir;?>]</h6>
 </td></tr>
+<?php
+		$recent = array();
+		if(is_file($recent_file) == true){
+			$recent = json_decode(file_get_contents($recent_file), true);
+			if($recent[$getdir] != null){
+?>
+<tr><td class="m-0 p-0">
+	<button class="btn btn-warning btn-sm" style="font-family: 'Nanum Gothic', sans-serif;" onclick="location.href='./viewer.php?file=<?php echo encode_url($getdir."/".$recent[$getdir]); ?>'">[<?php echo $recent[$getdir];?>]까지 읽음</button>
+</td></tr>
+<?php
+			} else {
+			}
+		} else {
+		}
+?>
 </table>
 	<br>
 	</div>
