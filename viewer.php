@@ -164,6 +164,7 @@ if(is_file($bookmark_file) === true){
 				} else {
 				}				
 			} else {
+				$recent[$link_dir] = $totalfile[$now];
 			}
 		} else {
 			$recent[$link_dir] = $totalfile[$now];
