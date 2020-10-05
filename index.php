@@ -322,7 +322,6 @@ if($use_listcover == "y"){
 			if($i >= count($dir_list)){
 				break;
 			}
-
 	?>	
 			 
 	<a href='index.php?uppage=<?php echo $_GET['page']; ?>&dir=<?php echo encode_url($getdir."/".$fileinfo);?>'>
@@ -344,6 +343,22 @@ if($use_listcover == "y"){
 		echo "<img class=\"rounded-lg mb-2\" src=\"data:".mime_type("jpg").";base64,".$null_image."\" style=\"height:120px;max-width:100%;min-width:100%;object-fit:fill;\"><br>";
 	}
 }
+		$file_marker = str_replace("rclone_", "", $fileinfo);
+		$files = scandir($dir."/".$file_marker);
+		$files = n_sort($files);
+		$totalfile = array();
+		foreach ($files as $file) {
+			if(strpos($file, "json") !== false || $file == "." || $file == ".." || $file == "@eaDir"){
+			} elseif (strpos(strtolower($file), "zip") !== false || strpos(strtolower($file), "cbz") !== false || strpos(strtolower($file), "rar") !== false || strpos(strtolower($file), "cbr") !== false || strpos(strtolower($file), "pdf") !== false || is_file($dir."/".$file_marker."/".$file."/image_files.json") == true) {
+				$totalfile[] = $file;
+			}
+		}
+		$new_marker_od = array_search ($recent[$getdir."/".$file_marker], $totalfile);
+		if(count($totalfile) > ($new_marker_od + 1)) {
+			echo "<div class=\"card-img-overlay m-1 p-0 text-right\"><span class=\"badge badge-pill badge-warning\">new</span></div>";
+		}
+		unset($totalfile);
+
 ?>
 					<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-folder-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
 					  <path fill-rule="evenodd" d="M9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.826a2 2 0 0 1-1.991-1.819l-.637-7a1.99 1.99 0 0 1 .342-1.31L.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3zm-8.322.12C1.72 3.042 1.95 3 2.19 3h5.396l-.707-.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981l.006.139z"/>
@@ -380,6 +395,22 @@ if($use_listcover == "y"){
 		echo "<img class=\"rounded-lg mb-2\" src=\"data:".mime_type("jpg").";base64,".$null_image."\" style=\"height:120px;max-width:100%;min-width:100%;object-fit:fill;\"><br>";
 	}
 }
+		$file_marker = str_replace("rclone_", "", $fileinfo);
+		$files = scandir($dir."/".$file_marker);
+		$files = n_sort($files);
+		$totalfile = array();
+		foreach ($files as $file) {
+			if(strpos($file, "json") !== false || $file == "." || $file == ".." || $file == "@eaDir"){
+			} elseif (strpos(strtolower($file), "zip") !== false || strpos(strtolower($file), "cbz") !== false || strpos(strtolower($file), "rar") !== false || strpos(strtolower($file), "cbr") !== false || strpos(strtolower($file), "pdf") !== false || is_file($dir."/".$file_marker."/".$file."/image_files.json") == true) {
+				$totalfile[] = $file;
+			}
+		}
+		$new_marker_od = array_search ($recent[$getdir."/".$file_marker], $totalfile);
+		if(count($totalfile) > ($new_marker_od + 1)) {
+			echo "<div class=\"card-img-overlay m-1 p-0 text-right\"><span class=\"badge badge-pill badge-warning\">new</span></div>";
+		}
+		unset($totalfile);
+
 ?>
 					<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-book" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
   <path fill-rule="evenodd" d="M1 2.828v9.923c.918-.35 2.107-.692 3.287-.81 1.094-.111 2.278-.039 3.213.492V2.687c-.654-.689-1.782-.886-3.112-.752-1.234.124-2.503.523-3.388.893zm7.5-.141v9.746c.935-.53 2.12-.603 3.213-.493 1.18.12 2.37.461 3.287.811V2.828c-.885-.37-2.154-.769-3.388-.893-1.33-.134-2.458.063-3.112.752zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783z"/>
