@@ -354,7 +354,7 @@ if ($use_cover == "y"){
 </svg>
 			<?php } ?>
 			</button>
-			<button onclick="location.replace('index.php?sort=<?php if($_GET['sort'] == "sizeasc") { echo "sizedesc"; } else { echo "sizeasc"; } ?>&dir=<?php echo encode_url($getdir);?>&page=<?php echo $_GET['page']; ?>')" class="btn btn-sm btn-<?php if($_GET['sort'] != "sizeasc" && $_GET['sort'] != "sizedesc"){ ?>outline-<?php } ?>warning ml-1">크기
+			<button onclick="location.replace('index.php?sort=<?php if($_GET['sort'] == "sizeasc") { echo "sizedesc"; } else { echo "sizeasc"; } ?>&dir=<?php echo encode_url($getdir);?>&page=<?php echo $_GET['page']; ?>')" class="btn btn-sm btn-<?php if($_GET['sort'] != "sizeasc" && $_GET['sort'] != "sizedesc"){ ?>outline-<?php } ?>warning ml-1 mr-1">크기
 			<?php if($_GET['sort'] == "sizedesc") { ?>
 <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-sort-up-alt" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
   <path fill-rule="evenodd" d="M3 14a.5.5 0 0 0 .5-.5v-10a.5.5 0 0 0-1 0v10a.5.5 0 0 0 .5.5z"/>
