@@ -137,13 +137,24 @@ if(is_dir($dir) == true){
 	sort($jpg_list, SORT_NATURAL);
 	sort($dir_list, SORT_NATURAL);
 	sort($title_list, SORT_NATURAL);
-	if($_GET['sort'] == "name" || $_GET['sort'] == null){
+	if($_GET['sort'] == "nameasc" || $_GET['sort'] == null){
 		$tempcc = 0;
 		foreach($file_list as $file_n){
 			$file_list_temp[$tempcc] = $file_list[$tempcc]['name'];
 			$tempcc++;
 		}
 		$file_list = n_sort($file_list_temp);
+	} elseif($_GET['sort'] == "namedesc" || $_GET['sort'] == null){
+		$tempcc = 0;
+		foreach($file_list as $file_n){
+			$file_list_temp[$tempcc] = $file_list[$tempcc]['name'];
+			$tempcc++;
+		}
+		$file_list_temp = n_sort($file_list_temp);
+		foreach($file_list_temp as $file_n){
+			$tempcc = $tempcc-1;
+			$file_list[$tempcc] = $file_n;
+		}
 	} elseif($_GET['sort'] == "timeasc"){
 		$file_list_temp = arr_sort($file_list, 'time', 'asc');
 		$tempcc = 0;
@@ -336,10 +347,25 @@ if ($use_cover == "y"){
 			if(count($file_list) > 0){
 			?>
 			</td><td align=right>
-			<button onclick="location.replace('index.php?dir=<?php echo encode_url($getdir);?>&page=<?php echo $_GET['page']; ?>')" class="btn btn-sm btn-<?php if($_GET['sort'] != "" && $_GET['sort'] != null){ ?>outline-<?php } ?>warning m-0">
-			기본
+			<button onclick="location.replace('index.php?<?php if($_GET['sort'] == "nameasc" || $_GET['sort'] == null) { echo "sort=namedesc&"; } ?>dir=<?php echo encode_url($getdir);?>&page=<?php echo $_GET['page']; ?>')" class="btn btn-sm btn-<?php if($_GET['sort'] != "" && $_GET['sort'] != null && $_GET['sort'] != "namedesc" && $_GET['sort'] != "nameasc"){ ?>outline-<?php } ?>info m-0 p-1">기본
+			<?php if($_GET['sort'] == "namedesc") { ?>
+<svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-sort-alpha-up" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <path fill-rule="evenodd" d="M4 14a.5.5 0 0 0 .5-.5v-11a.5.5 0 0 0-1 0v11a.5.5 0 0 0 .5.5z"/>
+  <path fill-rule="evenodd" d="M6.354 4.854a.5.5 0 0 0 0-.708l-2-2a.5.5 0 0 0-.708 0l-2 2a.5.5 0 1 0 .708.708L4 3.207l1.646 1.647a.5.5 0 0 0 .708 0z"/>
+  <path d="M9.664 7l.418-1.371h1.781L12.281 7h1.121l-1.78-5.332h-1.235L8.597 7h1.067zM11 2.687l.652 2.157h-1.351l.652-2.157H11zM9.027 14h3.934v-.867h-2.645v-.055l2.567-3.719v-.691H9.098v.867h2.507v.055l-2.578 3.719V14z"/>
+</svg>			
+			<?php	} else { ?>
+<svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-sort-alpha-down" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <path fill-rule="evenodd" d="M4 2a.5.5 0 0 1 .5.5v11a.5.5 0 0 1-1 0v-11A.5.5 0 0 1 4 2z"/>
+  <path fill-rule="evenodd" d="M6.354 11.146a.5.5 0 0 1 0 .708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 0 1 .708-.708L4 12.793l1.646-1.647a.5.5 0 0 1 .708 0z"/>
+  <path d="M9.664 7l.418-1.371h1.781L12.281 7h1.121l-1.78-5.332h-1.235L8.597 7h1.067zM11 2.687l.652 2.157h-1.351l.652-2.157H11zM9.027 14h3.934v-.867h-2.645v-.055l2.567-3.719v-.691H9.098v.867h2.507v.055l-2.578 3.719V14z"/>
+</svg>			
+			<?php } ?>
 			</button>
-			<button onclick="location.replace('index.php?sort=<?php if($_GET['sort'] == "timeasc") { echo "timedesc"; } else { echo "timeasc"; } ?>&dir=<?php echo encode_url($getdir);?>&page=<?php echo $_GET['page']; ?>')" class="btn btn-sm btn-<?php if($_GET['sort'] != "timeasc" && $_GET['sort'] != "timedesc"){ ?>outline-<?php } ?>warning ml-1">시간
+
+
+
+			<button onclick="location.replace('index.php?sort=<?php if($_GET['sort'] == "timeasc") { echo "timedesc"; } else { echo "timeasc"; } ?>&dir=<?php echo encode_url($getdir);?>&page=<?php echo $_GET['page']; ?>')" class="btn btn-sm btn-<?php if($_GET['sort'] != "timeasc" && $_GET['sort'] != "timedesc"){ ?>outline-<?php } ?>info ml-1 p-1">시간
 			<?php if($_GET['sort'] == "timedesc") { ?>
 <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-sort-numeric-up" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
   <path fill-rule="evenodd" d="M4 14a.5.5 0 0 0 .5-.5v-11a.5.5 0 0 0-1 0v11a.5.5 0 0 0 .5.5z"/>
@@ -354,7 +380,7 @@ if ($use_cover == "y"){
 </svg>
 			<?php } ?>
 			</button>
-			<button onclick="location.replace('index.php?sort=<?php if($_GET['sort'] == "sizeasc") { echo "sizedesc"; } else { echo "sizeasc"; } ?>&dir=<?php echo encode_url($getdir);?>&page=<?php echo $_GET['page']; ?>')" class="btn btn-sm btn-<?php if($_GET['sort'] != "sizeasc" && $_GET['sort'] != "sizedesc"){ ?>outline-<?php } ?>warning ml-1 mr-1">크기
+			<button onclick="location.replace('index.php?sort=<?php if($_GET['sort'] == "sizeasc") { echo "sizedesc"; } else { echo "sizeasc"; } ?>&dir=<?php echo encode_url($getdir);?>&page=<?php echo $_GET['page']; ?>')" class="btn btn-sm btn-<?php if($_GET['sort'] != "sizeasc" && $_GET['sort'] != "sizedesc"){ ?>outline-<?php } ?>info ml-1 mr-1 p-1">크기
 			<?php if($_GET['sort'] == "sizedesc") { ?>
 <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-sort-up-alt" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
   <path fill-rule="evenodd" d="M3 14a.5.5 0 0 0 .5-.5v-10a.5.5 0 0 0-1 0v10a.5.5 0 0 0 .5.5z"/>
