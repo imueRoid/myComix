@@ -44,8 +44,7 @@ function n_sort($file_list) {
 		$n_sort = str_replace("권.cbz", "", strtolower($n_sort));
 		$n_sort = str_replace(".zip", "", strtolower($n_sort));
 		$n_sort = str_replace(".cbz", "", strtolower($n_sort));
-		$n_sort = str_replace("_", " ", strtolower($n_sort));
-		$n_sort = str_replace(" ", "", strtolower($n_sort));
+		$n_sort = str_replace(" ", "_", strtolower($n_sort));
 		$n_sort = str_replace("_imgfolder", "", strtolower($n_sort));
 		$filelist_sort[$sort_file] = $n_sort;
 	}
