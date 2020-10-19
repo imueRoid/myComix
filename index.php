@@ -77,7 +77,7 @@ if(is_dir($dir) == true){
 				}
 			}
 		}
-		if (!$fileinfo->isDot() && $fileinfo != "@eaDir" && $fileinfo->isDir()) {
+		if (!$fileinfo->isDot() && $fileinfo != "@eaDir" && $fileinfo != "tmp" && $fileinfo->isDir()) {
 			if(strpos($dir, "rclone_") !== false || $is_remote == "y" || strpos($fileinfo->getFilename(), "rclone_") !== false || $fileis_remote == "y") {
 				$dir_list[$dircounter] = $fileinfo->getFilename();
 				$dirinfo[$fileinfo->getFilename()] = "remote";
@@ -89,7 +89,7 @@ if(is_dir($dir) == true){
 				$jpg_c = 0;
 				$jpg_folder[$fileinfo->getFilename()] = array();
 				foreach ($sub_iterator as $subfileinfo) {
-					if (!$subfileinfo->isDot() && $subfileinfo != "@eaDir") {
+					if (!$subfileinfo->isDot() && $subfileinfo != "@eaDir" && $subfileinfo != "tmp") {
 							if($subfileinfo->isDir() == true) {	
 								$jpg_c = 0;
 								$sub_dircounter++;
