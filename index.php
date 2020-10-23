@@ -63,6 +63,11 @@ if(is_dir($dir) == true){
 	if(str_replace("/", "", $base_dir) == str_replace("/", "", $dir)){
 		$is_root = true;
 	}
+	
+	$recent = array();
+	if(is_file($recent_file) == true){
+		$recent = json_decode(file_get_contents($recent_file), true);
+	}
 	foreach ($iterator as $fileinfo) {
 		$fileis_remote = "c";
 		if($is_root == true) {
@@ -111,7 +116,34 @@ if(is_dir($dir) == true){
 						$filecounter++;
 					} else {
 						unset($jpg_folder[$fileinfo->getFilename()]);
-						$title_list[$titlecounter] = $fileinfo->getFilename();
+						
+						if(checknew_value($getdir) =="y") {
+							$file_marker = $fileinfo->getFilename();
+							$files = scandir($dir."/".$file_marker);
+							$files = n_sort($files);
+							$totalfile = array();
+							foreach ($files as $file) {
+								if(strpos($file, "json") !== false || $file == "." || $file == ".." || $file == "@eaDir"){
+								} elseif (strpos(strtolower($file), "zip") !== false || strpos(strtolower($file), "cbz") !== false || strpos(strtolower($file), "rar") !== false || strpos(strtolower($file), "cbr") !== false || strpos(strtolower($file), "pdf") !== false || is_file($dir."/".$file_marker."/".$file."/image_files.json") == true) {
+									$totalfile[] = $file;
+								}
+							}
+							if(count($totalfile) > 0){
+								if($recent[$getdir."/".$file_marker] == null) {
+									$title_list[$titlecounter] = "00000000.".$fileinfo->getFilename();
+								} else {
+									$new_marker_od = array_search ($recent[$getdir."/".$file_marker], $totalfile);
+									if(count($totalfile) > ($new_marker_od + 1)) {
+										$title_list[$titlecounter] = "00000000.".$fileinfo->getFilename();
+									} else {
+										$title_list[$titlecounter] = $fileinfo->getFilename();
+									}
+								}
+							}
+							unset($totalfile);
+						} else {
+							$title_list[$titlecounter] = $fileinfo->getFilename();
+						}
 						$titlecounter++;
 					}
 				}
@@ -144,7 +176,7 @@ if(is_dir($dir) == true){
 			$tempcc++;
 		}
 		$file_list = n_sort($file_list_temp);
-	} elseif($_GET['sort'] == "namedesc" || $_GET['sort'] == null){
+	} elseif($_GET['sort'] == "namedesc"){
 		$tempcc = 0;
 		foreach($file_list as $file_n){
 			$file_list_temp[$tempcc] = $file_list[$tempcc]['name'];
@@ -309,9 +341,6 @@ if ($use_cover == "y"){
 	<h6 style="font-family: 'Nanum Gothic', sans-serif;">[<?php echo $getdir;?>]</h6>
 </td></tr>
 <?php
-		$recent = array();
-		if(is_file($recent_file) == true){
-			$recent = json_decode(file_get_contents($recent_file), true);
 			if($recent[$getdir] != null){
 ?>
 <tr><td class="m-0 p-0">
@@ -320,8 +349,6 @@ if ($use_cover == "y"){
 <?php
 			} else {
 			}
-		} else {
-		}
 ?>
 </table>
 	<br>
@@ -481,7 +508,7 @@ if($use_listcover == "y"){
 	if(count($title_list) > 0){
 		for($i=$title_start;$i<$endview;$i++) {
 			$startview = $i;
-			$fileinfo = $title_list[$i-count($dir_list)];
+			$fileinfo = str_replace("00000000.","", $title_list[$i-count($dir_list)]);
 			$dirs = str_replace($base_dir."/", "", $dir);
 			if($i >= (count($title_list)+count($dir_list))){
 				break;
