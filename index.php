@@ -41,6 +41,7 @@ include("function.php");
 
 if($_GET['dir'] != null){
 	$getdir = decode_url($_GET['dir']);
+	$getdir = str_replace("/..","",$getdir);
 	$dir = $base_dir.$getdir;
 	$is_remote = dir_check($getdir);
 } else {
